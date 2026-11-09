@@ -164,6 +164,9 @@ summary{cursor:pointer}
  details>*:not(summary){display:block!important}
  summary::after{display:none}
 }
+.how{margin:12px 0 4px}
+.how .body ul{margin:0;padding-left:20px;font:15px/1.5 -apple-system,system-ui,sans-serif}
+.how .body li{margin-bottom:8px}
 </style>
 </head>
 <body>
@@ -239,8 +242,21 @@ function idxOf(id){for(var k=0;k<S.length;k++)if(S[k].id===id)return k;return -1
 var FLAT=[];GRP.forEach(function(g){g.ids.forEach(function(id){var k=idxOf(id);if(k>=0)FLAT.push(k)})});
 var view='home';
 function shortMeta(s){return s.meta.replace(/ · Hope Chapel$/,'')}
+
+function howTo(){
+ var seen=false;try{seen=localStorage.getItem('hw')==='1'}catch(e){}
+ return '<details class="how"'+(seen?'':' open')+'><summary>How to use this</summary><div class="body"><ul>'
+ +'<li><b>Open a sermon</b> by tapping it. Use the <b>Notes</b> and <b>Questions</b> buttons at the top to switch views.</li>'
+ +'<li><b>Notes</b> has the outline, key takeaways and scriptures. Tap any verse to open it in the ESV.</li>'
+ +'<li><b>Questions</b> shows the discussion questions in large text for your group. <b>Copy questions</b> copies them to paste into a text or email.</li>'
+ +'<li><b>Search</b> finds words, scripture references and questions across every sermon.</li>'
+ +'<li>Use <b>← →</b> to move between sermons, <b>A− A+</b> to change text size, and <b>☾</b> for dark mode.</li>'
+ +'<li><b>On a laptop:</b> press <b>/</b> to search, <b>← →</b> to change sermons, <b>g</b> for Questions and <b>n</b> for Notes.</li>'
+ +'<li><b>Phone tip:</b> tap Share, then <b>Add to Home Screen</b> to open it like an app.</li>'
+ +'</ul></div></details>';
+}
 function buildHome(){
- var nw=S.length-1,h='<button class="card wk" data-i="'+nw+'" style="border-left-color:'+S[nw].color+'"><em>This week’s sermon</em><b>'+S[nw].title+'</b><span>'+shortMeta(S[nw])+'</span></button><p class="hint">Or tap any sermon below.</p>';
+ var nw=S.length-1,h='<button class="card wk" data-i="'+nw+'" style="border-left-color:'+S[nw].color+'"><em>This week’s sermon</em><b>'+S[nw].title+'</b><span>'+shortMeta(S[nw])+'</span></button><p class="hint">Or tap any sermon below.</p>'+howTo();
  var last=null;try{last=localStorage.getItem('sid')}catch(e){}
  var li2=last?idxOf(last):-1;
  if(li2>=0)h+='<button class="card cont" data-i="'+li2+'" style="border-left-color:'+S[li2].color+'"><em>Continue where you left off</em><b>'+S[li2].title+'</b><span>'+shortMeta(S[li2])+'</span></button>';
@@ -283,6 +299,7 @@ document.addEventListener('visibilitychange',function(){try{if(gm&&document.visi
 setGm(gm);
 nav.addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;
  if(b.id==='nHome')goHome();else if(b.id==='nNotes')setGm(false);else if(b.id==='nQs')setGm(true);else if(b.id==='nPrev')step(-1);else if(b.id==='nNext')step(1)});
+home.addEventListener('toggle',function(e){if(e.target.classList&&e.target.classList.contains('how')&&!e.target.open){try{localStorage.setItem('hw','1')}catch(x){}}},true);
 home.addEventListener('click',function(e){var c=e.target.closest('.card');if(!c)return;show(+c.dataset.i);setGm(!!c.dataset.q)});
 /* copy questions */
 function plain(t){return t.replace(/<br\s*\/?>/g,'\n').replace(/<[^>]+>/g,'').replace(/&amp;/g,'&')}
