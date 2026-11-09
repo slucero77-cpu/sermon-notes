@@ -167,6 +167,15 @@ summary{cursor:pointer}
 .how{margin:12px 0 4px}
 .how .body ul{margin:0;padding-left:20px;font:15px/1.5 -apple-system,system-ui,sans-serif}
 .how .body li{margin-bottom:8px}
+
+.favrow{margin:6px 0 4px}
+.favbtn{font:600 13px -apple-system,system-ui,sans-serif;border:1.5px solid var(--rule);background:var(--btn);color:var(--mut);border-radius:18px;padding:7px 14px;min-height:36px}
+.favbtn.on{background:var(--a);border-color:var(--a);color:#fff}
+.mn .priv{font:12px -apple-system,system-ui,sans-serif;color:var(--mut);text-transform:none;letter-spacing:0;font-weight:400;margin-left:6px}
+textarea.mynotes{width:100%;box-sizing:border-box;border:1px solid var(--rule);border-radius:12px;padding:12px;background:var(--card);color:var(--ink);font:16px/1.45 -apple-system,system-ui,sans-serif;resize:vertical;min-height:110px}
+body.gm .favrow{display:none}
+body.gm .qsec>.sec.mn{display:block}
+@media print{.favrow{display:none!important}textarea.mynotes{border:1px solid #999}}
 </style>
 </head>
 <body>
@@ -206,9 +215,15 @@ var nav=document.getElementById('nav'),main=document.getElementById('main'),res=
 function strip(h){return h.replace(/<[^>]+>/g,' ').replace(/&amp;/g,'&').replace(/\s+/g,' ').trim()}
 function li(a){return a.map(function(q){return '<li>'+q+'</li>'}).join('')}
 var IDX=[];
+var NT={};try{NT=JSON.parse(localStorage.getItem('nt')||'{}')||{}}catch(e){NT={}}
+function setFav(root,id){var b=root.querySelector('.favbtn');if(b){var f=isFav(id);b.textContent=f?'★ Saved':'☆ Save sermon';b.classList.toggle('on',f)}}
+function saveNT(){try{localStorage.setItem('nt',JSON.stringify(NT))}catch(e){}}
+function hasNote(id){return !!(NT[id]&&NT[id].n&&NT[id].n.trim())}
+function isFav(id){return !!(NT[id]&&NT[id].fav)}
+
 S.forEach(function(s,i){
  var d=document.createElement('section');d.className='sermon';d.id='s'+i;
- var h='<h2 style="font-size:1.4em;line-height:1.2;margin:4px 0 2px">'+s.title+'</h2><p class="meta">'+s.meta+'</p>';
+ var h='<h2 style="font-size:1.4em;line-height:1.2;margin:4px 0 2px">'+s.title+'</h2><p class="meta">'+s.meta+'</p><p class="favrow"><button data-fav="'+i+'" class="favbtn"></button></p>';
  h+='<div class="verse"><b>'+s.ref+'</b>'+s.verse+'</div><div class="big"><b>Big Idea</b>'+s.big+'</div>';
  h+='<details open id="dt'+i+'"><summary>Key takeaways</summary><div class="body"><ul>'+li(s.take)+'</ul></div></details>';
  h+='<details id="ds'+i+'"><summary>Key scriptures ('+s.scr.length+')</summary><div class="body">'+s.scr.map(function(v,vi){return '<div class="vr" data-i="'+i+'" data-v="'+vi+'" role="button" tabindex="0"><b>'+v[0]+'</b><span>'+v[1]+'</span></div>'}).join('')+'</div></details>';
@@ -224,12 +239,15 @@ S.forEach(function(s,i){
  } else {
   h+='<div class="sec">'+(s.official?'Minichurch Questions':'Discussion Questions')+'<span class="tools"><button data-copy="'+i+'">Copy questions</button></span></div><details open id="dq'+i+'"><summary>'+(s.official?'Official Minichurch questions':'Discuss')+'</summary><div class="body"><ol class="dq">'+li(s.qs)+'</ol></div></details>';
  }
+ h+='<div class="sec mn">My notes <span class="priv">only on this device</span></div><textarea class="mynotes" data-note="'+i+'" rows="4" placeholder="Jot your own notes for this sermon here…"></textarea>';
  h+='</div>';
  if(s.app){h+='<div class="sec">Personal Application</div><details><summary>This week, consider…</summary><div class="body"><ul>'+li(s.app)+'</ul></div></details>'}
  IDX.push({i:i,id:'dt'+i,L:'Takeaway',t:'Key takeaways',x:strip(s.big+' '+s.take.join(' '))});
  s.scr.forEach(function(v){IDX.push({i:i,id:'ds'+i,L:'Scripture',t:v[0],x:strip(v[0]+' — '+v[1])})});
  (s.qa?s.qa.map(function(o){return {q:o.q,a:o.a}}):s.qs.map(function(q){return {q:q}})).forEach(function(o,n){IDX.push({i:i,id:'dq'+i,L:'Question',t:'Question '+(n+1),x:strip(o.q+(o.a?' '+o.a:''))})});
  d.innerHTML=h;main.appendChild(d);
+ var ta=d.querySelector('textarea.mynotes');if(ta)ta.value=(NT[s.id]&&NT[s.id].n)||'';
+ setFav(d,s.id);
 });
 var home=document.getElementById('home');
 var GRP=[
@@ -260,10 +278,12 @@ function buildHome(){
  var last=null;try{last=localStorage.getItem('sid')}catch(e){}
  var li2=last?idxOf(last):-1;
  if(li2>=0)h+='<button class="card cont" data-i="'+li2+'" style="border-left-color:'+S[li2].color+'"><em>Continue where you left off</em><b>'+S[li2].title+'</b><span>'+shortMeta(S[li2])+'</span></button>';
+ var favs=S.map(function(s,k){return k}).filter(function(k){return isFav(S[k].id)});
+ if(favs.length){h+='<div class="sec">★ Saved</div>';favs.forEach(function(k){var s=S[k];h+='<button class="card" data-i="'+k+'" style="border-left-color:'+s.color+'"><b>'+s.title+(hasNote(s.id)?' ✎':'')+'</b><span>'+shortMeta(s)+'</span><em>'+s.ref+'</em></button>'})}
  GRP.forEach(function(g){
   h+='<div class="sec">'+g.n+'</div>';
   g.ids.forEach(function(id){var k=idxOf(id);if(k<0)return;var s=S[k];
-   h+='<button class="card" data-i="'+k+'" style="border-left-color:'+s.color+'"><b>'+s.title+'</b><span>'+shortMeta(s)+'</span><em>'+s.ref+'</em></button>';});
+   h+='<button class="card" data-i="'+k+'" style="border-left-color:'+s.color+'"><b>'+s.title+(hasNote(s.id)?' ✎':'')+'</b><span>'+shortMeta(s)+'</span><em>'+s.ref+'</em></button>';});
  });
  home.innerHTML=h;
 }
@@ -374,12 +394,17 @@ sh.querySelector('.x').addEventListener('click',closeSh);
 document.addEventListener('keydown',function(e){if(e.key==='Escape')closeSh()});
 
 
+/* favorites + personal notes */
+main.addEventListener('click',function(e){var b=e.target.closest('button[data-fav]');if(!b)return;
+ var s=S[+b.dataset.fav];NT[s.id]=NT[s.id]||{};NT[s.id].fav=!NT[s.id].fav;saveNT();setFav(b.closest('.sermon'),s.id);buildSide&&buildSide();markSide&&markSide()});
+main.addEventListener('input',function(e){var t=e.target;if(!t.matches||!t.matches('textarea.mynotes'))return;
+ var s=S[+t.dataset.note];NT[s.id]=NT[s.id]||{};NT[s.id].n=t.value;saveNT()});
 /* desktop sidebar + keyboard */
 var side=document.getElementById('side');
 function buildSide(){
  var s='';
  GRP.forEach(function(g){s+='<h3>'+g.n+'</h3>';g.ids.forEach(function(id){var k=idxOf(id);if(k<0)return;
-  s+='<button data-i="'+k+'" style="--c:'+S[k].color+'">'+S[k].title+'<small>'+shortMeta(S[k])+'</small></button>'})});
+  s+='<button data-i="'+k+'" style="--c:'+S[k].color+'">'+(isFav(S[k].id)?'★ ':'')+S[k].title+(hasNote(S[k].id)?' ✎':'')+'<small>'+shortMeta(S[k])+'</small></button>'})});
  side.innerHTML=s;
 }
 function markSide(){[].forEach.call(side.querySelectorAll('button'),function(b){b.classList.toggle('on',+b.dataset.i===view)})}
