@@ -224,6 +224,14 @@ body.gm .qa summary{font-size:calc(15px*var(--qz));min-height:calc(44px*var(--qz
 #lead .lq{font-size:calc(1.65em*var(--qz))}
 #lead .lb .body{font-size:calc(1em*var(--qz))}
 #lead .lh .lz{width:34px;height:34px;border-radius:10px;border:1px solid var(--rule);background:var(--btn);color:var(--mut);font:700 13px -apple-system,system-ui,sans-serif}
+
+.a2{position:relative;margin:12px 0 4px;padding:14px 16px 14px;border-radius:14px;background:var(--tint);border:1.5px solid #6f9ef6;font:15px/1.45 -apple-system,system-ui,sans-serif;color:var(--ink)}
+.a2 h3{margin:0 28px 6px 0;font-size:16px;color:var(--at)}
+.a2 .x{position:absolute;right:6px;top:6px;width:40px;height:40px;border:0;background:transparent;color:var(--mut);font-size:22px}
+.a2 b.pl{display:block;margin:8px 0 2px;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--mut)}
+.a2 ol{margin:0 0 0 20px;padding:0}.a2 li{margin:3px 0}
+.a2 .w{margin-top:8px;font-size:13px;color:var(--mut)}
+@media print{.a2{display:none!important}}
 /* motion */
 @keyframes fin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 @keyframes fo{from{opacity:0}to{opacity:1}}
@@ -337,6 +345,15 @@ var FLAT=[];GRP.forEach(function(g){g.ids.forEach(function(id){var k=idxOf(id);i
 var view='home';
 function shortMeta(s){return s.meta.replace(/ · Hope Chapel$/,'')}
 
+
+function a2hs(){var d=false,st=false;try{d=localStorage.getItem('a2')==='1'}catch(e){}
+ try{st=(window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true}catch(e){}
+ if(!IS_PUB||d||st)return '';
+ return '<div class="a2"><button class="x" aria-label="Hide this tip">×</button><h3>📱 Add this to your phone’s Home Screen</h3>'
+ +'<b class="pl">iPhone</b><ol><li>Open this page in <b>Safari</b>.</li><li>Tap the <b>Share</b> button (a square with an arrow pointing up) at the bottom of the screen.</li><li>Scroll down and tap <b>Add to Home Screen</b>, then tap <b>Add</b>.</li></ol>'
+ +'<b class="pl">Android</b><ol><li>Open this page in <b>Chrome</b>.</li><li>Tap the <b>⋮</b> menu in the top corner.</li><li>Tap <b>Add to Home screen</b> (or <b>Install app</b>), then tap <b>Add</b>.</li></ol>'
+ +'<p class="w">Opened this from Facebook, Instagram or a text message? Tap the ⋯ or Share icon and choose <b>Open in Safari</b> (or <b>Open in Chrome</b>) first. Home Screen only works from the browser.</p></div>'}
+
 function howTo(){
  var seen=false;try{seen=localStorage.getItem('hw')==='1'}catch(e){}
  return '<details class="how"'+(seen?'':' open')+'><summary>How to use this</summary><div class="body"><ul>'
@@ -345,13 +362,14 @@ function howTo(){
  +'<li><b>Notes</b> has the outline, key takeaways and scriptures. Tap any verse to open it in the ESV.</li>'
  +'<li><b>Questions</b> shows the discussion questions in large text for your group. <b>Copy questions</b> copies them to paste into a text or email.</li>'
  +'<li><b>Search</b> finds words, scripture references and questions across every sermon.</li>'
+ +(IS_PUB?'<li><b>Add it to your Home Screen:</b> in Safari tap <b>Share</b>, then <b>Add to Home Screen</b> (on Android: <b>⋮</b> menu, then <b>Add to Home screen</b>).</li>':'')
  +'<li>Use <b>← →</b> to move between sermons, <b>A− A+</b> to change text size, and <b>☾</b> for dark mode.</li>'
  +'<li><b>On a laptop:</b> press <b>/</b> to search, <b>← →</b> to change sermons, <b>g</b> for Questions and <b>n</b> for Notes.</li>'
  +'<li><b>Phone tip:</b> tap Share, then <b>Add to Home Screen</b> to open it like an app.</li>'
  +'</ul></div></details>';
 }
 function buildHome(){
- var nw=S.length-1,h='<button class="card wk" data-i="'+nw+'" style="border-left-color:'+S[nw].color+'"><em>This week’s sermon</em><b>'+S[nw].title+'</b><span>'+shortMeta(S[nw])+'</span></button><p class="hint"><b>Notes updated Tue, Nov 10.</b> New notes post Tuesday evening, or Wednesday at the latest. Or tap any sermon below.</p>'+howTo();
+ var nw=S.length-1,h='<button class="card wk" data-i="'+nw+'" style="border-left-color:'+S[nw].color+'"><em>This week’s sermon</em><b>'+S[nw].title+'</b><span>'+shortMeta(S[nw])+'</span></button><p class="hint"><b>Notes updated Tue, Nov 10.</b> New notes post Tuesday evening, or Wednesday at the latest. Or tap any sermon below.</p>'+a2hs()+howTo();
  var last=null;try{last=localStorage.getItem('sid')}catch(e){}
  var li2=last?idxOf(last):-1;
  if(li2>=0)h+='<button class="card cont" data-i="'+li2+'" style="border-left-color:'+S[li2].color+'"><em>Continue where you left off</em><b>'+S[li2].title+'</b><span>'+shortMeta(S[li2])+'</span></button>';
@@ -400,7 +418,7 @@ setGm(gm);
 nav.addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;
  if(b.id==='nHome')goHome();else if(b.id==='nNotes')setGm(false);else if(b.id==='nQs')setGm(true);else if(b.id==='nPrev')step(-1);else if(b.id==='nNext')step(1)});
 home.addEventListener('toggle',function(e){if(e.target.classList&&e.target.classList.contains('how')&&!e.target.open){try{localStorage.setItem('hw','1')}catch(x){}}},true);
-home.addEventListener('click',function(e){var c=e.target.closest('.card');if(!c)return;show(+c.dataset.i);setGm(!!c.dataset.q)});
+home.addEventListener('click',function(e){var x=e.target.closest('.a2 .x');if(x){try{localStorage.setItem('a2','1')}catch(z){}x.closest('.a2').remove();return}var c=e.target.closest('.card');if(!c)return;show(+c.dataset.i);setGm(!!c.dataset.q)});
 /* copy questions */
 function plain(t){return t.replace(/<br\s*\/?>/g,'\n').replace(/<[^>]+>/g,'').replace(/&amp;/g,'&')}
 function qText(i){var s=S[i],qs=s.qa?s.qa.map(function(o){return o.q}):s.qs;
