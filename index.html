@@ -275,6 +275,7 @@ function strip(h){return h.replace(/<[^>]+>/g,' ').replace(/&amp;/g,'&').replace
 function li(a){return a.map(function(q){return '<li>'+q+'</li>'}).join('')}
 var IDX=[];
 var NT={};try{NT=JSON.parse(localStorage.getItem('nt')||'{}')||{}}catch(e){NT={}}
+var LEADER=false;
 var IS_PUB=/github\.io$|^localhost$|^127\./.test(location.hostname);
 function pkOf(id){return (NT[id]&&NT[id].pk)||[]}
 function setPk(root,id){var pk=pkOf(id);[].forEach.call(root.querySelectorAll('[data-qn]'),function(e){var on=pk.indexOf(+e.dataset.qn)>=0;e.classList.toggle('st',on);var b=e.querySelector('.qstar');if(b)b.textContent=on?'★':'☆'});
@@ -299,9 +300,9 @@ S.forEach(function(s,i){
  h+='</div>';
  h+='<p class="gref">'+s.ref+'</p><div class="qsec">';
  if(s.qa){
-  h+='<div class="sec">Minichurch Questions<span class="tools"><button data-lead="'+i+'">Lead</button><button data-pk="'+i+'">★ Picks</button><button data-copy="'+i+'">Copy</button></span></div><details open id="dq'+i+'"><summary>10 questions with sermon notes</summary><div class="body">'+s.qa.map(function(o,n){return '<div class="qa" data-qn="'+n+'"><button class="qstar" data-qs="'+i+','+n+'" aria-label="Pick this question">☆</button><div class="qq">'+(n+1)+'. '+o.q+'</div>'+(o.a?'<details><summary>What the sermon says</summary><div class="body"><p>'+o.a+'</p></div></details>':'')+'</div>'}).join('')+'</div></details>';
+  h+='<div class="sec">Minichurch Questions<span class="tools">'+(LEADER?'<button data-lead="'+i+'">Lead</button><button data-pk="'+i+'">★ Picks</button>':'')+'<button data-copy="'+i+'">'+(LEADER?'Copy':'Copy questions')+'</button></span></div><details open id="dq'+i+'"><summary>10 questions with sermon notes</summary><div class="body">'+s.qa.map(function(o,n){return '<div class="qa" data-qn="'+n+'">'+(LEADER?'<button class="qstar" data-qs="'+i+','+n+'" aria-label="Pick this question">☆</button>':'')+'<div class="qq">'+(n+1)+'. '+o.q+'</div>'+(o.a?'<details><summary>What the sermon says</summary><div class="body"><p>'+o.a+'</p></div></details>':'')+'</div>'}).join('')+'</div></details>';
  } else {
-  h+='<div class="sec">'+(s.official?'Minichurch Questions':'Discussion Questions')+'<span class="tools"><button data-lead="'+i+'">Lead</button><button data-pk="'+i+'">★ Picks</button><button data-copy="'+i+'">Copy</button></span></div><details open id="dq'+i+'"><summary>'+(s.official?'Official Minichurch questions':'Discuss')+'</summary><div class="body"><ol class="dq">'+s.qs.map(function(q,n){return '<li data-qn="'+n+'">'+q+'<button class="qstar" data-qs="'+i+','+n+'" aria-label="Pick this question">☆</button></li>'}).join('')+'</ol></div></details>';
+  h+='<div class="sec">'+(s.official?'Minichurch Questions':'Discussion Questions')+'<span class="tools">'+(LEADER?'<button data-lead="'+i+'">Lead</button><button data-pk="'+i+'">★ Picks</button>':'')+'<button data-copy="'+i+'">'+(LEADER?'Copy':'Copy questions')+'</button></span></div><details open id="dq'+i+'"><summary>'+(s.official?'Official Minichurch questions':'Discuss')+'</summary><div class="body"><ol class="dq">'+s.qs.map(function(q,n){return '<li data-qn="'+n+'">'+q+(LEADER?'<button class="qstar" data-qs="'+i+','+n+'" aria-label="Pick this question">☆</button>':'')+'</li>'}).join('')+'</ol></div></details>';
  }
  h+='<div class="sec mn">My notes <span class="priv">only on this device</span></div><textarea class="mynotes" data-note="'+i+'" rows="4" placeholder="Jot your own notes for this sermon here…"></textarea>';
  h+='</div>';
