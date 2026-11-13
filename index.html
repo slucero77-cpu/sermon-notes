@@ -373,9 +373,10 @@ function applyView(){
 function updPB(){var b=document.getElementById('pb');if(!b)return;if(view==='home'||typeof view!=='number'){b.style.display='none';return}
  var m=document.documentElement.scrollHeight-window.innerHeight;b.style.display='block';b.style.width=(m>0?Math.min(100,Math.max(0,window.scrollY/m*100)):0)+'%'}
 window.addEventListener('scroll',updPB,{passive:true});window.addEventListener('resize',updPB);
-function goHome(){view='home';try{if(IS_PUB&&location.hash)history.replaceState(null,'',location.pathname)}catch(e){}qin.value='';buildHome();applyView();window.scrollTo(0,0)}
+function trk(){try{if(!window.goatcounter||!goatcounter.count)return;var v=(typeof view==='number'&&S[view])?S[view]:null;goatcounter.count({path:v?'/'+v.id:'/',title:v?v.title:'Home'})}catch(e){}}
+function goHome(){view='home';setTimeout(trk,0);try{if(IS_PUB&&location.hash)history.replaceState(null,'',location.pathname)}catch(e){}qin.value='';buildHome();applyView();window.scrollTo(0,0)}
 function show(i,openK){
- view=i;var s=S[i];qin.value='';try{if(IS_PUB&&location.hash!=='#'+s.id)history.replaceState(null,'','#'+s.id)}catch(e){}
+ view=i;var s=S[i];setTimeout(trk,0);qin.value='';try{if(IS_PUB&&location.hash!=='#'+s.id)history.replaceState(null,'','#'+s.id)}catch(e){}
  document.documentElement.style.setProperty('--a',s.color);
  [].forEach.call(document.querySelectorAll('.sermon'),function(e,k){e.classList.toggle('on',k==i)});
  document.getElementById('nCur').textContent=s.tab;
@@ -550,5 +551,6 @@ if(!fromHash())goHome();
 
 try{if('serviceWorker' in navigator&&/^https?:/.test(location.protocol)&&location.hostname.indexOf('claude')<0){navigator.serviceWorker.register('sw.js').catch(function(){})}}catch(e){}
 </script>
+<script data-goatcounter="https://slucero77.goatcounter.com/count" data-goatcounter-settings='{"no_onload":true}' async src="//gc.zgo.at/count.js" onload="trk()"></script>
 </body>
 </html>
