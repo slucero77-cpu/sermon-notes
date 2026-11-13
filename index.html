@@ -184,6 +184,35 @@ body.gm .qsec>.sec.mn{display:block}
 #pb{position:fixed;top:0;left:0;height:3px;width:0;background:var(--a);z-index:60;display:none;transition:width .1s linear;pointer-events:none}
 html[data-th=dark] #pb{background:var(--at)}
 @media print{#pb{display:none!important}}
+
+.qa,ol.dq li{position:relative}
+.qa .qq,ol.dq li{padding-right:42px}
+.qstar{position:absolute;right:0;top:6px;width:40px;height:40px;border:0;background:transparent;font-size:22px;line-height:1;color:var(--mut)}
+ol.dq li .qstar{top:-6px}
+.qa.st .qstar,li.st .qstar{color:#d9a21b}
+.qsec.pk .qa:not(.st),.qsec.pk ol.dq li:not(.st){display:none}
+.qsec .sec{flex-wrap:wrap;gap:6px}
+.shbtn{font:600 13px -apple-system,system-ui,sans-serif;border:1.5px solid var(--rule);background:var(--btn);color:var(--mut);border-radius:18px;padding:7px 14px;min-height:36px;margin-left:6px}
+.favrow{display:flex;flex-wrap:wrap;gap:6px 0}.favrow .shbtn:first-of-type{margin-left:6px}
+#lead{display:none;position:fixed;inset:0;z-index:70;background:var(--bg);color:var(--ink);flex-direction:column;padding:calc(env(safe-area-inset-top) + 12px) 18px calc(env(safe-area-inset-bottom) + 16px)}
+#lead.on{display:flex}
+#lead .lh{display:flex;align-items:center;gap:10px;font:600 14px -apple-system,system-ui,sans-serif;color:var(--mut)}
+#lead .lh b{flex:1;color:var(--at);font-size:15px}
+#lead .lx{width:40px;height:40px;border-radius:50%;border:0;background:var(--tint);color:var(--mut);font-size:22px}
+#lead .lbar{height:4px;background:var(--rule);border-radius:2px;margin:12px 0 4px;overflow:hidden}
+#lead .lbar i{display:block;height:100%;width:0;background:var(--a);transition:width .25s ease}
+#lead .lb{flex:1;overflow:auto;display:flex;flex-direction:column;justify-content:center;padding:10px 2px}
+#lead .ls{font:700 12px -apple-system,system-ui,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--at);margin-bottom:12px}
+#lead .lq{font-size:1.65em;line-height:1.4;font-weight:600}
+#lead .lq .lk{display:block;font-size:.62em;font-weight:400;color:var(--mut);margin-top:16px;line-height:1.4}
+#lead details{margin-top:18px}
+#lead .lf{display:flex;gap:10px}
+#lead .lf button{flex:1;min-height:56px;border-radius:14px;border:1.5px solid var(--rule);background:var(--btn);color:var(--ink);font:700 17px -apple-system,system-ui,sans-serif}
+#lead .lf button.nx{background:var(--a);border-color:var(--a);color:#fff}
+#lead .lf button:disabled{opacity:.35}
+html[data-th=dark] #lead .lf button.nx{filter:brightness(.88)}
+body.lk{overflow:hidden}
+@media print{#lead,.shbtn,.qstar{display:none!important}}
 /* motion */
 @keyframes fin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 @keyframes fo{from{opacity:0}to{opacity:1}}
@@ -208,6 +237,7 @@ body,header,.card,details,nav,.big,.search input,textarea.mynotes{transition:bac
 </head>
 <body>
 <div id="pb" aria-hidden="true"></div>
+<div id="lead" role="dialog" aria-label="Lead questions"></div>
 <header>
  <div class="hrow"><div><small>Hope Chapel</small><h1>Sermon Notes</h1></div>
  <div class="fs"><button id="th" aria-label="Dark mode">☾</button><button id="fm" aria-label="Smaller text">A−</button><button id="fp" aria-label="Larger text">A+</button></div></div>
@@ -245,6 +275,10 @@ function strip(h){return h.replace(/<[^>]+>/g,' ').replace(/&amp;/g,'&').replace
 function li(a){return a.map(function(q){return '<li>'+q+'</li>'}).join('')}
 var IDX=[];
 var NT={};try{NT=JSON.parse(localStorage.getItem('nt')||'{}')||{}}catch(e){NT={}}
+var IS_PUB=/github\.io$|^localhost$|^127\./.test(location.hostname);
+function pkOf(id){return (NT[id]&&NT[id].pk)||[]}
+function setPk(root,id){var pk=pkOf(id);[].forEach.call(root.querySelectorAll('[data-qn]'),function(e){var on=pk.indexOf(+e.dataset.qn)>=0;e.classList.toggle('st',on);var b=e.querySelector('.qstar');if(b)b.textContent=on?'★':'☆'});
+ var pb=root.querySelector('button[data-pk]');if(pb){pb.textContent='★ Picks'+(pk.length?' ('+pk.length+')':'')}}
 function setFav(root,id){var b=root.querySelector('.favbtn');if(b){var f=isFav(id);b.textContent=f?'★ Saved':'☆ Save sermon';b.classList.toggle('on',f)}}
 function saveNT(){try{localStorage.setItem('nt',JSON.stringify(NT))}catch(e){}}
 function hasNote(id){return !!(NT[id]&&NT[id].n&&NT[id].n.trim())}
@@ -252,7 +286,7 @@ function isFav(id){return !!(NT[id]&&NT[id].fav)}
 
 S.forEach(function(s,i){
  var d=document.createElement('section');d.className='sermon';d.id='s'+i;
- var h='<h2 style="font-size:1.4em;line-height:1.2;margin:4px 0 2px">'+s.title+'</h2><p class="meta">'+s.meta+'</p><p class="favrow"><button data-fav="'+i+'" class="favbtn"></button></p>';
+ var h='<h2 style="font-size:1.4em;line-height:1.2;margin:4px 0 2px">'+s.title+'</h2><p class="meta">'+s.meta+'</p><p class="favrow"><button data-fav="'+i+'" class="favbtn"></button>'+(IS_PUB?'<button class="shbtn" data-share="'+i+'">↗ Share</button>':'')+'</p>';
  var vl=linkRef(s.vref||s.ref);
  h+='<div class="verse"><b>'+s.ref+'</b>'+s.verse+(vl.indexOf('href')>=0?'<span class="vlink">Read in the ESV: '+vl+' ↗</span>':'')+'</div><div class="big"><b>Big Idea</b>'+s.big+'</div>';
  h+='<details open id="dt'+i+'"><summary>Key takeaways</summary><div class="body"><ul>'+li(s.take)+'</ul></div></details>';
@@ -265,9 +299,9 @@ S.forEach(function(s,i){
  h+='</div>';
  h+='<p class="gref">'+s.ref+'</p><div class="qsec">';
  if(s.qa){
-  h+='<div class="sec">Minichurch Questions<span class="tools"><button data-copy="'+i+'">Copy questions</button></span></div><details open id="dq'+i+'"><summary>10 questions with sermon notes</summary><div class="body">'+s.qa.map(function(o,n){return '<div class="qa"><div class="qq">'+(n+1)+'. '+o.q+'</div>'+(o.a?'<details><summary>What the sermon says</summary><div class="body"><p>'+o.a+'</p></div></details>':'')+'</div>'}).join('')+'</div></details>';
+  h+='<div class="sec">Minichurch Questions<span class="tools"><button data-lead="'+i+'">Lead</button><button data-pk="'+i+'">★ Picks</button><button data-copy="'+i+'">Copy</button></span></div><details open id="dq'+i+'"><summary>10 questions with sermon notes</summary><div class="body">'+s.qa.map(function(o,n){return '<div class="qa" data-qn="'+n+'"><button class="qstar" data-qs="'+i+','+n+'" aria-label="Pick this question">☆</button><div class="qq">'+(n+1)+'. '+o.q+'</div>'+(o.a?'<details><summary>What the sermon says</summary><div class="body"><p>'+o.a+'</p></div></details>':'')+'</div>'}).join('')+'</div></details>';
  } else {
-  h+='<div class="sec">'+(s.official?'Minichurch Questions':'Discussion Questions')+'<span class="tools"><button data-copy="'+i+'">Copy questions</button></span></div><details open id="dq'+i+'"><summary>'+(s.official?'Official Minichurch questions':'Discuss')+'</summary><div class="body"><ol class="dq">'+li(s.qs)+'</ol></div></details>';
+  h+='<div class="sec">'+(s.official?'Minichurch Questions':'Discussion Questions')+'<span class="tools"><button data-lead="'+i+'">Lead</button><button data-pk="'+i+'">★ Picks</button><button data-copy="'+i+'">Copy</button></span></div><details open id="dq'+i+'"><summary>'+(s.official?'Official Minichurch questions':'Discuss')+'</summary><div class="body"><ol class="dq">'+s.qs.map(function(q,n){return '<li data-qn="'+n+'">'+q+'<button class="qstar" data-qs="'+i+','+n+'" aria-label="Pick this question">☆</button></li>'}).join('')+'</ol></div></details>';
  }
  h+='<div class="sec mn">My notes <span class="priv">only on this device</span></div><textarea class="mynotes" data-note="'+i+'" rows="4" placeholder="Jot your own notes for this sermon here…"></textarea>';
  h+='</div>';
@@ -277,7 +311,7 @@ S.forEach(function(s,i){
  (s.qa?s.qa.map(function(o){return {q:o.q,a:o.a}}):s.qs.map(function(q){return {q:q}})).forEach(function(o,n){IDX.push({i:i,id:'dq'+i,L:'Question',t:'Question '+(n+1),x:strip(o.q+(o.a?' '+o.a:''))})});
  d.innerHTML=h;main.appendChild(d);
  var ta=d.querySelector('textarea.mynotes');if(ta)ta.value=(NT[s.id]&&NT[s.id].n)||'';
- setFav(d,s.id);
+ setFav(d,s.id);setPk(d,s.id);
 });
 var home=document.getElementById('home');
 var GRP=[
@@ -329,9 +363,9 @@ function applyView(){
 function updPB(){var b=document.getElementById('pb');if(!b)return;if(view==='home'||typeof view!=='number'){b.style.display='none';return}
  var m=document.documentElement.scrollHeight-window.innerHeight;b.style.display='block';b.style.width=(m>0?Math.min(100,Math.max(0,window.scrollY/m*100)):0)+'%'}
 window.addEventListener('scroll',updPB,{passive:true});window.addEventListener('resize',updPB);
-function goHome(){view='home';qin.value='';buildHome();applyView();window.scrollTo(0,0)}
+function goHome(){view='home';try{if(IS_PUB&&location.hash)history.replaceState(null,'',location.pathname)}catch(e){}qin.value='';buildHome();applyView();window.scrollTo(0,0)}
 function show(i,openK){
- view=i;var s=S[i];qin.value='';
+ view=i;var s=S[i];qin.value='';try{if(IS_PUB&&location.hash!=='#'+s.id)history.replaceState(null,'','#'+s.id)}catch(e){}
  document.documentElement.style.setProperty('--a',s.color);
  [].forEach.call(document.querySelectorAll('.sermon'),function(e,k){e.classList.toggle('on',k==i)});
  document.getElementById('nCur').textContent=s.tab;
@@ -455,7 +489,49 @@ document.addEventListener('keydown',function(e){
  else if(e.key==='n'&&view!=='home')setGm(false);
 });
 window.addEventListener('beforeprint',function(){[].forEach.call(document.querySelectorAll('.sermon.on details'),function(d){d.open=true})});
-goHome();
+
+/* picks */
+main.addEventListener('click',function(e){
+ var st=e.target.closest('.qstar');if(st){var a=st.dataset.qs.split(','),s=S[+a[0]],n=+a[1];NT[s.id]=NT[s.id]||{};var pk=NT[s.id].pk||[],k=pk.indexOf(n);if(k>=0)pk.splice(k,1);else pk.push(n);NT[s.id].pk=pk.sort(function(x,y){return x-y});saveNT();setPk(st.closest('.sermon'),s.id);
+  st.classList.remove('bump');void st.offsetWidth;st.classList.add('bump');if(!pk.length)st.closest('.qsec').classList.remove('pk');return}
+ var pb=e.target.closest('button[data-pk]');if(pb){var s2=S[+pb.dataset.pk],q=pb.closest('.qsec');
+  if(!pkOf(s2.id).length){var o=pb.textContent;pb.textContent='Tap ☆ to pick';setTimeout(function(){setPk(pb.closest('.sermon'),s2.id)},1800);return}
+  var on=q.classList.toggle('pk');pb.classList.toggle('on',on)}
+});
+/* copy: respect picks view */
+function qList(i,onlyPk){var s=S[i],all=s.qa?s.qa.map(function(o){return o.q}):s.qs,pk=pkOf(s.id);
+ return all.map(function(q,n){return {n:n,q:q}}).filter(function(x){return !onlyPk||pk.indexOf(x.n)>=0})}
+qText=function(i){var s=S[i],on=!!document.querySelector('.sermon.on .qsec.pk'),l=qList(i,on);
+ return s.title+' — '+shortMeta(s)+'\n'+s.ref+'\n\n'+(on?'My picks':'Discussion questions')+'\n\n'+l.map(function(x){return (x.n+1)+'. '+plain(x.q)}).join('\n\n')};
+/* lead mode */
+var lead=document.getElementById('lead'),LS={i:0,l:[],p:0},wl=null;
+function leadDraw(){var s=S[LS.i],x=LS.l[LS.p],t=x.q,sec='',body=t,lk='';
+ var bi=t.indexOf('<br>');if(bi>0&&/^<b>/.test(t)){sec=strip(t.slice(0,bi));body=t.slice(bi+4)}
+ var m=body.match(/\s*\((Look at:[^)]*)\)\s*$/);if(m){lk=m[1];body=body.slice(0,m.index)}
+ var o=s.qa&&s.qa[x.n],ans=o&&o.a;
+ lead.innerHTML='<div class="lh"><button class="lx" aria-label="Close">×</button><b>'+s.title+'</b><span>'+LS.l.length+(LS.pk?' picks':' questions')+'</span></div><div class="lbar"><i style="width:'+((LS.p+1)/LS.l.length*100)+'%"></i></div>'
+ +'<div class="lb"><div class="ls">Question '+(x.n+1)+(sec?' · '+sec:'')+'</div><div class="lq">'+body+(lk?'<span class="lk">'+lk+'</span>':'')+'</div>'+(ans?'<details><summary>What the sermon says</summary><div class="body"><p>'+ans+'</p></div></details>':'')+'</div>'
+ +'<div class="lf"><button class="pv"'+(LS.p?'':' disabled')+'>← Back</button><button class="nx"'+(LS.p<LS.l.length-1?'':' disabled')+'>Next →</button></div>';
+}
+function leadOpen(i){LS.i=i;var pk=pkOf(S[i].id).length>0;LS.pk=pk;LS.l=qList(i,pk);LS.p=0;if(!LS.l.length)return;
+ document.documentElement.style.setProperty('--a',S[i].color);leadDraw();lead.classList.add('on');document.body.classList.add('lk');
+ try{if(navigator.wakeLock)navigator.wakeLock.request('screen').then(function(w){wl=w},function(){})}catch(e){}}
+function leadClose(){lead.classList.remove('on');document.body.classList.remove('lk');try{if(wl){wl.release();wl=null}}catch(e){}}
+function leadStep(d){var n=LS.p+d;if(n<0||n>=LS.l.length)return;LS.p=n;leadDraw()}
+lead.addEventListener('click',function(e){if(e.target.closest('.lx'))leadClose();else if(e.target.closest('.nx'))leadStep(1);else if(e.target.closest('.pv'))leadStep(-1)});
+var tx=0,ty=0;lead.addEventListener('touchstart',function(e){tx=e.touches[0].clientX;ty=e.touches[0].clientY},{passive:true});
+lead.addEventListener('touchend',function(e){var dx=e.changedTouches[0].clientX-tx,dy=e.changedTouches[0].clientY-ty;if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.5)leadStep(dx<0?1:-1)},{passive:true});
+document.addEventListener('keydown',function(e){if(!lead.classList.contains('on'))return;
+ if(e.key==='Escape')leadClose();else if(e.key==='ArrowRight'||e.key===' ')leadStep(1);else if(e.key==='ArrowLeft')leadStep(-1);else return;e.preventDefault();e.stopImmediatePropagation()},true);
+main.addEventListener('click',function(e){var b=e.target.closest('button[data-lead]');if(b)leadOpen(+b.dataset.lead)});
+/* share + deep links */
+main.addEventListener('click',function(e){var b=e.target.closest('button[data-share]');if(!b)return;
+ var s=S[+b.dataset.share],u=location.origin+location.pathname+'#'+s.id,old=b.textContent;
+ if(navigator.share){navigator.share({title:s.title+' — Hope Chapel',text:s.title+' ('+shortMeta(s)+')',url:u}).catch(function(){});return}
+ copyText(u,function(ok){b.textContent=ok?'Link copied ✓':'Couldn’t copy';setTimeout(function(){b.textContent=old},1800)})});
+function fromHash(){if(!IS_PUB)return false;var id=(location.hash||'').slice(1),k=id?idxOf(id):-1;if(k>=0){show(k);return true}return false}
+window.addEventListener('hashchange',function(){if(!fromHash()&&!location.hash&&view!=='home')goHome()});
+if(!fromHash())goHome();
 
 try{if('serviceWorker' in navigator&&/^https?:/.test(location.protocol)&&location.hostname.indexOf('claude')<0){navigator.serviceWorker.register('sw.js').catch(function(){})}}catch(e){}
 </script>
