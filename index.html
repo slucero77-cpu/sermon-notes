@@ -179,6 +179,27 @@ body.gm .qsec>.sec.mn{display:block}
 @media print{.favrow{display:none!important}textarea.mynotes{border:1px solid #999}}
 .vlink{display:block;font:600 14px -apple-system,system-ui,sans-serif;font-style:normal;margin-top:10px}
 .vlink a{color:var(--at);text-decoration:underline}
+
+/* motion */
+@keyframes fin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes fo{from{opacity:0}to{opacity:1}}
+@keyframes su{from{transform:translateY(40px);opacity:0}to{transform:none;opacity:1}}
+@keyframes pp{from{opacity:0;transform:translate(-50%,-48%) scale(.96)}to{opacity:1;transform:translate(-50%,-50%)}}
+@keyframes bump{0%{transform:scale(1)}40%{transform:scale(1.18)}100%{transform:scale(1)}}
+.sermon.on>*{animation:fin .28s ease both}
+#home>*{animation:fin .3s ease both}
+#home>*:nth-child(2){animation-delay:.04s}#home>*:nth-child(3){animation-delay:.08s}#home>*:nth-child(4){animation-delay:.12s}#home>*:nth-child(5){animation-delay:.16s}#home>*:nth-child(6){animation-delay:.2s}#home>*:nth-child(7){animation-delay:.24s}#home>*:nth-child(n+8){animation-delay:.28s}
+details[open]>.body{animation:fin .25s ease both}
+@supports selector(::details-content){:root{interpolate-size:allow-keywords}details::details-content{block-size:0;overflow:hidden;transition:block-size .25s ease,content-visibility .25s allow-discrete}details[open]::details-content{block-size:auto}}
+.card,nav button,.favbtn,.fs button,#th,.vr,#side button{transition:transform .12s ease,background-color .2s,color .2s,border-color .2s}
+.card:active,nav button:active,.favbtn:active,.fs button:active,#th:active,.vr:active{transform:scale(.97)}
+.favbtn.bump{animation:bump .35s ease}
+body,header,.card,details,nav,.big,.search input,textarea.mynotes{transition:background-color .25s ease,color .25s ease,border-color .25s ease}
+#sheet.on .bd{animation:fo .2s ease}
+#sheet.on .pn{animation:su .26s cubic-bezier(.2,.8,.2,1)}
+@media(min-width:1000px){#sheet.on .pn{animation:pp .2s ease}}
+@media print{details::details-content{block-size:auto!important;content-visibility:visible!important}.sermon.on>*,#home>*,details[open]>.body{animation:none!important}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
@@ -399,7 +420,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape')closeSh()});
 
 /* favorites + personal notes */
 main.addEventListener('click',function(e){var b=e.target.closest('button[data-fav]');if(!b)return;
- var s=S[+b.dataset.fav];NT[s.id]=NT[s.id]||{};NT[s.id].fav=!NT[s.id].fav;saveNT();setFav(b.closest('.sermon'),s.id);buildSide&&buildSide();markSide&&markSide()});
+ var s=S[+b.dataset.fav];NT[s.id]=NT[s.id]||{};NT[s.id].fav=!NT[s.id].fav;saveNT();setFav(b.closest('.sermon'),s.id);b.classList.remove('bump');void b.offsetWidth;b.classList.add('bump');buildSide&&buildSide();markSide&&markSide()});
 main.addEventListener('input',function(e){var t=e.target;if(!t.matches||!t.matches('textarea.mynotes'))return;
  var s=S[+t.dataset.note];NT[s.id]=NT[s.id]||{};NT[s.id].n=t.value;saveNT()});
 /* desktop sidebar + keyboard */
