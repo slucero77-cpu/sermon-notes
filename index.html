@@ -224,6 +224,26 @@ body.gm .qa summary{font-size:calc(15px*var(--qz));min-height:calc(44px*var(--qz
 #lead .lq{font-size:calc(1.65em*var(--qz))}
 #lead .lb .body{font-size:calc(1em*var(--qz))}
 #lead .lh .lz{width:34px;height:34px;border-radius:10px;border:1px solid var(--rule);background:var(--btn);color:var(--mut);font:700 13px -apple-system,system-ui,sans-serif}
+
+#handout{display:none}
+@media print{
+ body.ho>*:not(#handout){display:none!important}
+ body.ho #handout{display:block!important;color:#000;background:#fff;font:10.5pt/1.4 Georgia,'Times New Roman',serif}
+ #handout .hb{border-top:5px solid #6f9ef6;padding-top:8px}
+ #handout .hs{font:700 8pt -apple-system,Helvetica,Arial,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#2f63c9}
+ #handout h1{font-size:19pt;margin:3px 0 2px;line-height:1.15}
+ #handout .hm{font-style:italic;color:#444;margin-bottom:8px}
+ #handout h2{font:700 8.5pt -apple-system,Helvetica,Arial,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#2f63c9;border-bottom:1px solid #bbb;margin:12px 0 5px;padding-bottom:2px;break-after:avoid}
+ #handout .hbig{border-left:4px solid #6f9ef6;padding:3px 0 3px 9px;font-size:11pt}
+ #handout ul{margin:0 0 0 17px}#handout li{margin-bottom:3px}
+ #handout .hv b{font-family:-apple-system,Helvetica,Arial,sans-serif}
+ #handout .hq{margin-bottom:9px;break-inside:avoid}
+ #handout .hq .t{font-weight:700}
+ #handout .hl{border-bottom:1px solid #999;height:20px}
+ #handout .ha{margin:4px 0 0 14px;padding:4px 8px;border-left:3px solid #999;background:#f2f2f2;font-size:9.5pt}
+ #handout .hf{margin-top:14px;text-align:center;font:700 8pt -apple-system,Helvetica,Arial,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#2f63c9}
+ @page{margin:14mm}
+}
 /* motion */
 @keyframes fin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 @keyframes fo{from{opacity:0}to{opacity:1}}
@@ -249,6 +269,7 @@ body,header,.card,details,nav,.big,.search input,textarea.mynotes{transition:bac
 <body>
 <div id="pb" aria-hidden="true"></div>
 <div id="lead" role="dialog" aria-label="Lead questions"></div>
+<div id="handout"></div>
 <header>
  <div class="hrow"><div><small>Hope Chapel</small><h1>Sermon Notes</h1></div>
  <div class="fs"><button id="th" aria-label="Dark mode">☾</button><button id="fm" aria-label="Smaller text">A−</button><button id="fp" aria-label="Larger text">A+</button></div></div>
@@ -298,7 +319,7 @@ function isFav(id){return !!(NT[id]&&NT[id].fav)}
 
 S.forEach(function(s,i){
  var d=document.createElement('section');d.className='sermon';d.id='s'+i;
- var h='<h2 style="font-size:1.4em;line-height:1.2;margin:4px 0 2px">'+s.title+'</h2><p class="meta">'+s.meta+'</p><p class="favrow"><button data-fav="'+i+'" class="favbtn"></button>'+(IS_PUB?'<button class="shbtn" data-share="'+i+'">↗ Share</button>':'')+'</p>';
+ var h='<h2 style="font-size:1.4em;line-height:1.2;margin:4px 0 2px">'+s.title+'</h2><p class="meta">'+s.meta+'</p><p class="favrow"><button data-fav="'+i+'" class="favbtn"></button>'+(IS_PUB?'<button class="shbtn" data-share="'+i+'">↗ Share</button>':'')+'<button class="shbtn" data-ho="'+i+'">🖨 Handout</button>'+(LEADER?'<button class="shbtn" data-ho="'+i+'" data-ans="1">🖨 Leader copy</button>':'')+'</p>';
  var vl=linkRef(s.vref||s.ref);
  h+='<div class="verse"><b>'+s.ref+'</b>'+s.verse+(vl.indexOf('href')>=0?'<span class="vlink">Read in the ESV: '+vl+' ↗</span>':'')+'</div><div class="big"><b>Big Idea</b>'+s.big+'</div>';
  h+='<details open id="dt'+i+'"><summary>Key takeaways</summary><div class="body"><ul>'+li(s.take)+'</ul></div></details>';
@@ -522,6 +543,21 @@ var QZ=1;try{var z=parseFloat(localStorage.getItem('qz'));if(z>=.8&&z<=1.8)QZ=z}
 function setQz(v){QZ=Math.max(.8,Math.min(1.8,Math.round(v*10)/10));document.documentElement.style.setProperty('--qz',QZ);try{localStorage.setItem('qz',QZ)}catch(e){}}
 setQz(QZ);
 document.addEventListener('click',function(e){var b=e.target.closest('button[data-qz]');if(b)setQz(QZ+(+b.dataset.qz)*.1)});
+
+/* printable handout */
+function buildHandout(i,ans){var s=S[i],q=s.qa?s.qa:s.qs.map(function(t){return {q:t}});
+ var h='<div class="hb"><div class="hs">Hope Chapel · Sermon Notes'+(ans?' · Leader copy':'')+'</div><h1>'+s.title+'</h1><div class="hm">'+shortMeta(s)+' · '+s.ref+'</div>'
+ +'<h2>Big idea</h2><div class="hbig">'+s.big+'</div>'
+ +'<h2>Key takeaways</h2><ul>'+li(s.take)+'</ul>'
+ +'<h2>Key scriptures</h2><ul>'+s.scr.map(function(v){return '<li class="hv"><b>'+v[0]+'</b> — '+v[1]+'</li>'}).join('')+'</ul>'
+ +'<h2>Discussion questions</h2>'+q.map(function(o,n){var t=o.q.replace(/<br>/,' — ').replace(/<\/?b>/g,function(m){return m});
+  return '<div class="hq"><div class="t">'+(n+1)+'. '+t+'</div>'+(ans&&o.a?'<div class="ha"><b>What the sermon says:</b> '+o.a+'</div>':'')+'<div class="hl"></div></div>'}).join('')
+ +'<div class="hf">Hope Chapel · Sermon Notes</div></div>';
+ document.getElementById('handout').innerHTML=h}
+main.addEventListener('click',function(e){var b=e.target.closest('button[data-ho]');if(!b)return;
+ buildHandout(+b.dataset.ho,!!b.dataset.ans);document.body.classList.add('ho');
+ var done=function(){document.body.classList.remove('ho');window.removeEventListener('afterprint',done)};
+ window.addEventListener('afterprint',done);setTimeout(function(){try{window.print()}catch(x){done()}},50)});
 /* lead mode */
 var lead=document.getElementById('lead'),LS={i:0,l:[],p:0},wl=null;
 function leadDraw(){var s=S[LS.i],x=LS.l[LS.p],t=x.q,sec='',body=t,lk='';
