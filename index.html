@@ -338,6 +338,7 @@ function shortMeta(s){return s.meta.replace(/ · Hope Chapel$/,'')}
 function howTo(){
  var seen=false;try{seen=localStorage.getItem('hw')==='1'}catch(e){}
  return '<details class="how"'+(seen?'':' open')+'><summary>How to use this</summary><div class="body"><ul>'
+ +'<li><b>When it’s updated:</b> each week’s sermon notes are added Tuesday evening, or Wednesday at the latest.</li>'
  +'<li><b>Open a sermon</b> by tapping it. Use the <b>Notes</b> and <b>Questions</b> buttons at the top to switch views.</li>'
  +'<li><b>Notes</b> has the outline, key takeaways and scriptures. Tap any verse to open it in the ESV.</li>'
  +'<li><b>Questions</b> shows the discussion questions in large text for your group. <b>Copy questions</b> copies them to paste into a text or email.</li>'
