@@ -349,7 +349,7 @@ function howTo(){
  +'</ul></div></details>';
 }
 function buildHome(){
- var nw=S.length-1,h='<button class="card wk" data-i="'+nw+'" style="border-left-color:'+S[nw].color+'"><em>This week’s sermon</em><b>'+S[nw].title+'</b><span>'+shortMeta(S[nw])+'</span></button><p class="hint">Or tap any sermon below.</p>'+howTo();
+ var nw=S.length-1,h='<button class="card wk" data-i="'+nw+'" style="border-left-color:'+S[nw].color+'"><em>This week’s sermon</em><b>'+S[nw].title+'</b><span>'+shortMeta(S[nw])+'</span></button><p class="hint">New notes post Tuesday evening, or Wednesday at the latest. Or tap any sermon below.</p>'+howTo();
  var last=null;try{last=localStorage.getItem('sid')}catch(e){}
  var li2=last?idxOf(last):-1;
  if(li2>=0)h+='<button class="card cont" data-i="'+li2+'" style="border-left-color:'+S[li2].color+'"><em>Continue where you left off</em><b>'+S[li2].title+'</b><span>'+shortMeta(S[li2])+'</span></button>';
