@@ -226,22 +226,29 @@ body.gm .qa summary{font-size:calc(15px*var(--qz));min-height:calc(44px*var(--qz
 #lead .lh .lz{width:34px;height:34px;border-radius:10px;border:1px solid var(--rule);background:var(--btn);color:var(--mut);font:700 13px -apple-system,system-ui,sans-serif}
 
 #handout{display:none}
+body.hshow{overflow:hidden}
+body.hshow #handout{display:block;position:fixed;inset:0;z-index:80;background:#fff;overflow:auto;padding:0 18px calc(env(safe-area-inset-bottom) + 30px);color:#000;font:11pt/1.45 Georgia,'Times New Roman',serif}
+#handout .htool{position:sticky;top:0;z-index:2;display:flex;gap:8px;padding:calc(env(safe-area-inset-top) + 10px) 0 10px;margin:0 -18px 8px;padding-left:18px;padding-right:18px;background:#fff;border-bottom:1px solid #d5deea}
+#handout .htool button{flex:1;min-height:44px;border-radius:12px;border:1.5px solid #d5deea;background:#fff;color:#151c26;font:700 14px -apple-system,system-ui,sans-serif}
+#handout .htool button.pr{background:#2f63c9;border-color:#2f63c9;color:#fff}
+#handout .hb{border-top:5px solid #6f9ef6;padding-top:8px;max-width:760px;margin:0 auto}
+#handout .hs{font:700 8pt -apple-system,Helvetica,Arial,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#2f63c9}
+#handout h1{font-size:19pt;margin:3px 0 2px;line-height:1.15}
+#handout .hm{font-style:italic;color:#444;margin-bottom:8px}
+#handout h2{font:700 8.5pt -apple-system,Helvetica,Arial,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#2f63c9;border-bottom:1px solid #bbb;margin:12px 0 5px;padding-bottom:2px;break-after:avoid}
+#handout .hbig{border-left:4px solid #6f9ef6;padding:3px 0 3px 9px;font-size:11.5pt}
+#handout ul{margin:0 0 0 17px}#handout li{margin-bottom:3px}
+#handout .hv b{font-family:-apple-system,Helvetica,Arial,sans-serif}
+#handout .hq{margin-bottom:9px;break-inside:avoid}
+#handout .hq .t{font-weight:700}
+#handout .hl{border-bottom:1px solid #999;height:20px}
+#handout .ha{margin:4px 0 0 14px;padding:4px 8px;border-left:3px solid #999;background:#f2f2f2;font-size:10pt}
+#handout .hf{margin-top:14px;text-align:center;font:700 8pt -apple-system,Helvetica,Arial,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#2f63c9}
 @media print{
  body.ho>*:not(#handout){display:none!important}
- body.ho #handout{display:block!important;color:#000;background:#fff;font:10.5pt/1.4 Georgia,'Times New Roman',serif}
- #handout .hb{border-top:5px solid #6f9ef6;padding-top:8px}
- #handout .hs{font:700 8pt -apple-system,Helvetica,Arial,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#2f63c9}
- #handout h1{font-size:19pt;margin:3px 0 2px;line-height:1.15}
- #handout .hm{font-style:italic;color:#444;margin-bottom:8px}
- #handout h2{font:700 8.5pt -apple-system,Helvetica,Arial,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#2f63c9;border-bottom:1px solid #bbb;margin:12px 0 5px;padding-bottom:2px;break-after:avoid}
- #handout .hbig{border-left:4px solid #6f9ef6;padding:3px 0 3px 9px;font-size:11pt}
- #handout ul{margin:0 0 0 17px}#handout li{margin-bottom:3px}
- #handout .hv b{font-family:-apple-system,Helvetica,Arial,sans-serif}
- #handout .hq{margin-bottom:9px;break-inside:avoid}
- #handout .hq .t{font-weight:700}
- #handout .hl{border-bottom:1px solid #999;height:20px}
- #handout .ha{margin:4px 0 0 14px;padding:4px 8px;border-left:3px solid #999;background:#f2f2f2;font-size:9.5pt}
- #handout .hf{margin-top:14px;text-align:center;font:700 8pt -apple-system,Helvetica,Arial,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#2f63c9}
+ body.ho #handout{display:block!important;position:static!important;overflow:visible!important;padding:0!important;font-size:10.5pt}
+ body.ho #handout .htool{display:none!important}
+ #handout .hbig{font-size:11pt}#handout .ha{font-size:9.5pt}
  @page{margin:14mm}
 }
 /* motion */
@@ -554,10 +561,21 @@ function buildHandout(i,ans){var s=S[i],q=s.qa?s.qa:s.qs.map(function(t){return 
   return '<div class="hq"><div class="t">'+(n+1)+'. '+t+'</div>'+(ans&&o.a?'<div class="ha"><b>What the sermon says:</b> '+o.a+'</div>':'')+'<div class="hl"></div></div>'}).join('')
  +'<div class="hf">Hope Chapel · Sermon Notes</div></div>';
  document.getElementById('handout').innerHTML=h}
+function hoText(i,ans){var s=S[i],q=s.qa?s.qa:s.qs.map(function(t){return {q:t}});
+ return s.title+'\n'+shortMeta(s)+' · '+s.ref+'\n\nBIG IDEA\n'+plain(s.big)+'\n\nKEY TAKEAWAYS\n'+s.take.map(function(t){return '• '+plain(t)}).join('\n')
+ +'\n\nKEY SCRIPTURES\n'+s.scr.map(function(v){return '• '+v[0]+' — '+v[1]}).join('\n')
+ +'\n\nDISCUSSION QUESTIONS\n\n'+q.map(function(o,n){return (n+1)+'. '+plain(o.q)+(ans&&o.a?'\n   What the sermon says: '+plain(o.a):'')}).join('\n\n')+'\n\nHope Chapel · Sermon Notes'}
+var HO={i:0,a:false};
+function hoClose(){document.body.classList.remove('ho','hshow')}
 main.addEventListener('click',function(e){var b=e.target.closest('button[data-ho]');if(!b)return;
- buildHandout(+b.dataset.ho,!!b.dataset.ans);document.body.classList.add('ho');
- var done=function(){document.body.classList.remove('ho');window.removeEventListener('afterprint',done)};
- window.addEventListener('afterprint',done);setTimeout(function(){try{window.print()}catch(x){done()}},50)});
+ HO.i=+b.dataset.ho;HO.a=!!b.dataset.ans;buildHandout(HO.i,HO.a);
+ var d=document.getElementById('handout');d.insertAdjacentHTML('afterbegin','<div class="htool"><button class="hx">← Back</button><button class="hc">Copy text</button><button class="pr">Print / PDF</button></div>');
+ document.body.classList.add('hshow');d.scrollTop=0});
+document.getElementById('handout').addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;
+ if(b.classList.contains('hx'))hoClose();
+ else if(b.classList.contains('hc')){var o=b.textContent;copyText(hoText(HO.i,HO.a),function(ok){b.textContent=ok?'Copied ✓':'Couldn’t copy';setTimeout(function(){b.textContent=o},1800)})}
+ else if(b.classList.contains('pr')){document.body.classList.add('ho');setTimeout(function(){try{window.print()}catch(x){}setTimeout(function(){document.body.classList.remove('ho')},400)},60)}});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&document.body.classList.contains('hshow'))hoClose()});
 /* lead mode */
 var lead=document.getElementById('lead'),LS={i:0,l:[],p:0},wl=null;
 function leadDraw(){var s=S[LS.i],x=LS.l[LS.p],t=x.q,sec='',body=t,lk='';
