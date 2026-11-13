@@ -357,15 +357,13 @@ function a2hs(){var d=false,st=false;try{d=localStorage.getItem('a2')==='1'}catc
 function howTo(){
  var seen=false;try{seen=localStorage.getItem('hw')==='1'}catch(e){}
  return '<details class="how"'+(seen?'':' open')+'><summary>How to use this</summary><div class="body"><ul>'
- +'<li><b>When it’s updated:</b> each week’s sermon notes are added Tuesday evening, or Wednesday at the latest.</li>'
+ +(IS_PUB?'<li><b>Add it to your Home Screen</b> so it opens like an app.<br><b>iPhone:</b> open this page in <b>Safari</b>, tap <b>Share</b> (the square with an arrow pointing up), scroll down and tap <b>Add to Home Screen</b>, then tap <b>Add</b>.<br><b>Android:</b> open this page in <b>Chrome</b>, tap the <b>⋮</b> menu, tap <b>Add to Home screen</b> (or <b>Install app</b>), then tap <b>Add</b>.</li>':'')
  +'<li><b>Open a sermon</b> by tapping it. Use the <b>Notes</b> and <b>Questions</b> buttons at the top to switch views.</li>'
  +'<li><b>Notes</b> has the outline, key takeaways and scriptures. Tap any verse to open it in the ESV.</li>'
  +'<li><b>Questions</b> shows the discussion questions in large text for your group. <b>Copy questions</b> copies them to paste into a text or email.</li>'
  +'<li><b>Search</b> finds words, scripture references and questions across every sermon.</li>'
- +(IS_PUB?'<li><b>Add it to your Home Screen:</b> in Safari tap <b>Share</b>, then <b>Add to Home Screen</b> (on Android: <b>⋮</b> menu, then <b>Add to Home screen</b>).</li>':'')
  +'<li>Use <b>← →</b> to move between sermons, <b>A− A+</b> to change text size, and <b>☾</b> for dark mode.</li>'
  +'<li><b>On a laptop:</b> press <b>/</b> to search, <b>← →</b> to change sermons, <b>g</b> for Questions and <b>n</b> for Notes.</li>'
- +'<li><b>Phone tip:</b> tap Share, then <b>Add to Home Screen</b> to open it like an app.</li>'
  +'</ul></div></details>';
 }
 function buildHome(){
