@@ -569,11 +569,12 @@ var HO={i:0,a:false};
 function hoClose(){document.body.classList.remove('ho','hshow')}
 main.addEventListener('click',function(e){var b=e.target.closest('button[data-ho]');if(!b)return;
  HO.i=+b.dataset.ho;HO.a=!!b.dataset.ans;buildHandout(HO.i,HO.a);
- var d=document.getElementById('handout');d.insertAdjacentHTML('afterbegin','<div class="htool"><button class="hx">← Back</button><button class="hc">Copy text</button><button class="pr">Print / PDF</button></div>');
+ var d=document.getElementById('handout');d.insertAdjacentHTML('afterbegin','<div class="htool"><button class="hx">← Back</button><button class="hc">Copy text</button>'+(IS_PUB?'<button class="pr">Print / PDF</button>':(navigator.share?'<button class="pr hs2">Share…</button>':''))+'</div>');
  document.body.classList.add('hshow');d.scrollTop=0});
 document.getElementById('handout').addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;
  if(b.classList.contains('hx'))hoClose();
  else if(b.classList.contains('hc')){var o=b.textContent;copyText(hoText(HO.i,HO.a),function(ok){b.textContent=ok?'Copied ✓':'Couldn’t copy';setTimeout(function(){b.textContent=o},1800)})}
+ else if(b.classList.contains('hs2')){var t=hoText(HO.i,HO.a);try{navigator.share({title:S[HO.i].title,text:t}).catch(function(){copyText(t,function(ok){b.textContent=ok?'Copied ✓':'Couldn’t copy';setTimeout(function(){b.textContent='Share…'},1800)})})}catch(x){copyText(t,function(){})}}
  else if(b.classList.contains('pr')){document.body.classList.add('ho');setTimeout(function(){try{window.print()}catch(x){}setTimeout(function(){document.body.classList.remove('ho')},400)},60)}});
 document.addEventListener('keydown',function(e){if(e.key==='Escape'&&document.body.classList.contains('hshow'))hoClose()});
 /* lead mode */
