@@ -398,7 +398,7 @@ S.forEach(function(s,i){
  h+='<details id="ds'+i+'"><summary>Key scriptures ('+s.scr.length+')</summary><div class="body">'+s.scr.map(function(v,vi){return '<div class="vr" data-i="'+i+'" data-v="'+vi+'" role="button" tabindex="0"><b>'+v[0]+'</b><span>'+v[1]+'</span></div>'}).join('')+'</div></details>';
  h+='<div class="sec">Outline<span class="tools"><button data-x="open">Expand all</button><button data-x="close">Collapse</button></span></div><div class="outline">';
  s.secs.forEach(function(x,k){
-  h+='<details id="d'+i+'_'+k+'"><summary><span class="n">'+(k+1)+'</span>'+x.t+'</summary><div class="body">'+(s.yt&&x.s!=null?ytLink(s.yt,x.s,'▶ Watch this part · '+fmtT(x.s)):'')+x.h+'</div></details>';
+  h+='<details id="d'+i+'_'+k+'"><summary><span class="n">'+(k+1)+'</span>'+x.t+'</summary><div class="body">'+(s.yt&&x.s!=null?ytLink(s.yt,x.s,'▶ Watch this part · '+fmtT(x.s)+(s.secs[k+1]&&s.secs[k+1].s!=null?'–'+fmtT(s.secs[k+1].s):' to end')):'')+x.h+'</div></details>';
   IDX.push({i:i,k:k,L:'Outline',t:x.t,x:strip(x.t+' '+x.h)});
  });
  h+='</div>';
