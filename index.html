@@ -286,11 +286,9 @@ summary{padding:14px var(--s2)}
 .sec{margin:var(--s3) 4px var(--s1)}
 #home .sec{margin:var(--s3) 2px var(--s1)}
 main{padding:var(--s2) 14px 40px}
-.outline details{border-left:3px solid transparent}
-.outline summary{font-weight:500}
-.outline details.mp{border-left-color:var(--a);box-shadow:0 1px 3px rgba(20,40,90,.08)}
-.outline details.mp>summary{font-weight:700;font-size:17px}
-.outline details.mp>summary .n{font-weight:700}
+.outline details{border-left:4px solid var(--a)}
+.outline summary{font-weight:600;font-size:16px}
+.outline summary .n{font-weight:700}
 .body li::marker{color:var(--at)}
 .body ul ul{margin:var(--s1) 0 4px;padding-left:20px;font-size:.94em;color:var(--mut)}
 .body ul ul li{margin-bottom:6px}
@@ -376,7 +374,7 @@ S.forEach(function(s,i){
  h+='<details id="ds'+i+'"><summary>Key scriptures ('+s.scr.length+')</summary><div class="body">'+s.scr.map(function(v,vi){return '<div class="vr" data-i="'+i+'" data-v="'+vi+'" role="button" tabindex="0"><b>'+v[0]+'</b><span>'+v[1]+'</span></div>'}).join('')+'</div></details>';
  h+='<div class="sec">Outline<span class="tools"><button data-x="open">Expand all</button><button data-x="close">Collapse</button></span></div><div class="outline">';
  s.secs.forEach(function(x,k){
-  h+='<details'+(/^[IVX]+[.:\-]/.test(x.t)?' class="mp"':'')+' id="d'+i+'_'+k+'"><summary><span class="n">'+(k+1)+'</span>'+x.t+'</summary><div class="body">'+x.h+'</div></details>';
+  h+='<details id="d'+i+'_'+k+'"><summary><span class="n">'+(k+1)+'</span>'+x.t+'</summary><div class="body">'+x.h+'</div></details>';
   IDX.push({i:i,k:k,L:'Outline',t:x.t,x:strip(x.t+' '+x.h)});
  });
  h+='</div>';
