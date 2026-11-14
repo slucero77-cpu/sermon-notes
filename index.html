@@ -382,7 +382,7 @@ var IS_PUB=/github\.io$|^localhost$|^127\./.test(location.hostname);
 function pkOf(id){return (NT[id]&&NT[id].pk)||[]}
 function setPk(root,id){var pk=pkOf(id);[].forEach.call(root.querySelectorAll('[data-qn]'),function(e){var on=pk.indexOf(+e.dataset.qn)>=0;e.classList.toggle('st',on);var b=e.querySelector('.qstar');if(b)b.textContent=on?'★':'☆'});
  var pb=root.querySelector('button[data-pk]');if(pb){pb.textContent='★ Picks'+(pk.length?' ('+pk.length+')':'')}}
-function fmtT(sec){var m=Math.floor(sec/60),s=sec%60;return m+':'+(s<10?'0':'')+s}
+function fmtT(sec){var hr=Math.floor(sec/3600),m=Math.floor(sec%3600/60),s=sec%60;return (hr?hr+':'+(m<10?'0':''):'')+m+':'+(s<10?'0':'')+s}
 function ytLink(id,sec,label,cls){return '<a class="'+(cls||'ytl')+'" href="https://youtu.be/'+id+(sec?'?t='+sec:'')+'" target="_blank">'+label+'</a>'}
 function setFav(root,id){var b=root.querySelector('.favbtn');if(b){var f=isFav(id);b.textContent=f?'★ Saved':'☆ Save sermon';b.classList.toggle('on',f)}}
 function saveNT(){try{localStorage.setItem('nt',JSON.stringify(NT))}catch(e){}}
