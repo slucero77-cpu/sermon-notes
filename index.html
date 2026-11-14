@@ -305,6 +305,10 @@ html[data-th=dark] .card.wk{background:linear-gradient(135deg,color-mix(in srgb,
 .gstrip{height:4px;border-radius:4px;margin:0 2px 12px;opacity:.95}
 nav{background:color-mix(in srgb,var(--bg) 72%,transparent);-webkit-backdrop-filter:blur(16px) saturate(1.6);backdrop-filter:blur(16px) saturate(1.6)}
 @media (prefers-reduced-transparency:reduce){nav{background:var(--bg);-webkit-backdrop-filter:none;backdrop-filter:none}}
+/* big idea reveal */
+.big.rv .w{display:inline-block;opacity:0;transform:translateY(8px)}
+.big.rv.in .w{opacity:1;transform:none;transition:opacity .5s ease var(--d),transform .5s ease var(--d)}
+@media print{.big.rv .w{opacity:1;transform:none}}
 /* motion */
 @keyframes fin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 @keyframes fo{from{opacity:0}to{opacity:1}}
@@ -406,6 +410,17 @@ S.forEach(function(s,i){
  var ta=d.querySelector('textarea.mynotes');if(ta)ta.value=(NT[s.id]&&NT[s.id].n)||'';
  setFav(d,s.id);setPk(d,s.id);
 });
+/* Big Idea word-by-word reveal */
+(function(){
+ var reduce=false;try{reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches}catch(e){}
+ if(reduce||!('IntersectionObserver' in window))return;
+ var io=new IntersectionObserver(function(en){en.forEach(function(x){if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target)}})},{threshold:.3});
+ [].forEach.call(document.querySelectorAll('.big'),function(el){
+  var n=0,tw=document.createTreeWalker(el,NodeFilter.SHOW_TEXT,null),nodes=[],t;
+  while(t=tw.nextNode()){if(t.parentNode.tagName==='B'&&t.parentNode===el.firstElementChild)continue;if(t.textContent.trim())nodes.push(t)}
+  nodes.forEach(function(t){var f=document.createDocumentFragment();t.textContent.split(/(\s+)/).forEach(function(w){if(!w)return;if(/^\s+$/.test(w)){f.appendChild(document.createTextNode(w));return}var s=document.createElement('span');s.className='w';s.style.setProperty('--d',Math.min(n*38,1500)+'ms');n++;s.textContent=w;f.appendChild(s)});t.parentNode.replaceChild(f,t)});
+  el.classList.add('rv');io.observe(el)});
+})();
 var home=document.getElementById('home');
 var GRP=[
  {n:'Habakkuk — Faith When We Don’t Understand',ids:['hab1','hab2','faith','wins']},
