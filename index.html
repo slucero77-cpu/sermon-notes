@@ -275,6 +275,26 @@ html[data-th=dark]{--at:color-mix(in srgb,var(--a) 55%,#fff)}
 a:focus-visible,button:focus-visible,summary:focus-visible,[role=button]:focus-visible,input:focus-visible{outline:3px solid #ffbf47;outline-offset:2px;border-radius:6px}
 .sec .tools{flex-wrap:wrap;justify-content:flex-end}
 .sec .tools button{min-height:44px;min-width:44px;padding:8px 14px;font-size:13px}
+/* visual design: spacing scale + outline hierarchy */
+:root{--s1:8px;--s2:16px;--s3:24px}
+details{margin-bottom:12px;border-radius:12px}
+summary{padding:14px var(--s2)}
+.body{padding:var(--s2) var(--s2) 8px}
+.body li{margin-bottom:var(--s1)}
+.body p{margin-bottom:12px}
+.verse{margin-bottom:var(--s2)}
+.sec{margin:var(--s3) 4px var(--s1)}
+#home .sec{margin:var(--s3) 2px var(--s1)}
+main{padding:var(--s2) 14px 40px}
+.outline details{border-left:3px solid transparent}
+.outline summary{font-weight:500}
+.outline details.mp{border-left-color:var(--a);box-shadow:0 1px 3px rgba(20,40,90,.08)}
+.outline details.mp>summary{font-weight:700;font-size:17px}
+.outline details.mp>summary .n{font-weight:700}
+.body li::marker{color:var(--at)}
+.body ul ul{margin:var(--s1) 0 4px;padding-left:20px;font-size:.94em;color:var(--mut)}
+.body ul ul li{margin-bottom:6px}
+.body b{font-weight:700}
 /* motion */
 @keyframes fin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 @keyframes fo{from{opacity:0}to{opacity:1}}
@@ -356,7 +376,7 @@ S.forEach(function(s,i){
  h+='<details id="ds'+i+'"><summary>Key scriptures ('+s.scr.length+')</summary><div class="body">'+s.scr.map(function(v,vi){return '<div class="vr" data-i="'+i+'" data-v="'+vi+'" role="button" tabindex="0"><b>'+v[0]+'</b><span>'+v[1]+'</span></div>'}).join('')+'</div></details>';
  h+='<div class="sec">Outline<span class="tools"><button data-x="open">Expand all</button><button data-x="close">Collapse</button></span></div><div class="outline">';
  s.secs.forEach(function(x,k){
-  h+='<details id="d'+i+'_'+k+'"><summary><span class="n">'+(k+1)+'</span>'+x.t+'</summary><div class="body">'+x.h+'</div></details>';
+  h+='<details'+(/^[IVX]+[.:\-]/.test(x.t)?' class="mp"':'')+' id="d'+i+'_'+k+'"><summary><span class="n">'+(k+1)+'</span>'+x.t+'</summary><div class="body">'+x.h+'</div></details>';
   IDX.push({i:i,k:k,L:'Outline',t:x.t,x:strip(x.t+' '+x.h)});
  });
  h+='</div>';
