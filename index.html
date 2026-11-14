@@ -671,7 +671,20 @@ main.addEventListener('click',function(e){var b=e.target.closest('button[data-sh
  copyText(u,function(ok){b.textContent=ok?'Link copied ✓':'Couldn’t copy';setTimeout(function(){b.textContent=old},1800)})});
 function fromHash(){if(!IS_PUB)return false;var id=(location.hash||'').slice(1),k=id?idxOf(id):-1;if(k>=0){show(k);return true}return false}
 window.addEventListener('hashchange',function(){if(!fromHash()&&!location.hash&&view!=='home')goHome()});
-if(!fromHash())goHome();
+/* remember reading position (so returning from YouTube picks up where you left off) */
+var RSK='rs',rsOn=false;
+function saveRS(){if(!rsOn)return;try{if(typeof view!=='number'){localStorage.removeItem(RSK);return}var o=[];[].forEach.call(document.querySelectorAll('.sermon.on details'),function(d,k){if(d.open)o.push(k)});localStorage.setItem(RSK,JSON.stringify({id:S[view].id,y:Math.round(window.scrollY),o:o,q:gm?1:0,t:Date.now()}))}catch(e){}}
+var rsT;window.addEventListener('scroll',function(){clearTimeout(rsT);rsT=setTimeout(saveRS,250)},{passive:true});
+document.addEventListener('visibilitychange',function(){if(document.hidden)saveRS()});
+window.addEventListener('pagehide',saveRS);
+document.addEventListener('toggle',function(e){if(e.target&&e.target.tagName==='DETAILS')saveRS()},true);
+function loadRS(){try{var r=JSON.parse(localStorage.getItem(RSK)||'null');if(r&&Date.now()-r.t<6*3600*1000&&idxOf(r.id)>=0)return r}catch(e){}return null}
+function applyRS(r){var ds=document.querySelectorAll('.sermon.on details');(r.o||[]).forEach(function(k){if(ds[k])ds[k].open=true});if(r.q)setGm(true);
+ var go=function(){window.scrollTo(0,r.y||0)};go();requestAnimationFrame(go);setTimeout(go,150);setTimeout(go,500)}
+(function(){var rs=loadRS(),k=-1;
+ if(fromHash()){k=view}else if(rs){k=idxOf(rs.id);show(k)}else goHome();
+ if(rs&&typeof view==='number'&&S[view].id===rs.id)applyRS(rs);
+ setTimeout(function(){rsOn=true},900)})();
 
 try{if('serviceWorker' in navigator&&/^https?:/.test(location.protocol)&&location.hostname.indexOf('claude')<0){navigator.serviceWorker.register('sw.js').catch(function(){})}}catch(e){}
 </script>
