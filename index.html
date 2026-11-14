@@ -293,6 +293,18 @@ main{padding:var(--s2) 14px 40px}
 .body ul ul{margin:var(--s1) 0 4px;padding-left:20px;font-size:.94em;color:var(--mut)}
 .body ul ul li{margin-bottom:6px}
 .body b{font-weight:700}
+/* cool: hero, series strips, frosted nav */
+.card.wk{position:relative;overflow:hidden;padding:20px 18px 18px;border-radius:18px;background:linear-gradient(135deg,color-mix(in srgb,var(--hc,#1c1c1e) 62%,#0b1220),#14213d);box-shadow:0 8px 22px rgba(10,25,60,.25)}
+.card.wk::after{content:'';position:absolute;right:-50px;top:-60px;width:190px;height:190px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.22),transparent 68%);pointer-events:none}
+html[data-th=dark] .card.wk{background:linear-gradient(135deg,color-mix(in srgb,var(--hc,#2c2c2e) 50%,#000),#0d1424);filter:none}
+.card.wk b{font:700 26px/1.15 Georgia,'Times New Roman',serif;margin:8px 0 6px;display:block}
+.card.wk span{font:14px -apple-system,system-ui,sans-serif;opacity:.92}
+.card.wk .pass{display:inline-block;margin-top:12px;text-decoration:none;font:600 13px -apple-system,system-ui,sans-serif;color:#fff;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.4);border-radius:999px;padding:6px 12px}
+.card.wk .go{display:block;margin-top:14px;text-align:center;font:700 16px -apple-system,system-ui,sans-serif;font-style:normal;color:#0b1f4a;background:#fff;border-radius:12px;padding:13px 14px;min-height:44px}
+.card.wk .nw{display:inline-block}
+.gstrip{height:4px;border-radius:4px;margin:0 2px 12px;opacity:.95}
+nav{background:color-mix(in srgb,var(--bg) 72%,transparent);-webkit-backdrop-filter:blur(16px) saturate(1.6);backdrop-filter:blur(16px) saturate(1.6)}
+@media (prefers-reduced-transparency:reduce){nav{background:var(--bg);-webkit-backdrop-filter:none;backdrop-filter:none}}
 /* motion */
 @keyframes fin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 @keyframes fo{from{opacity:0}to{opacity:1}}
@@ -430,14 +442,14 @@ function howTo(){
  +'</ul></div></details>';
 }
 function buildHome(){
- var nw=S.length-1,h='<button class="card wk" data-i="'+nw+'" style="border-left-color:'+S[nw].color+'"><em>This week’s sermon'+(isNew(nw)?'<span class="nw">New</span>':'')+'</em><b>'+S[nw].title+'</b><span>'+shortMeta(S[nw])+'</span></button><p class="hint"><b>Notes updated Tue, Nov 10.</b> New notes post Tuesday evening, or Wednesday at the latest. Or tap any sermon below.</p>'+a2hs()+howTo();
+ var nw=S.length-1,h='<button class="card wk" data-i="'+nw+'" style="border-left-color:'+S[nw].color+';--hc:'+S[nw].color+'"><em>This week’s sermon'+(isNew(nw)?'<span class="nw">New</span>':'')+'</em><b>'+S[nw].title+'</b><span>'+shortMeta(S[nw])+'</span><u class="pass">'+S[nw].ref+'</u><i class="go">Start reading ›</i></button><p class="hint"><b>Notes updated Tue, Nov 10.</b> New notes post Tuesday evening, or Wednesday at the latest. Or tap any sermon below.</p>'+a2hs()+howTo();
  var last=null;try{last=localStorage.getItem('sid')}catch(e){}
  var li2=last?idxOf(last):-1;
  if(li2>=0)h+='<button class="card cont" data-i="'+li2+'" style="border-left-color:'+S[li2].color+'"><em>Continue where you left off</em><b>'+S[li2].title+'</b><span>'+shortMeta(S[li2])+'</span></button>';
  var favs=S.map(function(s,k){return k}).filter(function(k){return isFav(S[k].id)});
  if(favs.length){h+='<div class="sec">★ Saved</div>';favs.forEach(function(k){var s=S[k];h+='<button class="card" data-i="'+k+'" style="border-left-color:'+s.color+'"><b>'+s.title+(hasNote(s.id)?' ✎':'')+'</b><span>'+shortMeta(s)+'</span><em>'+s.ref+'</em></button>'})}
  GRP.forEach(function(g){
-  h+='<div class="sec">'+g.n+'</div>';
+  h+='<div class="sec">'+g.n+'</div><div class="gstrip" style="background:linear-gradient(90deg,'+g.ids.map(function(id,q){var k=idxOf(id);var c=k>=0?S[k].color:'#999';var a=q*100/g.ids.length,b=(q+1)*100/g.ids.length;return c+' '+a+'%,'+c+' '+b+'%'}).join(',')+')"></div>';
   g.ids.forEach(function(id){var k=idxOf(id);if(k<0)return;var s=S[k];
    h+='<button class="card" data-i="'+k+'" style="border-left-color:'+s.color+'"><b>'+s.title+(isNew(k)?'<span class="nw">New</span>':'')+(hasNote(s.id)?' ✎':'')+'</b><span>'+shortMeta(s)+'</span><em>'+s.ref+'</em></button>';});
  });
