@@ -309,8 +309,8 @@ function linkRef(r){
   else if(last&&/^\d/.test(p)){book=last;rest=p}
   if(!book)return p;
   last=book;
-  var u='https://www.esv.org/'+book.replace(/ /g,'+')+'+'+rest.replace(/–/g,'-').replace(/\s/g,'')+'/';
-  return '<a href="'+u+'" target="_blank" rel="noopener">'+p+'</a>';
+  var u='https://www.biblegateway.com/passage/?version=ESV&search='+encodeURIComponent(book+' '+rest.replace(/–/g,'-').replace(/\s/g,''));
+  return '<a href="'+u+'" target="_blank">'+p+'</a>';
  }).join('; ');
 }
 
