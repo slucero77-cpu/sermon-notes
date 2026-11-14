@@ -258,6 +258,21 @@ body::before{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;
 html[data-th=dark] body::before{background:radial-gradient(circle at 8% -4%,rgba(79,123,214,.26),transparent 46%),radial-gradient(circle at 104% 34%,rgba(79,123,214,.14),transparent 42%),radial-gradient(circle at 20% 110%,rgba(79,123,214,.16),transparent 45%),radial-gradient(rgba(255,255,255,.04) 1px,transparent 1.4px) 0 0/22px 22px,linear-gradient(180deg,#0f1a30,#0a111d)}
 @media print{body::before{display:none}html{background:#fff}}
 
+/* accessibility */
+:root{--at:color-mix(in srgb,var(--a) 78%,#000);--ab:color-mix(in srgb,var(--a) 80%,#000)}
+header{color:#0b1f4a}
+header small,header h1{text-shadow:none;color:#0b1f4a}
+.fs button,#th{width:44px;height:44px;border:1.5px solid rgba(11,31,74,.55);background:rgba(255,255,255,.35);color:#0b1f4a}
+footer{color:#0b1f4a;text-shadow:none}
+html[data-th=dark] header,html[data-th=dark] footer{background:#2d4d8f;color:#fff}
+html[data-th=dark] header small,html[data-th=dark] header h1{color:#fff}
+html[data-th=dark] .fs button,html[data-th=dark] #th{color:#fff;border-color:rgba(255,255,255,.6);background:rgba(255,255,255,.14)}
+html[data-th=dark]{--at:color-mix(in srgb,var(--a) 55%,#fff)}
+#nSeg button.on2,.favbtn.on,#lead .lf button.nx,#sheet .lk a{background:var(--ab);border-color:var(--ab)}
+.favbtn{min-height:44px}
+.vlink a{display:inline-block;padding:12px 2px}
+#nPrev,#nNext{min-width:44px;min-height:44px}
+a:focus-visible,button:focus-visible,summary:focus-visible,[role=button]:focus-visible,input:focus-visible{outline:3px solid #ffbf47;outline-offset:2px;border-radius:6px}
 /* motion */
 @keyframes fin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 @keyframes fo{from{opacity:0}to{opacity:1}}
