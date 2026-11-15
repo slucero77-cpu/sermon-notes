@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta name="build" content="1794721134445">
+<meta name="build" content="1794724020652">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -364,6 +364,28 @@ html[data-th=dark] .ytbtn{background:#a8132b}
 .upd{text-align:center;margin:32px 0 8px}
 .upd button{font:600 14px -apple-system,system-ui,sans-serif;min-height:44px;padding:10px 20px;border-radius:22px;border:1px solid var(--rule);background:var(--btn);color:var(--ink)}
 .upd span{display:block;font:13px -apple-system,system-ui,sans-serif;color:var(--mut);margin-top:8px;min-height:18px}
+/* slide between sermons + finished-section checks */
+@keyframes slR{from{opacity:0;transform:translateX(34px)}to{opacity:1;transform:none}}
+@keyframes slL{from{opacity:0;transform:translateX(-34px)}to{opacity:1;transform:none}}
+.sermon.sl-r{animation:slR .32s cubic-bezier(.2,.8,.2,1)}
+.sermon.sl-l{animation:slL .32s cubic-bezier(.2,.8,.2,1)}
+#main{overflow-x:clip}
+.outline details.dn summary .n{font-size:0;min-width:26px;display:inline-block}
+.outline details.dn summary .n::before{content:'\2713';font:700 15px/1 -apple-system,system-ui,sans-serif;display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:var(--ab,var(--a));color:#fff}
+@keyframes ckpop{0%{transform:scale(.3);opacity:0}60%{transform:scale(1.25);opacity:1}100%{transform:scale(1)}}
+.outline details.just summary .n::before{animation:ckpop .45s ease}
+@media(prefers-reduced-motion:reduce){.sermon.sl-r,.sermon.sl-l,.outline details.just summary .n::before{animation:none}}
+/* more animations: home cards, takeaways, shimmer, verse sheet */
+@keyframes cardUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+#home .card,#home .sec{animation:cardUp .45s cubic-bezier(.2,.8,.2,1) both}
+#home>*:nth-child(1){animation-delay:0s}#home>*:nth-child(2){animation-delay:.05s}#home>*:nth-child(3){animation-delay:.1s}#home>*:nth-child(4){animation-delay:.15s}#home>*:nth-child(5){animation-delay:.2s}#home>*:nth-child(6){animation-delay:.25s}#home>*:nth-child(7){animation-delay:.3s}#home>*:nth-child(8){animation-delay:.35s}#home>*:nth-child(n+9){animation-delay:.4s}
+li.tk{opacity:0;transform:translateY(10px);transition:opacity .5s ease var(--d,0ms),transform .5s ease var(--d,0ms)}
+li.tk.in{opacity:1;transform:none}
+@keyframes shUp{from{transform:translateY(100%)}to{transform:none}}
+@keyframes shFade{from{opacity:0}to{opacity:1}}
+#sheet.on .pn{animation:shUp .3s cubic-bezier(.2,.8,.2,1)}
+#sheet.on .bd{animation:shFade .3s ease}
+@media(prefers-reduced-motion:reduce){#home .card,#home .sec,#sheet.on .pn,#sheet.on .bd{animation:none}li.tk{opacity:1;transform:none;transition:none}}
 </style>
 </head>
 <body>
@@ -413,6 +435,8 @@ var IS_PUB=/github\.io$|^localhost$|^127\./.test(location.hostname);
 function pkOf(id){return (NT[id]&&NT[id].pk)||[]}
 function setPk(root,id){var pk=pkOf(id);[].forEach.call(root.querySelectorAll('[data-qn]'),function(e){var on=pk.indexOf(+e.dataset.qn)>=0;e.classList.toggle('st',on);var b=e.querySelector('.qstar');if(b)b.textContent=on?'★':'☆'});
  var pb=root.querySelector('button[data-pk]');if(pb){pb.textContent='★ Picks'+(pk.length?' ('+pk.length+')':'')}}
+var DN={};try{DN=JSON.parse(localStorage.getItem('dn')||'{}')||{}}catch(e){DN={}}
+function setDn(d,i,id){(DN[id]||[]).forEach(function(k){var x=d.querySelector('#d'+i+'_'+k);if(x)x.classList.add('dn')})}
 function fmtT(sec){var hr=Math.floor(sec/3600),m=Math.floor(sec%3600/60),s=sec%60;return (hr?hr+':'+(m<10?'0':''):'')+m+':'+(s<10?'0':'')+s}
 function ytLink(id,sec,label,cls){return '<a class="'+(cls||'ytl')+'" href="https://youtu.be/'+id+(sec?'?t='+sec:'')+'" target="_blank">'+label+'</a>'}
 function setFav(root,id){var b=root.querySelector('.favbtn');if(b){var f=isFav(id);b.textContent=f?'★ Saved':'☆ Save sermon';b.classList.toggle('on',f);b.setAttribute('aria-pressed',f?'true':'false')}}
@@ -447,8 +471,16 @@ S.forEach(function(s,i){
  (s.qa?s.qa.map(function(o){return {q:o.q,a:o.a}}):s.qs.map(function(q){return {q:q}})).forEach(function(o,n){IDX.push({i:i,id:'dq'+i,L:'Question',t:'Question '+(n+1),x:strip(o.q+(o.a?' '+o.a:''))})});
  d.innerHTML=h;main.appendChild(d);
  var ta=d.querySelector('textarea.mynotes');if(ta)ta.value=(NT[s.id]&&NT[s.id].n)||'';
- setFav(d,s.id);setPk(d,s.id);
+ setFav(d,s.id);setPk(d,s.id);setDn(d,i,s.id);
 });
+(function(){var tk=false;function chk(){tk=false;if(typeof view!=='number'||gm)return;var s=S[view],ch=false;
+ [].forEach.call(document.querySelectorAll('.sermon.on .outline details[open]'),function(d,k){if(d.classList.contains('dn'))return;var r=d.getBoundingClientRect();if(r.height>60&&r.bottom<90){d.classList.add('dn','just');setTimeout(function(){d.classList.remove('just')},700);var a=DN[s.id]=DN[s.id]||[];if(a.indexOf(k)<0)a.push(k);ch=true}});
+ if(ch)try{localStorage.setItem('dn',JSON.stringify(DN))}catch(e){}}
+ window.addEventListener('scroll',function(){if(!tk){tk=true;requestAnimationFrame(chk)}},{passive:true})})();
+(function(){if(!window.IntersectionObserver)return;var rm=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;if(rm)return;
+ var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.2});
+ function arm(){[].forEach.call(document.querySelectorAll('.sermon details > summary'),function(s){if(s.textContent.indexOf('Key takeaways')!==0)return;[].forEach.call(s.parentNode.querySelectorAll('li:not(.tk)'),function(li,k){li.classList.add('tk');li.style.setProperty('--d',(k*90)+'ms');io.observe(li)})})}
+ arm();setTimeout(arm,300)})();
 /* Big Idea word-by-word reveal */
 (function(){
  var reduce=false;try{reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches}catch(e){}
@@ -527,10 +559,11 @@ window.addEventListener('scroll',updPB,{passive:true});window.addEventListener('
 function trk(){try{if(!window.goatcounter||!goatcounter.count)return;var v=(typeof view==='number'&&S[view])?S[view]:null;goatcounter.count({path:v?'/'+v.id:'/',title:v?v.title:'Home'})}catch(e){}}
 function goHome(){view='home';setTimeout(trk,0);try{if(IS_PUB&&location.hash)history.replaceState(null,'',location.pathname)}catch(e){}qin.value='';buildHome();applyView();window.scrollTo(0,0)}
 function show(i,openK){
- view=i;var s=S[i];setTimeout(trk,0);qin.value='';try{if(IS_PUB&&location.hash!=='#'+s.id)history.replaceState(null,'','#'+s.id)}catch(e){}
+ var pv=view;view=i;var s=S[i];setTimeout(trk,0);qin.value='';try{if(IS_PUB&&location.hash!=='#'+s.id)history.replaceState(null,'','#'+s.id)}catch(e){}
  document.documentElement.style.setProperty('--a',s.color);
  [].forEach.call(document.querySelectorAll('.sermon'),function(e,k){e.classList.toggle('on',k==i)});
  document.getElementById('nCur').textContent=s.tab;
+ try{if(typeof pv==='number'&&pv!==i&&!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)){var ne=document.querySelectorAll('.sermon')[i],fw=FLAT.indexOf(i)>FLAT.indexOf(pv);ne.classList.remove('sl-r','sl-l');void ne.offsetWidth;ne.classList.add(fw?'sl-r':'sl-l');setTimeout(function(){ne.classList.remove('sl-r','sl-l')},400)}}catch(e){}
  applyView();
  if(openK!=null&&gm&&!(typeof openK==='string'&&openK.indexOf('dq')===0))setGm(false);
  if(openK!=null){var el=document.getElementById(typeof openK==='string'?openK:'d'+i+'_'+openK);if(el){el.open=true;setTimeout(function(){el.scrollIntoView({block:'start'});window.scrollBy(0,-60)},30)}}
