@@ -377,7 +377,7 @@ function strip(h){return h.replace(/<[^>]+>/g,' ').replace(/&amp;/g,'&').replace
 function li(a){return a.map(function(q){return '<li>'+q+'</li>'}).join('')}
 var IDX=[];
 var NT={};try{NT=JSON.parse(localStorage.getItem('nt')||'{}')||{}}catch(e){NT={}}
-var LEADER=false; /* bump the 'Notes updated' date in buildHome() whenever a new sermon is added */
+var LEADER=false;
 var IS_PUB=/github\.io$|^localhost$|^127\./.test(location.hostname);
 function pkOf(id){return (NT[id]&&NT[id].pk)||[]}
 function setPk(root,id){var pk=pkOf(id);[].forEach.call(root.querySelectorAll('[data-qn]'),function(e){var on=pk.indexOf(+e.dataset.qn)>=0;e.classList.toggle('st',on);var b=e.querySelector('.qstar');if(b)b.textContent=on?'★':'☆'});
@@ -464,11 +464,13 @@ function howTo(){
  +'<li><b>On a laptop:</b> press <b>/</b> to search, <b>← →</b> to change sermons, <b>g</b> for Questions and <b>n</b> for Notes.</li>'
  +'</ul></div></details>';
 }
+function notesUpd(){try{var m=S[S.length-1].meta.match(/([A-Z][a-z]{2} \d{1,2}, \d{4})/);if(!m)return 'Notes updated weekly.';var d=new Date(m[1]);if(isNaN(d))return 'Notes updated weekly.';d.setDate(d.getDate()+((2-d.getDay()+7)%7||7));var D=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],M=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];return 'Notes updated '+D[d.getDay()]+', '+M[d.getMonth()]+' '+d.getDate()+'.'}catch(e){return 'Notes updated weekly.'}}
 function buildHome(){
- var nw=S.length-1,h='<button class="card wk" data-i="'+nw+'" style="border-left-color:'+S[nw].color+';--hc:'+S[nw].color+'"><em>This week’s sermon'+(isNew(nw)?'<span class="nw">New</span>':'')+'</em><b>'+S[nw].title+'</b><span>'+shortMeta(S[nw])+'</span><u class="pass">'+S[nw].ref+'</u><i class="go">Start reading ›</i></button><p class="hint"><b>Notes updated Tue, Nov 10.</b> New notes post Tuesday evening, or Wednesday at the latest. Or tap any sermon below.</p>'+a2hs()+howTo();
+ var nw=S.length-1,h='<button class="card wk" data-i="'+nw+'" style="border-left-color:'+S[nw].color+';--hc:'+S[nw].color+'"><em>This week’s sermon'+(isNew(nw)?'<span class="nw">New</span>':'')+'</em><b>'+S[nw].title+'</b><span>'+shortMeta(S[nw])+'</span><u class="pass">'+S[nw].ref+'</u><i class="go">Start reading ›</i></button><p class="hint"><b>'+notesUpd()+'</b> New notes post Tuesday evening, or Wednesday at the latest. Or tap any sermon below.</p>'+a2hs()+howTo();
  var last=null;try{last=localStorage.getItem('sid')}catch(e){}
- var li2=last?idxOf(last):-1;
- if(li2>=0)h+='<button class="card cont" data-i="'+li2+'" style="border-left-color:'+S[li2].color+'"><em>Continue where you left off</em><b>'+S[li2].title+'</b><span>'+shortMeta(S[li2])+'</span></button>';
+ var lr=null;try{lr=JSON.parse(localStorage.getItem('lr')||'null')}catch(e){}
+ var li2=(lr&&idxOf(lr.id)>=0)?idxOf(lr.id):(last?idxOf(last):-1);var lrOk=!!(lr&&idxOf(lr.id)===li2);
+ if(li2>=0)h+='<button class="card cont" data-i="'+li2+'"'+(lrOk?' data-rs="1"':'')+' style="border-left-color:'+S[li2].color+'"><em>Continue reading</em><b>'+S[li2].title+'</b><span>'+(lrOk&&lr.l?'You were in: '+String(lr.l).replace(/</g,'&lt;'):shortMeta(S[li2]))+'</span></button>';
  var favs=S.map(function(s,k){return k}).filter(function(k){return isFav(S[k].id)});
  if(favs.length){h+='<div class="sec">★ Saved</div>';favs.forEach(function(k){var s=S[k];h+='<button class="card" data-i="'+k+'" style="border-left-color:'+s.color+'"><b>'+s.title+(hasNote(s.id)?' ✎':'')+'</b><span>'+shortMeta(s)+'</span><em>'+s.ref+'</em></button>'})}
  GRP.forEach(function(g){
@@ -514,7 +516,7 @@ setGm(gm);
 nav.addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;
  if(b.id==='nHome')goHome();else if(b.id==='nNotes')setGm(false);else if(b.id==='nQs')setGm(true);else if(b.id==='nPrev')step(-1);else if(b.id==='nNext')step(1)});
 home.addEventListener('toggle',function(e){if(e.target.classList&&e.target.classList.contains('how')&&!e.target.open){try{localStorage.setItem('hw','1')}catch(x){}}},true);
-home.addEventListener('click',function(e){var x=e.target.closest('.a2 .x');if(x){try{localStorage.setItem('a2','1')}catch(z){}x.closest('.a2').remove();return}var c=e.target.closest('.card');if(!c)return;show(+c.dataset.i);setGm(!!c.dataset.q)});
+home.addEventListener('click',function(e){var x=e.target.closest('.a2 .x');if(x){try{localStorage.setItem('a2','1')}catch(z){}x.closest('.a2').remove();return}var c=e.target.closest('.card');if(!c)return;show(+c.dataset.i);setGm(!!c.dataset.q);if(c.dataset.rs){try{var r=JSON.parse(localStorage.getItem('lr')||'null');if(r&&S[view]&&r.id===S[view].id)applyRS(r)}catch(z){}}});
 /* copy questions */
 function plain(t){return t.replace(/<br\s*\/?>/g,'\n').replace(/<[^>]+>/g,'').replace(/&amp;/g,'&')}
 function qText(i){var s=S[i],qs=s.qa?s.qa.map(function(o){return o.q}):s.qs;
@@ -673,7 +675,8 @@ function fromHash(){if(!IS_PUB)return false;var id=(location.hash||'').slice(1),
 window.addEventListener('hashchange',function(){if(!fromHash()&&!location.hash&&view!=='home')goHome()});
 /* remember reading position (so returning from YouTube picks up where you left off) */
 var RSK='rs',rsOn=false;
-function saveRS(){if(!rsOn)return;try{if(typeof view!=='number'){localStorage.removeItem(RSK);return}var o=[];[].forEach.call(document.querySelectorAll('.sermon.on details'),function(d,k){if(d.open)o.push(k)});localStorage.setItem(RSK,JSON.stringify({id:S[view].id,y:Math.round(window.scrollY),o:o,q:gm?1:0,t:Date.now()}))}catch(e){}}
+function secLabel(){try{if(gm)return 'Questions';if(window.scrollY<250)return '';var best='';[].forEach.call(document.querySelectorAll('.sermon.on .outline details'),function(d){if(d.getBoundingClientRect().top<window.innerHeight*0.45){var sm=d.querySelector('summary');if(sm){var t='';[].forEach.call(sm.childNodes,function(n){if(!(n.classList&&n.classList.contains('n')))t+=n.textContent});best=t.trim()}}});return best.slice(0,80)}catch(e){return ''}}
+function saveRS(){if(!rsOn)return;try{if(typeof view!=='number'){localStorage.removeItem(RSK);return}var o=[];[].forEach.call(document.querySelectorAll('.sermon.on details'),function(d,k){if(d.open)o.push(k)});var rec={id:S[view].id,y:Math.round(window.scrollY),o:o,q:gm?1:0,t:Date.now()};localStorage.setItem(RSK,JSON.stringify(rec));rec.l=secLabel();localStorage.setItem('lr',JSON.stringify(rec))}catch(e){}}
 var rsT;window.addEventListener('scroll',function(){clearTimeout(rsT);rsT=setTimeout(saveRS,250)},{passive:true});
 document.addEventListener('visibilitychange',function(){if(document.hidden)saveRS()});
 window.addEventListener('pagehide',saveRS);
