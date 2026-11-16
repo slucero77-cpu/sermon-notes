@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta name="build" content="1794805000547">
+<meta name="build" content="1794805807656">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -396,6 +396,32 @@ li.tk.in{opacity:1;transform:none}
 .outline details{overflow:visible}
 @supports (overflow:clip){.outline details{overflow:clip}}
 .outline details[open]>summary{position:sticky;top:var(--nh,56px);z-index:3;background:var(--card);border-radius:10px 10px 0 0;box-shadow:0 1px 0 var(--rule)}
+/* cascade: section content rises in piece by piece, like the Big Idea */
+@keyframes casc{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.outline details[open]>.body>*,.outline details[open]>.body li{animation:casc .8s ease both}
+.outline details[open]>.body>*:nth-child(1){animation-delay:180ms}
+.outline details[open]>.body>*:nth-child(2){animation-delay:360ms}
+.outline details[open]>.body>*:nth-child(3){animation-delay:540ms}
+.outline details[open]>.body>*:nth-child(4){animation-delay:720ms}
+.outline details[open]>.body>*:nth-child(5){animation-delay:900ms}
+.outline details[open]>.body>*:nth-child(6){animation-delay:1080ms}
+.outline details[open]>.body>*:nth-child(7){animation-delay:1260ms}
+.outline details[open]>.body>*:nth-child(8){animation-delay:1440ms}
+.outline details[open]>.body>*:nth-child(9){animation-delay:1620ms}
+.outline details[open]>.body>*:nth-child(10){animation-delay:1800ms}
+.outline details[open]>.body>*:nth-child(11){animation-delay:1800ms}
+.outline details[open]>.body>*:nth-child(12){animation-delay:1800ms}
+.outline details[open]>.body li:nth-child(1){animation-delay:540ms}
+.outline details[open]>.body li:nth-child(2){animation-delay:680ms}
+.outline details[open]>.body li:nth-child(3){animation-delay:820ms}
+.outline details[open]>.body li:nth-child(4){animation-delay:960ms}
+.outline details[open]>.body li:nth-child(5){animation-delay:1100ms}
+.outline details[open]>.body li:nth-child(6){animation-delay:1240ms}
+.outline details[open]>.body li:nth-child(7){animation-delay:1380ms}
+.outline details[open]>.body li:nth-child(8){animation-delay:1520ms}
+.outline details[open]>.body li:nth-child(9){animation-delay:1660ms}
+@media (prefers-reduced-motion:reduce){.outline details[open]>.body>*,.outline details[open]>.body li{animation:none}}
+@media print{.outline details[open]>.body>*,.outline details[open]>.body li{animation:none}}
 </style>
 </head>
 <body>
@@ -446,7 +472,7 @@ function pkOf(id){return (NT[id]&&NT[id].pk)||[]}
 function setPk(root,id){var pk=pkOf(id);[].forEach.call(root.querySelectorAll('[data-qn]'),function(e){var on=pk.indexOf(+e.dataset.qn)>=0;e.classList.toggle('st',on);var b=e.querySelector('.qstar');if(b)b.textContent=on?'★':'☆'});
  var pb=root.querySelector('button[data-pk]');if(pb){pb.textContent='★ Picks'+(pk.length?' ('+pk.length+')':'')}}
 var DN={};try{DN=JSON.parse(localStorage.getItem('dn')||'{}')||{}}catch(e){DN={}}
-function setDn(d,i,id){(DN[id]||[]).forEach(function(k){var x=d.querySelector('#d'+i+'_'+k);if(x)x.classList.add('dn')})}
+function setDn(d,i,id){}
 function fmtT(sec){var hr=Math.floor(sec/3600),m=Math.floor(sec%3600/60),s=sec%60;return (hr?hr+':'+(m<10?'0':''):'')+m+':'+(s<10?'0':'')+s}
 function ytLink(id,sec,label,cls){return '<a class="'+(cls||'ytl')+'" href="https://youtu.be/'+id+(sec?'?t='+sec:'')+'" target="_blank">'+label+'</a>'}
 function setFav(root,id){var b=root.querySelector('.favbtn');if(b){var f=isFav(id);b.textContent=f?'★ Saved':'☆ Save sermon';b.classList.toggle('on',f);b.setAttribute('aria-pressed',f?'true':'false')}}
@@ -486,7 +512,7 @@ S.forEach(function(s,i){
 (function(){var tk=false;function chk(){tk=false;if(typeof view!=='number'||gm)return;var s=S[view],ch=false;
  [].forEach.call(document.querySelectorAll('.sermon.on .outline details[open]'),function(d,k){if(d.classList.contains('dn'))return;var r=d.getBoundingClientRect();if(r.height>60&&r.bottom<90){d.classList.add('dn','just');setTimeout(function(){d.classList.remove('just')},700);var a=DN[s.id]=DN[s.id]||[];if(a.indexOf(k)<0)a.push(k);ch=true}});
  if(ch)try{localStorage.setItem('dn',JSON.stringify(DN))}catch(e){}}
- window.addEventListener('scroll',function(){if(!tk){tk=true;requestAnimationFrame(chk)}},{passive:true})})();
+ })();
 (function(){if(!window.IntersectionObserver)return;var rm=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;if(rm)return;
  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.2});
  function arm(){[].forEach.call(document.querySelectorAll('.sermon details > summary'),function(s){if(s.textContent.indexOf('Key takeaways')!==0)return;[].forEach.call(s.parentNode.querySelectorAll('li:not(.tk)'),function(li,k){li.classList.add('tk');li.style.setProperty('--d',(k*90)+'ms');io.observe(li)})})}
@@ -552,7 +578,7 @@ function buildHome(){
   g.ids.forEach(function(id){var k=idxOf(id);if(k<0)return;var s=S[k];
    h+='<button class="card" data-i="'+k+'" style="border-left-color:'+s.color+'"><b>'+s.title+(isNew(k)?'<span class="nw">New</span>':'')+(hasNote(s.id)?' ✎':'')+'</b><span>'+shortMeta(s)+'</span><em>'+s.ref+'</em></button>';});
  });
- h+='<div class="rst"><button id="rstBtn" type="button">Reset my progress</button><span id="rstMsg" role="status" aria-live="polite"></span></div>';
+ 
  if(IS_PUB)h+='<div class="upd"><button id="updBtn" type="button">Check for updates</button><span id="updMsg" role="status" aria-live="polite"></span></div>';
  home.innerHTML=h;
 }
