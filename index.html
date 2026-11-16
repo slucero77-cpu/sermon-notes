@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta name="build" content="1794804982659">
+<meta name="build" content="1794805000547">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -469,7 +469,7 @@ S.forEach(function(s,i){
  h+='</div>';
  h+='<p class="gref">'+s.ref+'</p><div class="qsec">';
  if(s.qa){
-  h+='<div class="sec">Minichurch Questions<span class="tools">'+(LEADER?'<button data-lead="'+i+'">Lead</button><button data-pk="'+i+'">★ Picks</button>':'')+'<button data-copy="'+i+'">'+(LEADER?'Copy':'Copy questions')+'</button><button data-x="auto" class="aob" aria-pressed="true">Auto-open: On</button>'+(LEADER?'<button data-qz="-1" aria-label="Smaller question text">A−</button><button data-qz="1" aria-label="Larger question text">A+</button>':'')+'</span></div><details open id="dq'+i+'"><summary>10 questions with sermon notes</summary><div class="body">'+s.qa.map(function(o,n){return '<div class="qa" data-qn="'+n+'">'+(LEADER?'<button class="qstar" data-qs="'+i+','+n+'" aria-label="Pick this question">☆</button>':'')+'<div class="qq">'+(n+1)+'. '+o.q+'</div>'+(o.a?'<details><summary>What the sermon says</summary><div class="body"><p>'+o.a+'</p></div></details>':'')+'</div>'}).join('')+'</div></details>';
+  h+='<div class="sec">Minichurch Questions<span class="tools">'+(LEADER?'<button data-lead="'+i+'">Lead</button><button data-pk="'+i+'">★ Picks</button>':'')+'<button data-copy="'+i+'">'+(LEADER?'Copy':'Copy questions')+'</button>'+(LEADER?'<button data-x="auto" class="aob" aria-pressed="true">Auto-open: On</button><button data-qz="-1" aria-label="Smaller question text">A−</button><button data-qz="1" aria-label="Larger question text">A+</button>':'')+'</span></div><details open id="dq'+i+'"><summary>10 questions with sermon notes</summary><div class="body">'+s.qa.map(function(o,n){return '<div class="qa" data-qn="'+n+'">'+(LEADER?'<button class="qstar" data-qs="'+i+','+n+'" aria-label="Pick this question">☆</button>':'')+'<div class="qq">'+(n+1)+'. '+o.q+'</div>'+(o.a?'<details><summary>What the sermon says</summary><div class="body"><p>'+o.a+'</p></div></details>':'')+'</div>'}).join('')+'</div></details>';
  } else {
   h+='<div class="sec">'+(s.official?'Minichurch Questions':'Discussion Questions')+'<span class="tools">'+(LEADER?'<button data-lead="'+i+'">Lead</button><button data-pk="'+i+'">★ Picks</button>':'')+'<button data-copy="'+i+'">'+(LEADER?'Copy':'Copy questions')+'</button>'+(LEADER?'<button data-qz="-1" aria-label="Smaller question text">A−</button><button data-qz="1" aria-label="Larger question text">A+</button>':'')+'</span></div><details open id="dq'+i+'"><summary>'+(s.official?'Official Minichurch questions':'Discuss')+'</summary><div class="body"><ol class="dq">'+s.qs.map(function(q,n){return '<li data-qn="'+n+'">'+q+(LEADER?'<button class="qstar" data-qs="'+i+','+n+'" aria-label="Pick this question">☆</button>':'')+'</li>'}).join('')+'</ol></div></details>';
  }
