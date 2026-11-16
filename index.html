@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta name="build" content="1794807452950">
+<meta name="build" content="1794807680704">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -823,7 +823,7 @@ document.addEventListener('toggle',function(e){var d=e.target;if(!d||d.tagName!=
 var last=0,tk=false;
 function chk(){tk=false;var y=window.scrollY,down=y>last;last=y;if(!window.AO||!down||typeof view!=='number')return;
  var ds=document.querySelectorAll(gm?'.sermon.on .qa>details':'.sermon.on .outline details');if(!ds.length||ds[0].offsetParent===null)return;
- for(var k=0;k<ds.length;k++){var d=ds[k];if(d.open||d.dataset.man)continue;var t=d.getBoundingClientRect().top;if(t>0&&t<window.innerHeight*0.35){d.dataset.ao='1';d.open=true;break}}}
+ var bot=y+window.innerHeight>=document.documentElement.scrollHeight-8;for(var k=0;k<ds.length;k++){var d=ds[k];if(d.open||d.dataset.man)continue;var t=d.getBoundingClientRect().top;if(t>0&&(t<window.innerHeight*0.35||(t<window.innerHeight&&bot))){d.dataset.ao='1';d.open=true;break}}}
 window.addEventListener('scroll',function(){if(!tk){tk=true;requestAnimationFrame(chk)}},{passive:true})})();
 </script>
 <script data-goatcounter="https://slucero77.goatcounter.com/count" data-goatcounter-settings='{"no_onload":true}' async src="//gc.zgo.at/count.js" onload="trk()"></script>
