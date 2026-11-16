@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta name="build" content="1794808766181">
+<meta name="build" content="1794809315464">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -522,6 +522,11 @@ li.tk.in{opacity:1;transform:none}
 .outline details.cs[open]>.body>*:nth-child(12) li:nth-child(9){animation-delay:500ms}
 @media (prefers-reduced-motion:reduce){.outline details.cs[open]>.body>*,.outline details.cs[open]>.body li{animation:none!important}}
 @media print{.outline details.cs[open]>.body>*,.outline details.cs[open]>.body li{animation:none!important}}
+/* Notes view: questions live behind the Questions button */
+.qgo{display:block;width:100%;min-height:52px;margin:6px 0 14px;padding:12px 16px;border-radius:12px;border:1.5px solid var(--a);background:var(--tint);color:var(--at);font:700 16px -apple-system,system-ui,sans-serif;text-align:center}
+body:not(.gm) .qsec>.sec:not(.mn),body:not(.gm) .qsec>details{display:none}
+body.gm .qgo{display:none}
+@media print{.qgo{display:none}}
 </style>
 </head>
 <body>
