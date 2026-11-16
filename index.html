@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta name="build" content="1794805807656">
+<meta name="build" content="1794806936591">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -422,6 +422,11 @@ li.tk.in{opacity:1;transform:none}
 .outline details[open]>.body li:nth-child(9){animation-delay:1660ms}
 @media (prefers-reduced-motion:reduce){.outline details[open]>.body>*,.outline details[open]>.body li{animation:none}}
 @media print{.outline details[open]>.body>*,.outline details[open]>.body li{animation:none}}
+/* Notes view: questions live behind the Questions button */
+.qgo{display:block;width:100%;min-height:52px;margin:6px 0 14px;padding:12px 16px;border-radius:12px;border:1.5px solid var(--a);background:var(--tint);color:var(--at);font:700 16px -apple-system,system-ui,sans-serif;text-align:center}
+body:not(.gm) .qsec>.sec:not(.mn),body:not(.gm) .qsec>details{display:none}
+body.gm .qgo{display:none}
+@media print{.qgo{display:none}}
 </style>
 </head>
 <body>
@@ -493,7 +498,7 @@ S.forEach(function(s,i){
   IDX.push({i:i,k:k,L:'Outline',t:x.t,x:strip(x.t+' '+x.h)});
  });
  h+='</div>';
- h+='<p class="gref">'+s.ref+'</p><div class="qsec">';
+ h+='<p class="gref">'+s.ref+'</p><div class="qsec"><button class="qgo" type="button">Open discussion questions ›</button>';
  if(s.qa){
   h+='<div class="sec">Minichurch Questions<span class="tools">'+(LEADER?'<button data-lead="'+i+'">Lead</button><button data-pk="'+i+'">★ Picks</button>':'')+'<button data-copy="'+i+'">'+(LEADER?'Copy':'Copy questions')+'</button>'+(LEADER?'<button data-x="auto" class="aob" aria-pressed="true">Auto-open: On</button><button data-qz="-1" aria-label="Smaller question text">A−</button><button data-qz="1" aria-label="Larger question text">A+</button>':'')+'</span></div><details open id="dq'+i+'"><summary>10 questions with sermon notes</summary><div class="body">'+s.qa.map(function(o,n){return '<div class="qa" data-qn="'+n+'">'+(LEADER?'<button class="qstar" data-qs="'+i+','+n+'" aria-label="Pick this question">☆</button>':'')+'<div class="qq">'+(n+1)+'. '+o.q+'</div>'+(o.a?'<details><summary>What the sermon says</summary><div class="body"><p>'+o.a+'</p></div></details>':'')+'</div>'}).join('')+'</div></details>';
  } else {
@@ -603,7 +608,7 @@ function show(i,openK){
  document.getElementById('nCur').textContent=s.tab;
  try{if(typeof pv==='number'&&pv!==i&&!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)){var ne=document.querySelectorAll('.sermon')[i],fw=FLAT.indexOf(i)>FLAT.indexOf(pv);ne.classList.remove('sl-r','sl-l');void ne.offsetWidth;ne.classList.add(fw?'sl-r':'sl-l');setTimeout(function(){ne.classList.remove('sl-r','sl-l')},400)}}catch(e){}
  applyView();
- if(openK!=null&&gm&&!(typeof openK==='string'&&openK.indexOf('dq')===0))setGm(false);
+ if(openK!=null&&typeof openK==='string'&&openK.indexOf('dq')===0){if(!gm)setGm(true)}else if(openK!=null&&gm)setGm(false);
  if(openK!=null){var el=document.getElementById(typeof openK==='string'?openK:'d'+i+'_'+openK);if(el){el.open=true;setTimeout(function(){el.scrollIntoView({block:'start'});window.scrollBy(0,-60)},30)}}
  else window.scrollTo(0,0);
  try{localStorage.setItem('sid',s.id)}catch(e){}
@@ -633,6 +638,7 @@ main.addEventListener('click',function(e){var b=e.target.closest('button[data-co
  copyText(qText(+b.dataset.copy),function(ok){b.textContent=ok?'Copied ✓':'Couldn’t copy';setTimeout(function(){b.textContent=old},1800)});
 });
 main.addEventListener('click',function(e){
+ if(e.target.closest('.qgo')){setGm(true);window.scrollTo(0,0);return}
  var b=e.target.closest('button[data-x]');if(!b)return;
  if(b.dataset.x==='auto'){window.setAO(!window.AO);return}
  var o=b.dataset.x==='open';
