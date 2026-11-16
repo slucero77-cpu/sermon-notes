@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta name="build" content="1794808160969">
+<meta name="build" content="1794808766181">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -396,37 +396,132 @@ li.tk.in{opacity:1;transform:none}
 .outline details{overflow:visible}
 @supports (overflow:clip){.outline details{overflow:clip}}
 .outline details[open]>summary{position:sticky;top:var(--nh,56px);z-index:3;background:var(--card);border-radius:10px 10px 0 0;box-shadow:0 1px 0 var(--rule)}
-/* cascade: section content rises in piece by piece, like the Big Idea */
-@keyframes casc{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
-.outline details[open]>.body>*,.outline details[open]>.body li{animation:casc .8s ease both}
-.outline details[open]>.body>*:nth-child(1){animation-delay:180ms}
-.outline details[open]>.body>*:nth-child(2){animation-delay:360ms}
-.outline details[open]>.body>*:nth-child(3){animation-delay:540ms}
-.outline details[open]>.body>*:nth-child(4){animation-delay:720ms}
-.outline details[open]>.body>*:nth-child(5){animation-delay:900ms}
-.outline details[open]>.body>*:nth-child(6){animation-delay:1080ms}
-.outline details[open]>.body>*:nth-child(7){animation-delay:1260ms}
-.outline details[open]>.body>*:nth-child(8){animation-delay:1440ms}
-.outline details[open]>.body>*:nth-child(9){animation-delay:1620ms}
-.outline details[open]>.body>*:nth-child(10){animation-delay:1800ms}
-.outline details[open]>.body>*:nth-child(11){animation-delay:1800ms}
-.outline details[open]>.body>*:nth-child(12){animation-delay:1800ms}
-.outline details[open]>.body li:nth-child(1){animation-delay:540ms}
-.outline details[open]>.body li:nth-child(2){animation-delay:680ms}
-.outline details[open]>.body li:nth-child(3){animation-delay:820ms}
-.outline details[open]>.body li:nth-child(4){animation-delay:960ms}
-.outline details[open]>.body li:nth-child(5){animation-delay:1100ms}
-.outline details[open]>.body li:nth-child(6){animation-delay:1240ms}
-.outline details[open]>.body li:nth-child(7){animation-delay:1380ms}
-.outline details[open]>.body li:nth-child(8){animation-delay:1520ms}
-.outline details[open]>.body li:nth-child(9){animation-delay:1660ms}
-@media (prefers-reduced-motion:reduce){.outline details[open]>.body>*,.outline details[open]>.body li{animation:none}}
-@media print{.outline details[open]>.body>*,.outline details[open]>.body li{animation:none}}
-/* Notes view: questions live behind the Questions button */
-.qgo{display:block;width:100%;min-height:52px;margin:6px 0 14px;padding:12px 16px;border-radius:12px;border:1.5px solid var(--a);background:var(--tint);color:var(--at);font:700 16px -apple-system,system-ui,sans-serif;text-align:center}
-body:not(.gm) .qsec>.sec:not(.mn),body:not(.gm) .qsec>details{display:none}
-body.gm .qgo{display:none}
-@media print{.qgo{display:none}}
+/* cascade: when a section is opened by tap or by scrolling, its content rises in piece by piece */
+@keyframes casc{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.outline details.cs[open]>.body>*,.outline details.cs[open]>.body>ul li,.outline details.cs[open]>.body>ol li{animation:casc .35s ease-out both}
+.outline details.cs[open]>.body>ul,.outline details.cs[open]>.body>ol{animation:none}
+.outline details.cs[open]>.body>*:nth-child(1){animation-delay:50ms}
+.outline details.cs[open]>.body>*:nth-child(2){animation-delay:100ms}
+.outline details.cs[open]>.body>*:nth-child(3){animation-delay:150ms}
+.outline details.cs[open]>.body>*:nth-child(4){animation-delay:200ms}
+.outline details.cs[open]>.body>*:nth-child(5){animation-delay:250ms}
+.outline details.cs[open]>.body>*:nth-child(6){animation-delay:250ms}
+.outline details.cs[open]>.body>*:nth-child(7){animation-delay:250ms}
+.outline details.cs[open]>.body>*:nth-child(8){animation-delay:250ms}
+.outline details.cs[open]>.body>*:nth-child(9){animation-delay:250ms}
+.outline details.cs[open]>.body>*:nth-child(10){animation-delay:250ms}
+.outline details.cs[open]>.body>*:nth-child(11){animation-delay:250ms}
+.outline details.cs[open]>.body>*:nth-child(12){animation-delay:250ms}
+.outline details.cs[open]>.body>*:nth-child(1) li:nth-child(1){animation-delay:90ms}
+.outline details.cs[open]>.body>*:nth-child(1) li:nth-child(2){animation-delay:130ms}
+.outline details.cs[open]>.body>*:nth-child(1) li:nth-child(3){animation-delay:170ms}
+.outline details.cs[open]>.body>*:nth-child(1) li:nth-child(4){animation-delay:210ms}
+.outline details.cs[open]>.body>*:nth-child(1) li:nth-child(5){animation-delay:250ms}
+.outline details.cs[open]>.body>*:nth-child(1) li:nth-child(6){animation-delay:290ms}
+.outline details.cs[open]>.body>*:nth-child(1) li:nth-child(7){animation-delay:330ms}
+.outline details.cs[open]>.body>*:nth-child(1) li:nth-child(8){animation-delay:370ms}
+.outline details.cs[open]>.body>*:nth-child(1) li:nth-child(9){animation-delay:410ms}
+.outline details.cs[open]>.body>*:nth-child(2) li:nth-child(1){animation-delay:140ms}
+.outline details.cs[open]>.body>*:nth-child(2) li:nth-child(2){animation-delay:180ms}
+.outline details.cs[open]>.body>*:nth-child(2) li:nth-child(3){animation-delay:220ms}
+.outline details.cs[open]>.body>*:nth-child(2) li:nth-child(4){animation-delay:260ms}
+.outline details.cs[open]>.body>*:nth-child(2) li:nth-child(5){animation-delay:300ms}
+.outline details.cs[open]>.body>*:nth-child(2) li:nth-child(6){animation-delay:340ms}
+.outline details.cs[open]>.body>*:nth-child(2) li:nth-child(7){animation-delay:380ms}
+.outline details.cs[open]>.body>*:nth-child(2) li:nth-child(8){animation-delay:420ms}
+.outline details.cs[open]>.body>*:nth-child(2) li:nth-child(9){animation-delay:460ms}
+.outline details.cs[open]>.body>*:nth-child(3) li:nth-child(1){animation-delay:190ms}
+.outline details.cs[open]>.body>*:nth-child(3) li:nth-child(2){animation-delay:230ms}
+.outline details.cs[open]>.body>*:nth-child(3) li:nth-child(3){animation-delay:270ms}
+.outline details.cs[open]>.body>*:nth-child(3) li:nth-child(4){animation-delay:310ms}
+.outline details.cs[open]>.body>*:nth-child(3) li:nth-child(5){animation-delay:350ms}
+.outline details.cs[open]>.body>*:nth-child(3) li:nth-child(6){animation-delay:390ms}
+.outline details.cs[open]>.body>*:nth-child(3) li:nth-child(7){animation-delay:430ms}
+.outline details.cs[open]>.body>*:nth-child(3) li:nth-child(8){animation-delay:470ms}
+.outline details.cs[open]>.body>*:nth-child(3) li:nth-child(9){animation-delay:500ms}
+.outline details.cs[open]>.body>*:nth-child(4) li:nth-child(1){animation-delay:240ms}
+.outline details.cs[open]>.body>*:nth-child(4) li:nth-child(2){animation-delay:280ms}
+.outline details.cs[open]>.body>*:nth-child(4) li:nth-child(3){animation-delay:320ms}
+.outline details.cs[open]>.body>*:nth-child(4) li:nth-child(4){animation-delay:360ms}
+.outline details.cs[open]>.body>*:nth-child(4) li:nth-child(5){animation-delay:400ms}
+.outline details.cs[open]>.body>*:nth-child(4) li:nth-child(6){animation-delay:440ms}
+.outline details.cs[open]>.body>*:nth-child(4) li:nth-child(7){animation-delay:480ms}
+.outline details.cs[open]>.body>*:nth-child(4) li:nth-child(8){animation-delay:500ms}
+.outline details.cs[open]>.body>*:nth-child(4) li:nth-child(9){animation-delay:500ms}
+.outline details.cs[open]>.body>*:nth-child(5) li:nth-child(1){animation-delay:290ms}
+.outline details.cs[open]>.body>*:nth-child(5) li:nth-child(2){animation-delay:330ms}
+.outline details.cs[open]>.body>*:nth-child(5) li:nth-child(3){animation-delay:370ms}
+.outline details.cs[open]>.body>*:nth-child(5) li:nth-child(4){animation-delay:410ms}
+.outline details.cs[open]>.body>*:nth-child(5) li:nth-child(5){animation-delay:450ms}
+.outline details.cs[open]>.body>*:nth-child(5) li:nth-child(6){animation-delay:490ms}
+.outline details.cs[open]>.body>*:nth-child(5) li:nth-child(7){animation-delay:500ms}
+.outline details.cs[open]>.body>*:nth-child(5) li:nth-child(8){animation-delay:500ms}
+.outline details.cs[open]>.body>*:nth-child(5) li:nth-child(9){animation-delay:500ms}
+.outline details.cs[open]>.body>*:nth-child(6) li:nth-child(1){animation-delay:340ms}
+.outline details.cs[open]>.body>*:nth-child(6) li:nth-child(2){animation-delay:380ms}
+.outline details.cs[open]>.body>*:nth-child(6) li:nth-child(3){animation-delay:420ms}
+.outline details.cs[open]>.body>*:nth-child(6) li:nth-child(4){animation-delay:460ms}
+.outline details.cs[open]>.body>*:nth-child(6) li:nth-child(5){animation-delay:500ms}
+.outline details.cs[open]>.body>*:nth-child(6) li:nth-child(6){animation-delay:500ms}
+.outline details.cs[open]>.body>*:nth-child(6) li:nth-child(7){animation-delay:500ms}
+.outline details.cs[open]>.body>*:nth-child(6) li:nth-child(8){animation-delay:500ms}
+.outline details.cs[open]>.body>*:nth-child(6) li:nth-child(9){animation-delay:500ms}
+.outline details.cs[open]>.body>*:nth-child(7) li:nth-child(1){animation-delay:390ms}
+.outline details.cs[open]>.body>*:nth-child(7) li:nth-child(2){animation-delay:430ms}
+.outline details.cs[open]>.body>*:nth-child(7) li:nth-child(3){animation-delay:470ms}
+.outline details.cs[open]>.body>*:nth-child(7) li:nth-child(4){animation-delay:500ms}
+.outline details.cs[open]>.body>*:nth-child(7) li:nth-child(5){animation-delay:500ms}
+.outline details.cs[open]>.body>*:nth-child(7) li:nth-child(6){animation-delay:500ms}
+.outline details.cs[open]>.body>*:nth-child(7) li:nth-child(7){animation-delay:500ms}
+.outline details.cs[open]>.body>*:nth-child(7) li:nth-child(8){animation-delay:500ms}
+.outline details.cs[open]>.body>*:nth-child(7) li:nth-child(9){animation-delay:500ms}
+.outline details.cs[open]>.body>*:nth-child(8) li:nth-child(1){animation-delay:440ms}
+.outline details.cs[open]>.body>*:nth-child(8) li:nth-child(2){animation-delay:480ms}
+.outline details.cs[open]>.body>*:nth-child(8) li:nth-child(3){animation-delay:500ms}
+.outline details.cs[open]>.body>*:nth-child(8) li:nth-child(4){animation-delay:500ms}
+.outline details.cs[open]>.body>*:nth-child(8) li:nth-child(5){animation-delay:500ms}
+.outline details.cs[open]>.body>*:nth-child(8) li:nth-child(6){animation-delay:500ms}
+.outline details.cs[open]>.body>*:nth-child(8) li:nth-child(7){animation-delay:500ms}
+.outline details.cs[open]>.body>*:nth-child(8) li:nth-child(8){animation-delay:500ms}
+.outline details.cs[open]>.body>*:nth-child(8) li:nth-child(9){animation-delay:500ms}
+.outline details.cs[open]>.body>*:nth-child(9) li:nth-child(1){animation-delay:490ms}
+.outline details.cs[open]>.body>*:nth-child(9) li:nth-child(2){animation-delay:500ms}
+.outline details.cs[open]>.body>*:nth-child(9) li:nth-child(3){animation-delay:500ms}
+.outline details.cs[open]>.body>*:nth-child(9) li:nth-child(4){animation-delay:500ms}
+.outline details.cs[open]>.body>*:nth-child(9) li:nth-child(5){animation-delay:500ms}
+.outline details.cs[open]>.body>*:nth-child(9) li:nth-child(6){animation-delay:500ms}
+.outline details.cs[open]>.body>*:nth-child(9) li:nth-child(7){animation-delay:500ms}
+.outline details.cs[open]>.body>*:nth-child(9) li:nth-child(8){animation-delay:500ms}
+.outline details.cs[open]>.body>*:nth-child(9) li:nth-child(9){animation-delay:500ms}
+.outline details.cs[open]>.body>*:nth-child(10) li:nth-child(1){animation-delay:500ms}
+.outline details.cs[open]>.body>*:nth-child(10) li:nth-child(2){animation-delay:500ms}
+.outline details.cs[open]>.body>*:nth-child(10) li:nth-child(3){animation-delay:500ms}
+.outline details.cs[open]>.body>*:nth-child(10) li:nth-child(4){animation-delay:500ms}
+.outline details.cs[open]>.body>*:nth-child(10) li:nth-child(5){animation-delay:500ms}
+.outline details.cs[open]>.body>*:nth-child(10) li:nth-child(6){animation-delay:500ms}
+.outline details.cs[open]>.body>*:nth-child(10) li:nth-child(7){animation-delay:500ms}
+.outline details.cs[open]>.body>*:nth-child(10) li:nth-child(8){animation-delay:500ms}
+.outline details.cs[open]>.body>*:nth-child(10) li:nth-child(9){animation-delay:500ms}
+.outline details.cs[open]>.body>*:nth-child(11) li:nth-child(1){animation-delay:500ms}
+.outline details.cs[open]>.body>*:nth-child(11) li:nth-child(2){animation-delay:500ms}
+.outline details.cs[open]>.body>*:nth-child(11) li:nth-child(3){animation-delay:500ms}
+.outline details.cs[open]>.body>*:nth-child(11) li:nth-child(4){animation-delay:500ms}
+.outline details.cs[open]>.body>*:nth-child(11) li:nth-child(5){animation-delay:500ms}
+.outline details.cs[open]>.body>*:nth-child(11) li:nth-child(6){animation-delay:500ms}
+.outline details.cs[open]>.body>*:nth-child(11) li:nth-child(7){animation-delay:500ms}
+.outline details.cs[open]>.body>*:nth-child(11) li:nth-child(8){animation-delay:500ms}
+.outline details.cs[open]>.body>*:nth-child(11) li:nth-child(9){animation-delay:500ms}
+.outline details.cs[open]>.body>*:nth-child(12) li:nth-child(1){animation-delay:500ms}
+.outline details.cs[open]>.body>*:nth-child(12) li:nth-child(2){animation-delay:500ms}
+.outline details.cs[open]>.body>*:nth-child(12) li:nth-child(3){animation-delay:500ms}
+.outline details.cs[open]>.body>*:nth-child(12) li:nth-child(4){animation-delay:500ms}
+.outline details.cs[open]>.body>*:nth-child(12) li:nth-child(5){animation-delay:500ms}
+.outline details.cs[open]>.body>*:nth-child(12) li:nth-child(6){animation-delay:500ms}
+.outline details.cs[open]>.body>*:nth-child(12) li:nth-child(7){animation-delay:500ms}
+.outline details.cs[open]>.body>*:nth-child(12) li:nth-child(8){animation-delay:500ms}
+.outline details.cs[open]>.body>*:nth-child(12) li:nth-child(9){animation-delay:500ms}
+@media (prefers-reduced-motion:reduce){.outline details.cs[open]>.body>*,.outline details.cs[open]>.body li{animation:none!important}}
+@media print{.outline details.cs[open]>.body>*,.outline details.cs[open]>.body li{animation:none!important}}
 </style>
 </head>
 <body>
@@ -826,8 +921,12 @@ document.addEventListener('toggle',function(e){var d=e.target;if(!d||d.tagName!=
 var last=0,tk=false;
 function chk(){tk=false;var y=window.scrollY,down=y>last;last=y;if(!window.AO||!down||typeof view!=='number')return;
  var ds=document.querySelectorAll(gm?'.sermon.on .qa>details':'.sermon.on .outline details');if(!ds.length||ds[0].offsetParent===null)return;
- var bot=y+window.innerHeight>=document.documentElement.scrollHeight-8;for(var k=0;k<ds.length;k++){var d=ds[k];if(d.open||d.dataset.man)continue;var t=d.getBoundingClientRect().top;if(t>0&&(t<window.innerHeight*0.35||(t<window.innerHeight&&bot))){d.dataset.ao='1';d.open=true;break}}}
+ var bot=y+window.innerHeight>=document.documentElement.scrollHeight-8;for(var k=0;k<ds.length;k++){var d=ds[k];if(d.open||d.dataset.man)continue;var t=d.getBoundingClientRect().top;if(t>0&&(t<window.innerHeight*0.35||(t<window.innerHeight&&bot))){d.dataset.ao='1';window.csOn(d);d.open=true;break}}}
 window.addEventListener('scroll',function(){if(!tk){tk=true;requestAnimationFrame(chk)}},{passive:true})})();
+
+/* start the cascade only when a section is opened by tap or by scrolling */
+window.csOn=function(d){d.classList.add('cs');setTimeout(function(){d.classList.remove('cs')},1400)};
+document.addEventListener('click',function(e){var s=e.target.closest&&e.target.closest('.outline summary');if(s&&s.parentNode&&!s.parentNode.open)window.csOn(s.parentNode)},true);
 </script>
 <script data-goatcounter="https://slucero77.goatcounter.com/count" data-goatcounter-settings='{"no_onload":true}' async src="//gc.zgo.at/count.js" onload="trk()"></script>
 </body>
