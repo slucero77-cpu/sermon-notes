@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta name="build" content="1794810018377">
+<meta name="build" content="1794810929204">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -528,12 +528,17 @@ body:not(.gm) .qsec>.sec:not(.mn),body:not(.gm) .qsec>details{display:none}
 body.gm .qgo{display:none}
 @media print{.qgo{display:none}}
 /* bottom tab bar: Notes / Questions */
-#tabbar{position:fixed;left:0;right:0;bottom:0;z-index:6;display:flex;gap:8px;padding:8px 12px calc(8px + env(safe-area-inset-bottom));background:var(--bg);border-top:1px solid var(--rule)}
+#tabbar{position:fixed;left:0;right:0;bottom:0;z-index:6;display:flex;gap:8px;padding:6px 12px calc(4px + env(safe-area-inset-bottom));background:var(--bg);border-top:1px solid var(--rule);transition:transform .25s ease-out}
+#tabbar.tbh{transform:translateY(105%)}
+@media (prefers-reduced-motion:reduce){#tabbar{transition:none}}
 #tabbar[hidden],body.kb #tabbar{display:none}
-#tabbar button{flex:1;min-height:48px;border-radius:14px;border:1.5px solid var(--rule);background:var(--btn);color:var(--mut);font:700 16px -apple-system,system-ui,sans-serif}
+#tabbar button{flex:1;min-height:42px;border-radius:12px;border:1.5px solid var(--rule);background:var(--btn);color:var(--mut);font:700 16px -apple-system,system-ui,sans-serif}
 #tabbar button.on2{background:var(--a);color:#fff;border-color:transparent}
-body.hasTab{padding-bottom:72px}
+body.hasTab{padding-bottom:64px}
 .qgo{display:none!important}
+#nPrev{margin-left:auto}
+/* home: Questions shortcut under this week's card; end-of-notes previous/next sermon */
+.card.wkq{min-height:52px;margin:-2px 0 12px;padding:12px 16px;text-align:center;font:700 16px -apple-system,system-ui,sans-serif;color:var(--at);background:var(--tint);border:1.5px solid var(--a);border-left:1.5px solid var(--a)}
 </style>
 </head>
 <body>
@@ -668,7 +673,7 @@ function howTo(){
  var seen=false;try{seen=localStorage.getItem('hw2')==='1'}catch(e){}
  return '<details class="how"'+(seen?'':' open')+'><summary>How to use this</summary><div class="body"><ul>'
  +(IS_PUB?'<li><b>Add it to your Home Screen</b> so it opens like an app.<br><b>iPhone:</b> open this page in <b>Safari</b>, tap <b>Share</b> (the square with an arrow pointing up), scroll down and tap <b>Add to Home Screen</b>, then tap <b>Add</b>.<br><b>Android:</b> open this page in <b>Chrome</b>, tap the <b>⋮</b> menu, tap <b>Add to Home screen</b> (or <b>Install app</b>), then tap <b>Add</b>.</li>':'')
- +'<li><b>Open a sermon</b> by tapping it. Switch between <b>Notes</b> and <b>Questions</b> with the tabs at the bottom of the screen (the same buttons are at the top).</li>'
+ +'<li><b>Open a sermon</b> by tapping it. Switch between <b>Notes</b> and <b>Questions</b> with the tabs at the bottom of the screen.</li>'
  +'<li><b>Notes</b> has the outline, key takeaways and scriptures. Tap any verse to open it in the ESV.</li>'
  +'<li><b>Scroll to keep reading.</b> Each outline section opens on its own when you reach it, and the open section’s title stays pinned at the top. Tap <b>Auto-open</b> to turn that off, or open and close sections yourself.</li>'
  +'<li><b>Watch this part</b> in a section jumps to that spot in the sermon video on YouTube.</li>'
@@ -682,7 +687,7 @@ function howTo(){
 function notesUpd(){try{var m=S[S.length-1].meta.match(/([A-Z][a-z]{2} \d{1,2}, \d{4})/);if(!m)return 'Notes updated weekly.';var d=new Date(m[1]);if(isNaN(d))return 'Notes updated weekly.';d.setDate(d.getDate()+((2-d.getDay()+7)%7||7));var D=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],M=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];return 'Notes updated '+D[d.getDay()]+', '+M[d.getMonth()]+' '+d.getDate()+'.'}catch(e){return 'Notes updated weekly.'}}
 function wnote(){try{if(localStorage.getItem('wn1'))return''}catch(z){}return'<div class="wn"><button class="x" type="button" aria-label="Dismiss">×</button><h3>New: watch each part</h3><p>Every sermon now links to its YouTube video. Open a sermon and tap “Watch this part” on any section to jump to that spot.</p></div>'}
 function buildHome(){
- var nw=S.length-1,h='<button class="card wk" data-i="'+nw+'" style="border-left-color:'+S[nw].color+';--hc:'+S[nw].color+'"><em>This week’s sermon'+(isNew(nw)?'<span class="nw">New</span>':'')+'</em><b>'+S[nw].title+'</b><span>'+shortMeta(S[nw])+'</span><u class="pass">'+S[nw].ref+'</u><i class="go">Start reading ›</i></button><p class="hint"><b>'+notesUpd()+'</b> New notes post Tuesday evening, or Wednesday at the latest. Or tap any sermon below.</p>'+wnote()+a2hs()+howTo();
+ var nw=S.length-1,h='<button class="card wk" data-i="'+nw+'" style="border-left-color:'+S[nw].color+';--hc:'+S[nw].color+'"><em>This week’s sermon'+(isNew(nw)?'<span class="nw">New</span>':'')+'</em><b>'+S[nw].title+'</b><span>'+shortMeta(S[nw])+'</span><u class="pass">'+S[nw].ref+'</u><i class="go">Start reading ›</i></button><button class="card wkq" data-i="'+nw+'" data-q="1" type="button">Open this week’s questions ›</button><p class="hint"><b>'+notesUpd()+'</b> New notes post Tuesday evening, or Wednesday at the latest. Or tap any sermon below.</p>'+wnote()+a2hs()+howTo();
  var last=null;try{last=localStorage.getItem('sid')}catch(e){}
  var lr=null;try{lr=JSON.parse(localStorage.getItem('lr')||'null')}catch(e){}
  var li2=(lr&&idxOf(lr.id)>=0)?idxOf(lr.id):(last?idxOf(last):-1);var lrOk=!!(lr&&idxOf(lr.id)===li2);
@@ -699,7 +704,7 @@ function buildHome(){
  home.innerHTML=h;
 }
 function buildNav(){
- nav.innerHTML='<button id="nHome">‹ All</button><span id="nCur"></span><span id="nSeg"><button id="nNotes">Notes</button><button id="nQs">Questions</button></span><button id="nPrev" aria-label="Previous sermon">←</button><button id="nNext" aria-label="Next sermon">→</button>';
+ nav.innerHTML='<button id="nHome">‹ All</button><span id="nCur"></span><button id="nPrev" aria-label="Previous sermon">←</button><button id="nNext" aria-label="Next sermon">→</button>';
 }
 function applyView(){
  res.style.display='none';setTimeout(updPB,0);
@@ -752,6 +757,7 @@ main.addEventListener('click',function(e){var b=e.target.closest('button[data-co
 });
 main.addEventListener('click',function(e){
  if(e.target.closest('.qgo')){tabTo(true);return}
+ var nb=e.target.closest('.nxb');if(nb){show(+nb.dataset.go);if(gm)setGm(false);return}
  var b=e.target.closest('button[data-x]');if(!b)return;
  if(b.dataset.x==='auto'){window.setAO(!window.AO);return}
  var o=b.dataset.x==='open';
@@ -949,9 +955,13 @@ show=function(){var r=_s.apply(this,arguments);upd();return r};
 goHome=function(){var r=_h.apply(this,arguments);upd();return r};
 setGm=function(){var r=_g.apply(this,arguments);upd();return r};
 bn.addEventListener('click',function(){tabTo(false)});bq.addEventListener('click',function(){tabTo(true)});
+var ly=window.scrollY;window.addEventListener('scroll',function(){var y=window.scrollY,d=y-ly;if(Math.abs(d)<6)return;var bot=y+innerHeight>=document.documentElement.scrollHeight-8;if(d>0&&y>150&&!bot)tb.classList.add('tbh');else tb.classList.remove('tbh');ly=y},{passive:true});
+var _u=upd;upd=function(){tb.classList.remove('tbh');ly=window.scrollY;return _u.apply(this,arguments)};
 document.addEventListener('focusin',function(e){if(e.target.matches&&e.target.matches('textarea,input'))document.body.classList.add('kb')});
 document.addEventListener('focusout',function(){document.body.classList.remove('kb')});
 upd()})();
+
+
 </script>
 <script data-goatcounter="https://slucero77.goatcounter.com/count" data-goatcounter-settings='{"no_onload":true}' async src="//gc.zgo.at/count.js" onload="trk()"></script>
 </body>
