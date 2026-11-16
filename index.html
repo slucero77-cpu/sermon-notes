@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta name="build" content="1794775441248">
+<meta name="build" content="1794804982659">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -392,6 +392,10 @@ li.tk.in{opacity:1;transform:none}
 .rst span{display:block;font:13px -apple-system,system-ui,sans-serif;color:var(--mut);margin:8px auto 0;max-width:300px;min-height:18px}
 .rst+.upd{margin-top:8px}
 .wn{position:relative;margin:12px 0 4px;padding:14px 16px;border-radius:14px;background:var(--tint);border:1.5px solid var(--a);font:15px/1.45 -apple-system,system-ui,sans-serif;color:var(--ink)}.wn h3{margin:0 36px 4px 0;font-size:16px;color:var(--at)}.wn p{margin:0}.wn .x{position:absolute;right:2px;top:2px;width:44px;height:44px;border:0;background:transparent;color:var(--mut);font-size:24px}
+/* pin the open section's title while scrolling */
+.outline details{overflow:visible}
+@supports (overflow:clip){.outline details{overflow:clip}}
+.outline details[open]>summary{position:sticky;top:var(--nh,56px);z-index:3;background:var(--card);border-radius:10px 10px 0 0;box-shadow:0 1px 0 var(--rule)}
 </style>
 </head>
 <body>
@@ -457,7 +461,7 @@ S.forEach(function(s,i){
  h+='<div class="verse"><b>'+s.ref+'</b>'+s.verse+(vl.indexOf('href')>=0?'<span class="vlink">Read in the ESV: '+vl+' ↗</span>':'')+'</div><div class="big"><b>Big Idea</b>'+s.big+'</div>';
  h+='<details open id="dt'+i+'"><summary>Key takeaways</summary><div class="body"><ul>'+li(s.take)+'</ul></div></details>';
  h+='<details id="ds'+i+'"><summary>Key scriptures ('+s.scr.length+')</summary><div class="body">'+s.scr.map(function(v,vi){return '<div class="vr" data-i="'+i+'" data-v="'+vi+'" role="button" tabindex="0"><b>'+v[0]+'</b><span>'+v[1]+'</span></div>'}).join('')+'</div></details>';
- h+='<div class="sec">Outline<span class="tools"><button data-x="open">Expand all</button><button data-x="close">Collapse</button></span></div><div class="outline">';
+ h+='<div class="sec">Outline<span class="tools"><button data-x="open">Expand all</button><button data-x="close">Collapse</button><button data-x="auto" class="aob" aria-pressed="true">Auto-open: On</button></span></div><div class="outline">';
  s.secs.forEach(function(x,k){
   h+='<details id="d'+i+'_'+k+'"><summary><span class="n">'+(k+1)+'</span>'+x.t+'</summary><div class="body">'+(s.yt&&x.s!=null?ytLink(s.yt,x.s,'▶ Watch this part · '+fmtT(x.s)+(s.secs[k+1]&&s.secs[k+1].s!=null?'–'+fmtT(s.secs[k+1].s):' to end')):'')+x.h+'</div></details>';
   IDX.push({i:i,k:k,L:'Outline',t:x.t,x:strip(x.t+' '+x.h)});
@@ -465,7 +469,7 @@ S.forEach(function(s,i){
  h+='</div>';
  h+='<p class="gref">'+s.ref+'</p><div class="qsec">';
  if(s.qa){
-  h+='<div class="sec">Minichurch Questions<span class="tools">'+(LEADER?'<button data-lead="'+i+'">Lead</button><button data-pk="'+i+'">★ Picks</button>':'')+'<button data-copy="'+i+'">'+(LEADER?'Copy':'Copy questions')+'</button>'+(LEADER?'<button data-qz="-1" aria-label="Smaller question text">A−</button><button data-qz="1" aria-label="Larger question text">A+</button>':'')+'</span></div><details open id="dq'+i+'"><summary>10 questions with sermon notes</summary><div class="body">'+s.qa.map(function(o,n){return '<div class="qa" data-qn="'+n+'">'+(LEADER?'<button class="qstar" data-qs="'+i+','+n+'" aria-label="Pick this question">☆</button>':'')+'<div class="qq">'+(n+1)+'. '+o.q+'</div>'+(o.a?'<details><summary>What the sermon says</summary><div class="body"><p>'+o.a+'</p></div></details>':'')+'</div>'}).join('')+'</div></details>';
+  h+='<div class="sec">Minichurch Questions<span class="tools">'+(LEADER?'<button data-lead="'+i+'">Lead</button><button data-pk="'+i+'">★ Picks</button>':'')+'<button data-copy="'+i+'">'+(LEADER?'Copy':'Copy questions')+'</button><button data-x="auto" class="aob" aria-pressed="true">Auto-open: On</button>'+(LEADER?'<button data-qz="-1" aria-label="Smaller question text">A−</button><button data-qz="1" aria-label="Larger question text">A+</button>':'')+'</span></div><details open id="dq'+i+'"><summary>10 questions with sermon notes</summary><div class="body">'+s.qa.map(function(o,n){return '<div class="qa" data-qn="'+n+'">'+(LEADER?'<button class="qstar" data-qs="'+i+','+n+'" aria-label="Pick this question">☆</button>':'')+'<div class="qq">'+(n+1)+'. '+o.q+'</div>'+(o.a?'<details><summary>What the sermon says</summary><div class="body"><p>'+o.a+'</p></div></details>':'')+'</div>'}).join('')+'</div></details>';
  } else {
   h+='<div class="sec">'+(s.official?'Minichurch Questions':'Discussion Questions')+'<span class="tools">'+(LEADER?'<button data-lead="'+i+'">Lead</button><button data-pk="'+i+'">★ Picks</button>':'')+'<button data-copy="'+i+'">'+(LEADER?'Copy':'Copy questions')+'</button>'+(LEADER?'<button data-qz="-1" aria-label="Smaller question text">A−</button><button data-qz="1" aria-label="Larger question text">A+</button>':'')+'</span></div><details open id="dq'+i+'"><summary>'+(s.official?'Official Minichurch questions':'Discuss')+'</summary><div class="body"><ol class="dq">'+s.qs.map(function(q,n){return '<li data-qn="'+n+'">'+q+(LEADER?'<button class="qstar" data-qs="'+i+','+n+'" aria-label="Pick this question">☆</button>':'')+'</li>'}).join('')+'</ol></div></details>';
  }
@@ -604,6 +608,7 @@ main.addEventListener('click',function(e){var b=e.target.closest('button[data-co
 });
 main.addEventListener('click',function(e){
  var b=e.target.closest('button[data-x]');if(!b)return;
+ if(b.dataset.x==='auto'){window.setAO(!window.AO);return}
  var o=b.dataset.x==='open';
  [].forEach.call(document.querySelectorAll('.sermon.on .outline details'),function(d){d.open=o});
 });
@@ -772,6 +777,20 @@ function applyRS(r){var ds=document.querySelectorAll('.sermon.on details');(r.o|
  setTimeout(function(){rsOn=true},900)})();
 
 try{if('serviceWorker' in navigator&&/^https?:/.test(location.protocol)&&location.hostname.indexOf('claude')<0){navigator.serviceWorker.register('sw.js').catch(function(){})}}catch(e){}
+
+/* measure the top bar so pinned section titles sit just under it */
+(function(){function m(){var n=document.getElementById('nav');if(n&&n.offsetHeight>0)document.documentElement.style.setProperty('--nh',n.offsetHeight+'px')}m();window.addEventListener('resize',m);window.addEventListener('load',m);document.addEventListener('click',function(){setTimeout(m,80);setTimeout(m,500)});window.addEventListener('scroll',m,{passive:true,once:true})})();
+
+/* auto-open the next section as you scroll down */
+(function(){window.AO=true;try{if(localStorage.getItem('ao')==='0')window.AO=false}catch(e){}
+function lab(){[].forEach.call(document.querySelectorAll('.aob'),function(b){b.textContent='Auto-open: '+(window.AO?'On':'Off');b.setAttribute('aria-pressed',window.AO?'true':'false')})}
+window.setAO=function(v){window.AO=!!v;try{localStorage.setItem('ao',v?'1':'0')}catch(e){}lab()};lab();
+document.addEventListener('toggle',function(e){var d=e.target;if(!d||d.tagName!=='DETAILS'||!d.closest('.outline,.qa'))return;if(d.dataset.ao==='1'){delete d.dataset.ao;return}if(d.open)delete d.dataset.man;else d.dataset.man='1'},true);
+var last=0,tk=false;
+function chk(){tk=false;var y=window.scrollY,down=y>last;last=y;if(!window.AO||!down||typeof view!=='number')return;
+ var ds=document.querySelectorAll(gm?'.sermon.on .qa>details':'.sermon.on .outline details');if(!ds.length||ds[0].offsetParent===null)return;
+ for(var k=0;k<ds.length;k++){var d=ds[k];if(d.open||d.dataset.man)continue;var t=d.getBoundingClientRect().top;if(t>0&&t<window.innerHeight*0.7){d.dataset.ao='1';d.open=true;break}}}
+window.addEventListener('scroll',function(){if(!tk){tk=true;requestAnimationFrame(chk)}},{passive:true})})();
 </script>
 <script data-goatcounter="https://slucero77.goatcounter.com/count" data-goatcounter-settings='{"no_onload":true}' async src="//gc.zgo.at/count.js" onload="trk()"></script>
 </body>
