@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta name="build" content="1794964211211">
+<meta name="build" content="1794970739340">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -539,6 +539,9 @@ body.hasTab{padding-bottom:64px}
 #nPrev{margin-left:auto}
 /* home: Questions shortcut under this week's card; end-of-notes previous/next sermon */
 .card.wkq{min-height:52px;margin:-2px 0 12px;padding:12px 16px;text-align:center;font:700 16px -apple-system,system-ui,sans-serif;color:var(--at);background:var(--tint);border:1.5px solid var(--a);border-left:1.5px solid var(--a)}
+
+/* links in questions */
+.qa .qq a,ol.dq li a{color:var(--at);text-decoration:underline;text-underline-offset:3px;font-weight:inherit}
 </style>
 </head>
 <body>
@@ -565,7 +568,7 @@ var S=[{"id":"contentment","yt":"p9HA-fCHLL8","tab":"Contentment","color":"#248a
 var ORD={contentment:1,money1:1.5,money:2,obey:3,obey2:3.5,fear:4,judgment:5,eoh1:6,eoh2:7,eoh3:8,king:9,arrest:10,p1:11,p2:12,faith:13,hab1:12.5,hab2:12.7,story:12.9,wins:14,glory:15};
 S.sort(function(a,b){return ORD[a.id]-ORD[b.id]});
 
-var BK={Gen:'Genesis',Num:'Numbers',Exod:'Exodus',Lev:'Leviticus',Deut:'Deuteronomy',Ps:'Psalm',Prov:'Proverbs',Eccl:'Ecclesiastes',Isa:'Isaiah',Jer:'Jeremiah',Dan:'Daniel',Hab:'Habakkuk',Hag:'Haggai',Josh:'Joshua',Obad:'Obadiah',Zech:'Zechariah',Mal:'Malachi',Matt:'Matthew',Mark:'Mark',Luke:'Luke',John:'John',Acts:'Acts',Rom:'Romans','1 Cor':'1 Corinthians','2 Cor':'2 Corinthians',Gal:'Galatians',Eph:'Ephesians',Phil:'Philippians',Col:'Colossians','2 Kings':'2 Kings','1 Kings':'1 Kings','1 Thess':'1 Thessalonians','2 Thess':'2 Thessalonians','1 Tim':'1 Timothy','2 Tim':'2 Timothy',Titus:'Titus',Heb:'Hebrews',James:'James','1 Pet':'1 Peter','2 Pet':'2 Peter','1 John':'1 John',Rev:'Revelation'};
+var BK={Gen:'Genesis',Num:'Numbers',Exod:'Exodus',Lev:'Leviticus',Deut:'Deuteronomy',Ps:'Psalm',Prov:'Proverbs',Eccl:'Ecclesiastes',Isa:'Isaiah',Jer:'Jeremiah',Dan:'Daniel',Hab:'Habakkuk',Hag:'Haggai',Josh:'Joshua',Obad:'Obadiah',Zech:'Zechariah',Mal:'Malachi',Matt:'Matthew',Mark:'Mark',Luke:'Luke',John:'John',Acts:'Acts',Rom:'Romans','1 Cor':'1 Corinthians','2 Cor':'2 Corinthians',Gal:'Galatians',Eph:'Ephesians',Phil:'Philippians',Col:'Colossians','2 Kings':'2 Kings','1 Kings':'1 Kings','1 Thess':'1 Thessalonians','2 Thess':'2 Thessalonians','1 Tim':'1 Timothy','2 Tim':'2 Timothy',Titus:'Titus',Heb:'Hebrews',James:'James','1 Pet':'1 Peter','2 Pet':'2 Peter','1 John':'1 John',Job:'Job',Ezek:'Ezekiel',Hos:'Hosea',Joel:'Joel',Amos:'Amos',Jonah:'Jonah',Mic:'Micah',Nah:'Nahum',Zeph:'Zephaniah',Ruth:'Ruth',Judg:'Judges',Neh:'Nehemiah',Ezra:'Ezra',Lam:'Lamentations','1 Sam':'1 Samuel','2 Sam':'2 Samuel','1 Chron':'1 Chronicles','2 Chron':'2 Chronicles',Philem:'Philemon',Jude:'Jude','2 John':'2 John','3 John':'3 John',Rev:'Revelation'};
 function linkRef(r){
  var last=null;
  return r.split(/;\s*/).map(function(p){
@@ -579,6 +582,12 @@ function linkRef(r){
  }).join('; ');
 }
 
+/* link the "(Look at: …)" verses and "Read verses N–M" in question text to the ESV */
+function qL(q,s){
+ q=q.replace(/\(Look at:\s*([^)]+)\)/,function(m,r){return '(Look at: '+linkRef(r.trim())+')'});
+ var m=(s&&s.ref||'').match(/^((?:[1-3] )?[A-Za-z]+) (\d+):\d+[–-]\d+$/);
+ if(m)q=q.replace(/\b(Read verses?\s+)(\d+(?:\s?[-–]\s?\d+)?)/g,function(x,a,b){return a+'<a href="https://www.biblegateway.com/passage/?version=ESV&search='+encodeURIComponent(m[1]+' '+m[2]+':'+b.replace(/–/g,'-').replace(/\s/g,''))+'" target="_blank" rel="noopener">'+b+'</a>'});
+ return q}
 var nav=document.getElementById('nav'),main=document.getElementById('main'),res=document.getElementById('res'),qin=document.getElementById('q');
 function strip(h){return h.replace(/<[^>]+>/g,' ').replace(/&amp;/g,'&').replace(/\s+/g,' ').trim()}
 function li(a){return a.map(function(q){return '<li>'+q+'</li>'}).join('')}
@@ -613,9 +622,9 @@ S.forEach(function(s,i){
  h+='</div>';
  h+='<p class="gref">'+s.ref+'</p><div class="qsec"><button class="qgo" type="button">Open discussion questions ›</button>';
  if(s.qa){
-  h+='<div class="sec">Minichurch Questions<span class="tools">'+(LEADER?'<button data-lead="'+i+'">Lead</button><button data-pk="'+i+'">★ Picks</button>':'')+'<button data-copy="'+i+'">'+(LEADER?'Copy':'Copy questions')+'</button>'+(LEADER?'<button data-x="auto" class="aob" aria-pressed="true">Auto-open: On</button><button data-qz="-1" aria-label="Smaller question text">A−</button><button data-qz="1" aria-label="Larger question text">A+</button>':'')+'</span></div><details open id="dq'+i+'"><summary>10 questions with sermon notes</summary><div class="body">'+s.qa.map(function(o,n){return '<div class="qa" data-qn="'+n+'">'+(LEADER?'<button class="qstar" data-qs="'+i+','+n+'" aria-label="Pick this question">☆</button>':'')+'<div class="qq">'+(n+1)+'. '+o.q+'</div>'+(o.a?'<details><summary>What the sermon says</summary><div class="body"><p>'+o.a+'</p></div></details>':'')+'</div>'}).join('')+'</div></details>';
+  h+='<div class="sec">Minichurch Questions<span class="tools">'+(LEADER?'<button data-lead="'+i+'">Lead</button><button data-pk="'+i+'">★ Picks</button>':'')+'<button data-copy="'+i+'">'+(LEADER?'Copy':'Copy questions')+'</button>'+(LEADER?'<button data-x="auto" class="aob" aria-pressed="true">Auto-open: On</button><button data-qz="-1" aria-label="Smaller question text">A−</button><button data-qz="1" aria-label="Larger question text">A+</button>':'')+'</span></div><details open id="dq'+i+'"><summary>10 questions with sermon notes</summary><div class="body">'+s.qa.map(function(o,n){return '<div class="qa" data-qn="'+n+'">'+(LEADER?'<button class="qstar" data-qs="'+i+','+n+'" aria-label="Pick this question">☆</button>':'')+'<div class="qq">'+(n+1)+'. '+qL(o.q,s)+'</div>'+(o.a?'<details><summary>What the sermon says</summary><div class="body"><p>'+o.a+'</p></div></details>':'')+'</div>'}).join('')+'</div></details>';
  } else {
-  h+='<div class="sec">'+(s.official?'Minichurch Questions':'Discussion Questions')+'<span class="tools">'+(LEADER?'<button data-lead="'+i+'">Lead</button><button data-pk="'+i+'">★ Picks</button>':'')+'<button data-copy="'+i+'">'+(LEADER?'Copy':'Copy questions')+'</button>'+(LEADER?'<button data-qz="-1" aria-label="Smaller question text">A−</button><button data-qz="1" aria-label="Larger question text">A+</button>':'')+'</span></div><details open id="dq'+i+'"><summary>'+(s.official?'Official Minichurch questions':'Discuss')+'</summary><div class="body"><ol class="dq">'+s.qs.map(function(q,n){return '<li data-qn="'+n+'">'+q+(LEADER?'<button class="qstar" data-qs="'+i+','+n+'" aria-label="Pick this question">☆</button>':'')+'</li>'}).join('')+'</ol></div></details>';
+  h+='<div class="sec">'+(s.official?'Minichurch Questions':'Discussion Questions')+'<span class="tools">'+(LEADER?'<button data-lead="'+i+'">Lead</button><button data-pk="'+i+'">★ Picks</button>':'')+'<button data-copy="'+i+'">'+(LEADER?'Copy':'Copy questions')+'</button>'+(LEADER?'<button data-qz="-1" aria-label="Smaller question text">A−</button><button data-qz="1" aria-label="Larger question text">A+</button>':'')+'</span></div><details open id="dq'+i+'"><summary>'+(s.official?'Official Minichurch questions':'Discuss')+'</summary><div class="body"><ol class="dq">'+s.qs.map(function(q,n){return '<li data-qn="'+n+'">'+qL(q,s)+(LEADER?'<button class="qstar" data-qs="'+i+','+n+'" aria-label="Pick this question">☆</button>':'')+'</li>'}).join('')+'</ol></div></details>';
  }
  h+='<div class="sec mn">My notes <span class="priv">only on this device</span></div><textarea class="mynotes" data-note="'+i+'" aria-label="My private notes for '+s.title.replace(/"/g,'')+'" rows="4" placeholder="Jot your own notes for this sermon here…"></textarea>';
  h+='</div>';
