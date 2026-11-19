@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta name="build" content="1795096271341">
+<meta name="build" content="1795127418946">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -588,7 +588,7 @@ function bkOut(b){return LG==='es'?(ESBK[b]||b):b}
 var USFM={Genesis:'GEN',Exodus:'EXO',Leviticus:'LEV',Numbers:'NUM',Deuteronomy:'DEU',Joshua:'JOS',Judges:'JDG',Ruth:'RUT','1 Samuel':'1SA','2 Samuel':'2SA','1 Kings':'1KI','2 Kings':'2KI','1 Chronicles':'1CH','2 Chronicles':'2CH',Ezra:'EZR',Nehemiah:'NEH',Job:'JOB',Psalm:'PSA',Proverbs:'PRO',Ecclesiastes:'ECC',Isaiah:'ISA',Jeremiah:'JER',Lamentations:'LAM',Ezekiel:'EZK',Daniel:'DAN',Hosea:'HOS',Joel:'JOL',Amos:'AMO',Obadiah:'OBA',Jonah:'JON',Micah:'MIC',Nahum:'NAM',Habakkuk:'HAB',Zephaniah:'ZEP',Haggai:'HAG',Zechariah:'ZEC',Malachi:'MAL',Matthew:'MAT',Mark:'MRK',Luke:'LUK',John:'JHN',Acts:'ACT',Romans:'ROM','1 Corinthians':'1CO','2 Corinthians':'2CO',Galatians:'GAL',Ephesians:'EPH',Philippians:'PHP',Colossians:'COL','1 Thessalonians':'1TH','2 Thessalonians':'2TH','1 Timothy':'1TI','2 Timothy':'2TI',Titus:'TIT',Philemon:'PHM',Hebrews:'HEB',James:'JAS','1 Peter':'1PE','2 Peter':'2PE','1 John':'1JN','2 John':'2JN','3 John':'3JN',Jude:'JUD',Revelation:'REV'};
 /* link target: ESV on Bible Gateway in English; NBLA on YouVersion (bible.com) in Spanish */
 function bibleUrl(book,rest){rest=rest.replace(/–/g,'-').replace(/\s/g,'');
- if(USFM[book]){var m=rest.match(/^(\d+)(?::(\d+))?/);
+ if(LG==='es'&&USFM[book]){var m=rest.match(/^(\d+)(?::(\d+))?/);
   if(m){var tail=rest.slice(m[0].length),ref=USFM[book]+'.'+m[1];
    if(m[2]){ref+='.'+m[2];if(!/:/.test(tail)){var nn=tail.match(/\d+/g),last=nn?+nn[nn.length-1]:0;if(last>+m[2])ref+='-'+last}}
    return 'https://www.bible.com/bible/'+(LG==='es'?'103':'59')+'/'+ref+'.'+(LG==='es'?'NBLA':'ESV')}}
@@ -721,8 +721,8 @@ function howTo(){
  return '<details class="how"><summary>How to use this</summary><div class="body"><ul>'
  +(IS_PUB?'<li><b>Add it to your Home Screen</b> so it opens like an app.<br><b>iPhone:</b> in <b>Safari</b>, tap <b>Share</b> (the square with an arrow), then <b>Add to Home Screen</b>.<br><b>Android:</b> in <b>Chrome</b>, tap <b>⋮</b>, then <b>Add to Home screen</b> (or <b>Install app</b>).</li>':'')
  +'<li><b>Open a sermon</b>, then use the tabs at the bottom to switch between <b>Notes</b> and <b>Questions</b>. The tabs slide away as you scroll down and return when you scroll up.</li>'
- +'<li><b>Notes:</b> each outline section opens as you scroll. Tap a verse to open it in the Bible app (ESV), or tap <b>Watch this part</b> to jump to that spot in the video.</li>'
- +'<li><b>Questions:</b> large text for your group. <b>Copy questions</b> copies them to paste into a text, and the <b>Look at</b> verses open in the Bible app.</li>'
+ +'<li><b>Notes:</b> each outline section opens as you scroll. Tap a verse to read it in the ESV, or tap <b>Watch this part</b> to jump to that spot in the video.</li>'
+ +'<li><b>Questions:</b> large text for your group. <b>Copy questions</b> copies them to paste into a text, and the <b>Look at</b> verses are links.</li>'
  +'<li><b>Spanish:</b> tap <b>ES</b> at the top to read everything in Spanish (verses open in the NBLA). Tap <b>EN</b> to switch back.</li>'
  +'<li><b>Your place is remembered.</b> Switching tabs returns you to where you left off, and <b>Continue reading</b> on the home page takes you back to your last spot.</li>'
  +'<li><b>Also:</b> Search finds words, verses and questions. Swipe left or right (or use <b>← →</b>) to change sermons. <b>A− A+</b> changes text size and <b>☾</b> is dark mode. On a laptop, press <b>/</b> to search, <b>g</b> for Questions and <b>n</b> for Notes.</li>'
