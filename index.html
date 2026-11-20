@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta name="build" content="1795198667354">
+<meta name="build" content="1795199143372">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -653,6 +653,7 @@ body.sbs.qn .qsec>textarea.mynotes{display:block!important;min-height:340px;font
 #sheet .lk a.blb{background:transparent;color:var(--a);border:1.5px solid var(--a)}
 html[data-th=dark] #sheet .lk a.blb{filter:none;color:#9db8f0;border-color:#9db8f0}
 .vlink a.blb{white-space:nowrap}
+a.vq{cursor:pointer}
 </style>
 </head>
 <body>
@@ -701,7 +702,7 @@ var USFM={Genesis:'GEN',Exodus:'EXO',Leviticus:'LEV',Numbers:'NUM',Deuteronomy:'
 function bibleUrl(book,rest){rest=rest.replace(/–/g,'-').replace(/\s/g,'');
  var es=LG==='es';
  return 'https://www.biblegateway.com/passage/?version='+(es?'LBLA':'ESV')+'&search='+encodeURIComponent((es&&ESBK[book]?ESBK[book]:book)+' '+rest)}
-function linkRef(r){
+function linkRef(r,pop){
  var last=null;
  return r.split(/;\s*/).map(function(p){
   var m=p.match(/^((?:[1-3]\s)?[A-Za-zÁÉÍÓÚáéíóúñÑ]+)\.?\s+(\d.*)$/),book,rest;
@@ -710,6 +711,7 @@ function linkRef(r){
   if(!book)return p;
   last=book;
   var u=bibleUrl(book,rest);
+  if(pop)return '<a class="vq" role="button" tabindex="0" data-bk="'+book+'" data-rest="'+rest.replace(/"/g,'')+'">'+p+'</a>';
   return '<a href="'+u+'" target="_blank">'+p+'</a>';
  }).join('; ');
 }
@@ -724,9 +726,9 @@ function blbUrl(book,rest){var c=BLBK[book];if(!c)return null;rest=String(rest).
 function blbLink(r,label){var p=String(r).split(/;\s*/)[0],m=p.match(/^((?:[1-3]\s)?[A-Za-zÁÉÍÓÚáéíóúñÑ]+)\.?\s+(\d.*)$/);if(!m)return '';var b=bkEn(m[1]);if(!b)return '';var u=blbUrl(b,m[2]);return u?'<a class="blb" href="'+u+'" target="_blank" rel="noopener">'+label+'</a>':''}
 /* link the "(Look at: …)" verses and "Read verses N–M" in question text to the ESV */
 function qL(q,s){
- q=q.replace(/\((Look at|Ver):\s*([^)]+)\)/,function(m,l,r){return '('+l+': '+linkRef(r.trim())+')'});
+ q=q.replace(/\((Look at|Ver):\s*([^)]+)\)/,function(m,l,r){return '('+l+': '+linkRef(r.trim(),true)+')'});
  var m=(s&&s.ref||'').match(/^((?:[1-3] )?[A-Za-zÁÉÍÓÚáéíóúñÑ]+) (\d+):\d+[–-]\d+$/),bk=m&&bkEn(m[1]);
- if(bk)q=q.replace(/\b(Read verses?\s+|(?:Lean|Lee) los versículos\s+|(?:Lean|Lee) el versículo\s+)(\d+(?:\s?[-–]\s?\d+)?)/g,function(x,a,b){return a+'<a href="'+bibleUrl(bk,m[2]+':'+b)+'" target="_blank" rel="noopener">'+b+'</a>'});
+ if(bk)q=q.replace(/\b(Read verses?\s+|(?:Lean|Lee) los versículos\s+|(?:Lean|Lee) el versículo\s+)(\d+(?:\s?[-–]\s?\d+)?)/g,function(x,a,b){return a+'<a role="button" tabindex="0" class="vq" data-bk="'+bk+'" data-rest="'+m[2]+':'+b.replace(/\s/g,'')+'">'+b+'</a>'});
  return q}
 var nav=document.getElementById('nav'),main=document.getElementById('main'),res=document.getElementById('res'),qin=document.getElementById('q');
 function strip(h){return h.replace(/<[^>]+>/g,' ').replace(/&amp;/g,'&').replace(/\s+/g,' ').trim()}
@@ -991,12 +993,26 @@ function closeSh(){sh.classList.remove('on')}
 function openSh(i,vi){
  var s=S[i],v=s.scr[vi];
  document.getElementById('shT').textContent=v[0];
- document.getElementById('shN').textContent=v[1];
+ var _n=document.getElementById('shN');_n.style.display='';_n.textContent=v[1];
  document.getElementById('shS').textContent='From “'+s.title+'”';
  document.getElementById('shL').innerHTML=linkRef(v[0]).replace(/<a ([^>]*)>([^<]*)<\/a>/g,function(m,a,t){return '<a '+a+'>'+(LG==='es'?'Leer '+t+' en la LBLA ↗':'Read '+t+' in the ESV ↗')+'</a>'}).replace(/<\/a>; /g,'</a>');
  var bl=blbLink(v[0],LG==='es'?'Estudiar en Blue Letter Bible ↗ (RVR 1960)':'Study in Blue Letter Bible ↗');if(bl)document.getElementById('shL').innerHTML+=bl;
  sh.classList.add('on');
 }
+
+/* question verse links open the same popup card */
+function openRef(book,rest){
+ var es=LG==='es',t=bkOut(book)+' '+rest.replace(/-/g,'–');
+ document.getElementById('shT').textContent=t;
+ var n=document.getElementById('shN');n.textContent='';n.style.display='none';
+ document.getElementById('shS').textContent=es?'De una pregunta de discusión':'From a discussion question';
+ var a='<a href="'+bibleUrl(book,rest)+'" target="_blank" rel="noopener">'+(es?'Leer '+t+' en la LBLA ↗':'Read '+t+' in the ESV ↗')+'</a>';
+ var bl=blbLink(book+' '+rest,es?'Estudiar en Blue Letter Bible ↗ (RVR 1960)':'Study in Blue Letter Bible ↗');
+ document.getElementById('shL').innerHTML=a+bl;
+ sh.classList.add('on');
+}
+main.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('a.vq');if(!a)return;e.preventDefault();openRef(a.dataset.bk,a.dataset.rest)});
+main.addEventListener('keydown',function(e){if((e.key==='Enter'||e.key===' ')&&e.target.classList&&e.target.classList.contains('vq')){e.preventDefault();openRef(e.target.dataset.bk,e.target.dataset.rest)}});
 main.addEventListener('click',function(e){var r=e.target.closest('.vr');if(r)openSh(+r.dataset.i,+r.dataset.v)});
 main.addEventListener('keydown',function(e){if((e.key==='Enter'||e.key===' ')&&e.target.classList&&e.target.classList.contains('vr')){e.preventDefault();openSh(+e.target.dataset.i,+e.target.dataset.v)}});
 sh.querySelector('.bd').addEventListener('click',closeSh);
