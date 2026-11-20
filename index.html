@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta name="build" content="1795138282800">
+<meta name="build" content="1795139191844">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -307,6 +307,16 @@ html[data-th=dark] .card.wk{background:linear-gradient(135deg,color-mix(in srgb,
 .card.wk .pass{display:inline-block;margin-top:12px;text-decoration:none;font:600 13px -apple-system,system-ui,sans-serif;color:#fff;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.4);border-radius:999px;padding:6px 12px}
 .card.wk .go{display:block;margin-top:14px;text-align:center;font:700 16px -apple-system,system-ui,sans-serif;font-style:normal;color:#0b1f4a;background:#fff;border-radius:12px;padding:13px 14px;min-height:44px}
 .card.wk .nw{display:inline-block}
+details.grp,#side details.sg{background:transparent!important;border:0!important;box-shadow:none!important;padding:0!important;margin:0!important;border-radius:0!important;overflow:visible!important}
+.grp>summary,#side .sg>summary{list-style:none;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.grp>summary::-webkit-details-marker,#side .sg>summary::-webkit-details-marker{display:none}
+.grp>summary.sec{min-height:44px;margin-top:10px!important;margin-bottom:6px!important;justify-content:space-between}
+.grp>summary .gnm,#side .sg>summary .gnm{flex:1;min-width:0}
+.gct{font:700 11px -apple-system,system-ui,sans-serif;letter-spacing:0;background:var(--tint);color:var(--mut);border-radius:10px;padding:2px 8px}
+.grp>summary::after,#side .sg>summary::after{content:'›';font:700 20px/1 -apple-system,system-ui,sans-serif;color:var(--mut);transition:transform .2s;margin-left:6px}
+.grp[open]>summary::after,#side .sg[open]>summary::after{transform:rotate(90deg)}
+#side .sg>summary{display:flex;align-items:center;gap:6px;font:700 11px -apple-system,system-ui,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--mut);margin:10px 8px 4px;padding:8px 0;min-height:36px}
+@media (prefers-reduced-motion:reduce){.grp>summary::after,#side .sg>summary::after{transition:none}}
 .gstrip{height:4px;border-radius:4px;margin:0 2px 12px;opacity:.95}
 nav{background:color-mix(in srgb,var(--bg) 72%,transparent);-webkit-backdrop-filter:blur(16px) saturate(1.6);backdrop-filter:blur(16px) saturate(1.6)}
 @media (prefers-reduced-transparency:reduce){nav{background:var(--bg);-webkit-backdrop-filter:none;backdrop-filter:none}}
@@ -731,6 +741,10 @@ function howTo(){
 }
 function notesUpd(){try{var m=(S[S.length-1].metaEn||S[S.length-1].meta).match(/([A-Z][a-z]{2} \d{1,2}, \d{4})/);if(!m)return 'Notes updated weekly.';var d=new Date(m[1]);if(isNaN(d))return 'Notes updated weekly.';d.setDate(d.getDate()+((2-d.getDay()+7)%7||7));var D=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],M=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];return 'Notes updated '+D[d.getDay()]+', '+M[d.getMonth()]+' '+d.getDate()+'.'}catch(e){return 'Notes updated weekly.'}}
 function wnote(){try{if(localStorage.getItem('wn1'))return''}catch(z){}return LG==='es'?'<div class="wn"><button class="x" type="button" aria-label="Dismiss">×</button><h3>Nuevo: mira cada parte</h3><p>Cada sermón ahora tiene un enlace a su video de YouTube. Abre un sermón y toca “Ver esta parte” en cualquier sección para ir a ese momento.</p></div>':'<div class="wn"><button class="x" type="button" aria-label="Dismiss">×</button><h3>New: watch each part</h3><p>Every sermon now links to its YouTube video. Open a sermon and tap “Watch this part” on any section to jump to that spot.</p></div>'}
+var GX={};try{GX=JSON.parse(localStorage.getItem('gx')||'{}')||{}}catch(e){}
+function gOpen(g,dflt){return (g.n in GX)?!!GX[g.n]:dflt}
+function gSave(n,o){GX[n]=o?1:0;try{localStorage.setItem('gx',JSON.stringify(GX))}catch(e){}}
+function gOf(k){for(var q=0;q<GRP.length;q++)if(GRP[q].ids.indexOf(S[k].id)>=0)return GRP[q];return null}
 function buildHome(){
  var nw=S.length-1,h='<button class="card wk" data-i="'+nw+'" style="border-left-color:'+S[nw].color+';--hc:'+S[nw].color+'"><em>This week’s sermon'+(isNew(nw)?'<span class="nw">New</span>':'')+'</em><b>'+S[nw].title+'</b><span>'+shortMeta(S[nw])+'</span><u class="pass">'+S[nw].ref+'</u><i class="go">Start reading ›</i></button><button class="card wkq" data-i="'+nw+'" data-q="1" type="button">Open this week’s questions ›</button><p class="hint"><b>'+notesUpd()+'</b> New notes post Tuesday evening, or Wednesday at the latest. Or tap any sermon below.</p>'+wnote()+a2hs()+howTo();
  var last=null;try{last=localStorage.getItem('sid')}catch(e){}
@@ -740,9 +754,10 @@ function buildHome(){
  var favs=S.map(function(s,k){return k}).filter(function(k){return isFav(S[k].id)});
  if(favs.length){h+='<div class="sec">★ Saved</div>';favs.forEach(function(k){var s=S[k];h+='<button class="card" data-i="'+k+'" style="border-left-color:'+s.color+'"><b>'+s.title+(hasNote(s.id)?' ✎':'')+'</b><span>'+shortMeta(s)+'</span><em>'+s.ref+'</em></button>'})}
  GRP.forEach(function(g){
-  h+='<div class="sec" role="heading" aria-level="2">'+g.n+'</div><div class="gstrip" style="background:linear-gradient(90deg,'+g.ids.map(function(id,q){var k=idxOf(id);var c=k>=0?S[k].color:'#999';var a=q*100/g.ids.length,b=(q+1)*100/g.ids.length;return c+' '+a+'%,'+c+' '+b+'%'}).join(',')+')"></div>';
+  var gd=gOf(S.length-1)===g;h+='<details class="grp" data-g="'+g.n.replace(/"/g,'&quot;')+'"'+(gOpen(g,gd)?' open':'')+'><summary class="sec"><span class="gnm">'+g.n+'</span><span class="gct">'+g.ids.length+'</span></summary><div class="gstrip" style="background:linear-gradient(90deg,'+g.ids.map(function(id,q){var k=idxOf(id);var c=k>=0?S[k].color:'#999';var a=q*100/g.ids.length,b=(q+1)*100/g.ids.length;return c+' '+a+'%,'+c+' '+b+'%'}).join(',')+')"></div>';
   g.ids.forEach(function(id){var k=idxOf(id);if(k<0)return;var s=S[k];
    h+='<button class="card" data-i="'+k+'" style="border-left-color:'+s.color+'"><b>'+s.title+(isNew(k)?'<span class="nw">New</span>':'')+(hasNote(s.id)?' ✎':'')+'</b><span>'+shortMeta(s)+'</span><em>'+s.ref+'</em></button>';});
+  h+='</details>';
  });
  
  if(IS_PUB)h+='<div class="upd"><button id="updBtn" type="button">Check for updates</button><span id="updMsg" role="status" aria-live="polite"></span></div>';
@@ -889,12 +904,13 @@ main.addEventListener('input',function(e){var t=e.target;if(!t.matches||!t.match
 var side=document.getElementById('side');
 function buildSide(){
  var s='';
- GRP.forEach(function(g){s+='<h2>'+g.n+'</h2>';g.ids.forEach(function(id){var k=idxOf(id);if(k<0)return;
-  s+='<button data-i="'+k+'" style="--c:'+S[k].color+'">'+(isFav(S[k].id)?'★ ':'')+S[k].title+(hasNote(S[k].id)?' ✎':'')+'<small>'+shortMeta(S[k])+'</small></button>'})});
+ GRP.forEach(function(g){var cur=view>=0&&view<S.length&&gOf(view)===g;s+='<details class="sg" data-g="'+g.n.replace(/"/g,'&quot;')+'"'+(gOpen(g,cur||gOf(S.length-1)===g)?' open':'')+'><summary><span class="gnm">'+g.n+'</span><span class="gct">'+g.ids.length+'</span></summary>';g.ids.forEach(function(id){var k=idxOf(id);if(k<0)return;
+  s+='<button data-i="'+k+'" style="--c:'+S[k].color+'">'+(isFav(S[k].id)?'★ ':'')+S[k].title+(hasNote(S[k].id)?' ✎':'')+'<small>'+shortMeta(S[k])+'</small></button>'});s+='</details>'});
  side.innerHTML=s;
 }
-function markSide(){[].forEach.call(side.querySelectorAll('button'),function(b){b.classList.toggle('on',+b.dataset.i===view)})}
+function markSide(){[].forEach.call(side.querySelectorAll('button'),function(b){var on=+b.dataset.i===view;b.classList.toggle('on',on);if(on){var d=b.closest('details');if(d&&!d.open)d.open=true}})}
 buildSide();
+document.addEventListener('toggle',function(e){var d=e.target;if(d&&d.tagName==='DETAILS'&&d.dataset&&d.dataset.g&&(d.classList.contains('grp')||d.classList.contains('sg'))){gSave(d.dataset.g,d.open);[].forEach.call(document.querySelectorAll('details[data-g]'),function(o){if(o!==d&&o.dataset.g===d.dataset.g&&o.open!==d.open)o.open=d.open})}},true);
 side.addEventListener('click',function(e){var b=e.target.closest('button');if(b){show(+b.dataset.i);markSide()}});
 var _applyView=applyView;applyView=function(){_applyView();markSide()};
 markSide();
