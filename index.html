@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta name="build" content="1795150882798">
+<meta name="build" content="1795151497488">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -566,6 +566,16 @@ body.hasTab{padding-bottom:64px}
 
 /* links in questions */
 .qa .qq a,ol.dq li a{color:var(--at);text-decoration:underline;text-underline-offset:3px;font-weight:inherit}
+
+#side .hwbtn{display:flex!important;align-items:center;gap:10px;width:100%;margin:0 0 10px;padding:10px 12px!important;border:1.5px solid var(--a)!important;border-left:1.5px solid var(--a)!important;border-radius:10px!important;background:var(--tint)!important;color:var(--at)!important;font:700 14px -apple-system,system-ui,sans-serif;cursor:pointer}
+#side .hwbtn:hover{filter:brightness(.97)}
+#side .hwq{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:var(--a);color:#fff;font:800 13px -apple-system,system-ui,sans-serif}
+#hwd{display:none;position:fixed;inset:0;z-index:200;background:rgba(10,18,36,.55);align-items:center;justify-content:center;padding:24px}
+#hwd .hwc{position:relative;background:var(--card);color:var(--ink);border:1px solid var(--rule);border-radius:16px;max-width:600px;width:100%;max-height:82vh;overflow:auto;padding:22px 26px 24px;font:16px/1.55 -apple-system,system-ui,sans-serif;box-shadow:0 18px 50px rgba(0,0,0,.35)}
+#hwd h2{margin:0 0 10px;font:700 20px -apple-system,system-ui,sans-serif;color:var(--ink)}
+#hwd ul{margin:0;padding-left:20px}#hwd li{margin:0 0 12px}
+#hwd .hwx{position:absolute;top:10px;right:12px;width:40px;height:40px;border-radius:50%;border:0;background:var(--tint);color:var(--mut);font-size:24px;line-height:1;cursor:pointer}
+@media (max-width:999px){#hwd{display:none!important}}
 </style>
 </head>
 <body>
@@ -909,7 +919,7 @@ main.addEventListener('input',function(e){var t=e.target;if(!t.matches||!t.match
 /* desktop sidebar + keyboard */
 var side=document.getElementById('side');
 function buildSide(){
- var s='';
+ var s='<button type="button" class="hwbtn" id="hwbtn"><span class="hwq" aria-hidden="true">?</span>'+(LG==='es'?'Cómo usar esta página':'How to use this')+'</button>';
  GRP.forEach(function(g){var cur=view>=0&&view<S.length&&gOf(view)===g;s+='<details class="sg" data-g="'+g.n.replace(/"/g,'&quot;')+'"'+(gOpen(g,cur||gOf(S.length-1)===g)?' open':'')+' style="--gc:'+(g.c||'#6b7a90')+'"><summary><span class="gnm">'+g.n+'</span><span class="gct">'+g.ids.length+'</span></summary>';g.ids.forEach(function(id){var k=idxOf(id);if(k<0)return;
   s+='<button data-i="'+k+'" style="--c:'+S[k].color+'">'+(isFav(S[k].id)?'★ ':'')+S[k].title+(hasNote(S[k].id)?' ✎':'')+'<small>'+shortMeta(S[k])+'</small></button>'});s+='</details>'});
  side.innerHTML=s;
@@ -917,12 +927,15 @@ function buildSide(){
 function markSide(){[].forEach.call(side.querySelectorAll('button'),function(b){var on=+b.dataset.i===view;b.classList.toggle('on',on);if(on){var d=b.closest('details');if(d&&!d.open)d.open=true}})}
 buildSide();
 document.addEventListener('toggle',function(e){var d=e.target;if(d&&d.tagName==='DETAILS'&&d.dataset&&d.dataset.g&&(d.classList.contains('grp')||d.classList.contains('sg'))){gSave(d.dataset.g,d.open);[].forEach.call(document.querySelectorAll('details[data-g]'),function(o){if(o!==d&&o.dataset.g===d.dataset.g&&o.open!==d.open)o.open=d.open})}},true);
-side.addEventListener('click',function(e){var b=e.target.closest('button');if(b){show(+b.dataset.i);markSide()}});
+function hwOpen(){var m=howTo().match(/<div class="body">([\s\S]*)<\/div><\/details>/);var d=document.getElementById('hwd');if(!d){d=document.createElement('div');d.id='hwd';d.setAttribute('role','dialog');d.setAttribute('aria-modal','true');d.setAttribute('aria-label',LG==='es'?'Cómo usar esta página':'How to use this');document.body.appendChild(d);d.addEventListener('click',function(e){if(e.target===d||e.target.closest('.hwx'))hwClose()})}
+ d.innerHTML='<div class="hwc"><button type="button" class="hwx" aria-label="'+(LG==='es'?'Cerrar':'Close')+'">×</button><h2>'+(LG==='es'?'Cómo usar esta página':'How to use this')+'</h2>'+(m?m[1]:'')+'</div>';d.style.display='flex';var x=d.querySelector('.hwx');if(x)x.focus()}
+function hwClose(){var d=document.getElementById('hwd');if(d)d.style.display='none';var b=document.getElementById('hwbtn');if(b)b.focus()}
+side.addEventListener('click',function(e){var b=e.target.closest('button');if(b){if(b.id==='hwbtn'){hwOpen();return}show(+b.dataset.i);markSide()}});
 var _applyView=applyView;applyView=function(){_applyView();markSide()};
 markSide();
 document.addEventListener('keydown',function(e){
  var t=e.target,typing=t&&/^(INPUT|TEXTAREA)$/.test(t.tagName);
- if(e.key==='Escape'){if(sh&&sh.style.display==='block'){sh.style.display='none';return}if(typing||qin.value){qin.value='';qin.blur();applyView()}return}
+ if(e.key==='Escape'){var hd=document.getElementById('hwd');if(hd&&hd.style.display==='flex'){hwClose();return}if(sh&&sh.style.display==='block'){sh.style.display='none';return}if(typing||qin.value){qin.value='';qin.blur();applyView()}return}
  if(typing||e.ctrlKey||e.metaKey||e.altKey)return;
  if(e.key==='/'){e.preventDefault();qin.focus();qin.select()}
  else if(e.key==='ArrowRight'&&view!=='home')step(1);
