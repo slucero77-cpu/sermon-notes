@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta name="build" content="1795154067711">
+<meta name="build" content="1795154248482">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -630,6 +630,8 @@ body.gm #nJump{display:none}
 @media (min-width:1280px){
 body.sbs .sermon.on>.qsec{background:color-mix(in srgb,var(--accent,#2f4fa0) 7%,var(--card));border:1px solid var(--rule);border-top:4px solid var(--accent,#2f4fa0);border-radius:14px;padding:0 22px 26px;box-shadow:0 6px 22px rgba(20,30,60,.10)}
 body.sbs .sermon.on>.qsec::before{content:'Discussion Questions';display:block;position:sticky;top:0;z-index:2;margin:0 -22px 8px;padding:14px 22px 10px;font-weight:800;font-size:13px;letter-spacing:.09em;text-transform:uppercase;color:var(--accent,#2f4fa0);background:color-mix(in srgb,var(--accent,#2f4fa0) 7%,var(--card));border-bottom:1px solid var(--rule)}
+body.sbs .sermon.on>.qsec>.sec:not(.mn){font-size:0;letter-spacing:0;margin-top:6px}
+body.sbs .sermon.on>.qsec>.sec:not(.mn) .tools{font-size:13px}
 html[lang=es] body.sbs .sermon.on>.qsec::before{content:'Preguntas de discusión'}
 html[data-th=dark] body.sbs .sermon.on>.qsec::before{color:#9db8f0}
 html[data-th=dark] body.sbs .sermon.on>.qsec{border-top-color:#5b82d6;box-shadow:0 6px 22px rgba(0,0,0,.35)}
@@ -735,9 +737,9 @@ S.forEach(function(s,i){
  h+='</div>';
  h+='<p class="gref">'+s.ref+'</p><div class="qsec"><button class="qgo" type="button">Open discussion questions ›</button>';
  if(s.qa){
-  h+='<div class="sec">Minichurch Questions<span class="tools">'+(LEADER?'<button data-lead="'+i+'">Lead</button><button data-pk="'+i+'">★ Picks</button>':'')+'<button data-copy="'+i+'">'+(LEADER?'Copy':'Copy questions')+'</button>'+(LEADER?'<button data-x="auto" class="aob" aria-pressed="true">Auto-open: On</button><button data-qz="-1" aria-label="Smaller question text">A−</button><button data-qz="1" aria-label="Larger question text">A+</button>':'')+'</span></div><details open id="dq'+i+'"><summary>10 questions with sermon notes</summary><div class="body">'+s.qa.map(function(o,n){return '<div class="qa" data-qn="'+n+'">'+(LEADER?'<button class="qstar" data-qs="'+i+','+n+'" aria-label="Pick this question">☆</button>':'')+'<div class="qq">'+(n+1)+'. '+qL(o.q,s)+'</div>'+(o.a?'<details><summary>What the sermon says</summary><div class="body"><p>'+o.a+'</p></div></details>':'')+'</div>'}).join('')+'</div></details>';
+  h+='<div class="sec">Discussion Questions<span class="tools">'+(LEADER?'<button data-lead="'+i+'">Lead</button><button data-pk="'+i+'">★ Picks</button>':'')+'<button data-copy="'+i+'">'+(LEADER?'Copy':'Copy questions')+'</button>'+(LEADER?'<button data-x="auto" class="aob" aria-pressed="true">Auto-open: On</button><button data-qz="-1" aria-label="Smaller question text">A−</button><button data-qz="1" aria-label="Larger question text">A+</button>':'')+'</span></div><details open id="dq'+i+'"><summary>10 questions with sermon notes</summary><div class="body">'+s.qa.map(function(o,n){return '<div class="qa" data-qn="'+n+'">'+(LEADER?'<button class="qstar" data-qs="'+i+','+n+'" aria-label="Pick this question">☆</button>':'')+'<div class="qq">'+(n+1)+'. '+qL(o.q,s)+'</div>'+(o.a?'<details><summary>What the sermon says</summary><div class="body"><p>'+o.a+'</p></div></details>':'')+'</div>'}).join('')+'</div></details>';
  } else {
-  h+='<div class="sec">'+(s.official?'Minichurch Questions':'Discussion Questions')+'<span class="tools">'+(LEADER?'<button data-lead="'+i+'">Lead</button><button data-pk="'+i+'">★ Picks</button>':'')+'<button data-copy="'+i+'">'+(LEADER?'Copy':'Copy questions')+'</button>'+(LEADER?'<button data-qz="-1" aria-label="Smaller question text">A−</button><button data-qz="1" aria-label="Larger question text">A+</button>':'')+'</span></div><details open id="dq'+i+'"><summary>'+(s.official?'Official Minichurch questions':'Discuss')+'</summary><div class="body"><ol class="dq">'+s.qs.map(function(q,n){return '<li data-qn="'+n+'">'+qL(q,s)+(LEADER?'<button class="qstar" data-qs="'+i+','+n+'" aria-label="Pick this question">☆</button>':'')+'</li>'}).join('')+'</ol></div></details>';
+  h+='<div class="sec">'+'Discussion Questions'+'<span class="tools">'+(LEADER?'<button data-lead="'+i+'">Lead</button><button data-pk="'+i+'">★ Picks</button>':'')+'<button data-copy="'+i+'">'+(LEADER?'Copy':'Copy questions')+'</button>'+(LEADER?'<button data-qz="-1" aria-label="Smaller question text">A−</button><button data-qz="1" aria-label="Larger question text">A+</button>':'')+'</span></div><details open id="dq'+i+'"><summary>'+(s.official?'Official Minichurch questions':'Discuss')+'</summary><div class="body"><ol class="dq">'+s.qs.map(function(q,n){return '<li data-qn="'+n+'">'+qL(q,s)+(LEADER?'<button class="qstar" data-qs="'+i+','+n+'" aria-label="Pick this question">☆</button>':'')+'</li>'}).join('')+'</ol></div></details>';
  }
  h+='<div class="sec mn">My notes <span class="priv">only on this device</span></div><textarea class="mynotes" data-note="'+i+'" aria-label="My private notes for '+s.title.replace(/"/g,'')+'" rows="4" placeholder="Jot your own notes for this sermon here…"></textarea>';
  h+='</div>';
