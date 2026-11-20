@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta name="build" content="1795153458138">
+<meta name="build" content="1795154067711">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -625,6 +625,14 @@ body.gm #nJump{display:none}
  body.sbs .sermon.on>.sb{grid-column:1/-1}
  body.sbs .sermon.on>.qsec{grid-column:2;grid-row:2/span 24;position:sticky;top:calc(var(--nh,56px) + 12px);max-height:calc(100vh - var(--nh,56px) - 28px);overflow:auto;padding:0 8px 24px 0;scrollbar-width:thin}
  body.sbs .gref,body.sbs .qgo{display:none!important}
+}
+/* sbs panel distinction */
+@media (min-width:1280px){
+body.sbs .sermon.on>.qsec{background:color-mix(in srgb,var(--accent,#2f4fa0) 7%,var(--card));border:1px solid var(--rule);border-top:4px solid var(--accent,#2f4fa0);border-radius:14px;padding:0 22px 26px;box-shadow:0 6px 22px rgba(20,30,60,.10)}
+body.sbs .sermon.on>.qsec::before{content:'Discussion Questions';display:block;position:sticky;top:0;z-index:2;margin:0 -22px 8px;padding:14px 22px 10px;font-weight:800;font-size:13px;letter-spacing:.09em;text-transform:uppercase;color:var(--accent,#2f4fa0);background:color-mix(in srgb,var(--accent,#2f4fa0) 7%,var(--card));border-bottom:1px solid var(--rule)}
+html[lang=es] body.sbs .sermon.on>.qsec::before{content:'Preguntas de discusión'}
+html[data-th=dark] body.sbs .sermon.on>.qsec::before{color:#9db8f0}
+html[data-th=dark] body.sbs .sermon.on>.qsec{border-top-color:#5b82d6;box-shadow:0 6px 22px rgba(0,0,0,.35)}
 }
 </style>
 </head>
