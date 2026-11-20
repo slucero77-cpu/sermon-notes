@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta name="build" content="1795151497488">
+<meta name="build" content="1795151915070">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -575,7 +575,11 @@ body.hasTab{padding-bottom:64px}
 #hwd h2{margin:0 0 10px;font:700 20px -apple-system,system-ui,sans-serif;color:var(--ink)}
 #hwd ul{margin:0;padding-left:20px}#hwd li{margin:0 0 12px}
 #hwd .hwx{position:absolute;top:10px;right:12px;width:40px;height:40px;border-radius:50%;border:0;background:var(--tint);color:var(--mut);font-size:24px;line-height:1;cursor:pointer}
-@media (max-width:999px){#hwd{display:none!important}}
+#hwd .hwc li{font-size:16px}
+.hwhome{display:flex;align-items:center;gap:10px;width:100%;margin:12px 0 4px;padding:12px 14px;border:1.5px solid var(--a);border-radius:12px;background:var(--tint);color:var(--at);font:700 15px -apple-system,system-ui,sans-serif;cursor:pointer;min-height:48px;text-align:left}
+.hwhome .hwq{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:var(--a);color:#fff;font:800 14px -apple-system,system-ui,sans-serif;flex:none}
+@media (min-width:1000px){.hwhome{display:none!important}}
+@media (max-width:600px){#hwd{padding:12px;align-items:flex-end}#hwd .hwc{padding:20px 18px 22px;max-height:88vh;border-radius:16px}}
 </style>
 </head>
 <body>
@@ -745,6 +749,7 @@ function howToEs(){return '<details class="how"><summary>Cómo usar esta página
  +'<li><b>Inglés:</b> toca <b>EN</b> arriba para volver al inglés. Toca <b>ES</b> para leer todo en español.</li>'
  +'<li><b>También:</b> la búsqueda encuentra palabras, versículos y preguntas. Desliza a la izquierda o a la derecha (o usa <b>← →</b>) para cambiar de sermón. <b>A− A+</b> cambia el tamaño del texto y <b>☾</b> es el modo oscuro. En una computadora, presiona <b>/</b> para buscar, <b>g</b> para Preguntas y <b>n</b> para Notas.</li>'
  +'</ul></div></details>'}
+function howBtn(){return '<button type="button" class="hwhome" id="hwhome"><span class="hwq" aria-hidden="true">?</span>'+(LG==='es'?'Cómo usar esta página':'How to use this')+'</button>'}
 function howTo(){
  if(LG==='es')return howToEs();
  return '<details class="how"><summary>How to use this</summary><div class="body"><ul>'
@@ -762,7 +767,7 @@ function gOpen(g,dflt){return (g.n in GX)?!!GX[g.n]:dflt}
 function gSave(n,o){GX[n]=o?1:0;try{localStorage.setItem('gx',JSON.stringify(GX))}catch(e){}}
 function gOf(k){for(var q=0;q<GRP.length;q++)if(GRP[q].ids.indexOf(S[k].id)>=0)return GRP[q];return null}
 function buildHome(){
- var nw=S.length-1,h='<button class="card wk" data-i="'+nw+'" style="border-left-color:'+S[nw].color+';--hc:'+S[nw].color+'"><em>This week’s sermon'+(isNew(nw)?'<span class="nw">New</span>':'')+'</em><b>'+S[nw].title+'</b><span>'+shortMeta(S[nw])+'</span><u class="pass">'+S[nw].ref+'</u><i class="go">Start reading ›</i></button><button class="card wkq" data-i="'+nw+'" data-q="1" type="button">Open this week’s questions ›</button><p class="hint"><b>'+notesUpd()+'</b> New notes post Tuesday evening, or Wednesday at the latest. Or tap any sermon below.</p>'+wnote()+a2hs()+howTo();
+ var nw=S.length-1,h='<button class="card wk" data-i="'+nw+'" style="border-left-color:'+S[nw].color+';--hc:'+S[nw].color+'"><em>This week’s sermon'+(isNew(nw)?'<span class="nw">New</span>':'')+'</em><b>'+S[nw].title+'</b><span>'+shortMeta(S[nw])+'</span><u class="pass">'+S[nw].ref+'</u><i class="go">Start reading ›</i></button><button class="card wkq" data-i="'+nw+'" data-q="1" type="button">Open this week’s questions ›</button><p class="hint"><b>'+notesUpd()+'</b> New notes post Tuesday evening, or Wednesday at the latest. Or tap any sermon below.</p>'+wnote()+a2hs()+howBtn();
  var last=null;try{last=localStorage.getItem('sid')}catch(e){}
  var lr=null;try{lr=JSON.parse(localStorage.getItem('lr')||'null')}catch(e){}
  var li2=(lr&&idxOf(lr.id)>=0)?idxOf(lr.id):(last?idxOf(last):-1);var lrOk=!!(lr&&idxOf(lr.id)===li2);
@@ -930,6 +935,7 @@ document.addEventListener('toggle',function(e){var d=e.target;if(d&&d.tagName===
 function hwOpen(){var m=howTo().match(/<div class="body">([\s\S]*)<\/div><\/details>/);var d=document.getElementById('hwd');if(!d){d=document.createElement('div');d.id='hwd';d.setAttribute('role','dialog');d.setAttribute('aria-modal','true');d.setAttribute('aria-label',LG==='es'?'Cómo usar esta página':'How to use this');document.body.appendChild(d);d.addEventListener('click',function(e){if(e.target===d||e.target.closest('.hwx'))hwClose()})}
  d.innerHTML='<div class="hwc"><button type="button" class="hwx" aria-label="'+(LG==='es'?'Cerrar':'Close')+'">×</button><h2>'+(LG==='es'?'Cómo usar esta página':'How to use this')+'</h2>'+(m?m[1]:'')+'</div>';d.style.display='flex';var x=d.querySelector('.hwx');if(x)x.focus()}
 function hwClose(){var d=document.getElementById('hwd');if(d)d.style.display='none';var b=document.getElementById('hwbtn');if(b)b.focus()}
+home.addEventListener('click',function(e){var h=e.target.closest('#hwhome');if(h){e.stopPropagation();hwOpen()}},true);
 side.addEventListener('click',function(e){var b=e.target.closest('button');if(b){if(b.id==='hwbtn'){hwOpen();return}show(+b.dataset.i);markSide()}});
 var _applyView=applyView;applyView=function(){_applyView();markSide()};
 markSide();
