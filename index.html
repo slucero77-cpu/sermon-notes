@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta name="build" content="1795139191844">
+<meta name="build" content="1795139505723">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -312,9 +312,14 @@ details.grp,#side details.sg{background:transparent!important;border:0!important
 .grp>summary::-webkit-details-marker,#side .sg>summary::-webkit-details-marker{display:none}
 .grp>summary.sec{min-height:44px;margin-top:10px!important;margin-bottom:6px!important;justify-content:space-between}
 .grp>summary .gnm,#side .sg>summary .gnm{flex:1;min-width:0}
-.gct{font:700 11px -apple-system,system-ui,sans-serif;letter-spacing:0;background:var(--tint);color:var(--mut);border-radius:10px;padding:2px 8px}
-.grp>summary::after,#side .sg>summary::after{content:'›';font:700 20px/1 -apple-system,system-ui,sans-serif;color:var(--mut);transition:transform .2s;margin-left:6px}
-.grp[open]>summary::after,#side .sg[open]>summary::after{transform:rotate(90deg)}
+.grp>summary.sec,#side .sg>summary{border-left:5px solid var(--gc);border-radius:0 12px 12px 0;background:color-mix(in srgb,var(--gc) 13%,transparent);padding-left:12px!important;color:var(--ink)}
+.grp>summary.sec .gnm,#side .sg>summary .gnm{color:inherit}
+.gct{font:700 11px -apple-system,system-ui,sans-serif;letter-spacing:0;background:var(--gc);color:#fff;border-radius:10px;padding:2px 8px}
+.grp>.gstrip{display:none}
+details.grp{--gb:var(--gc)}
+.grp>summary.sec:hover,#side .sg>summary:hover{background:color-mix(in srgb,var(--gc) 22%,transparent)}
+.grp>summary::after,#side .sg>summary::after{content:'';flex:none;width:8px;height:8px;border-right:2.5px solid var(--gc);border-bottom:2.5px solid var(--gc);transform:rotate(-45deg);transition:transform .2s;margin:0 4px 0 8px}
+.grp[open]>summary::after,#side .sg[open]>summary::after{transform:rotate(45deg)}
 #side .sg>summary{display:flex;align-items:center;gap:6px;font:700 11px -apple-system,system-ui,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--mut);margin:10px 8px 4px;padding:8px 0;min-height:36px}
 @media (prefers-reduced-motion:reduce){.grp>summary::after,#side .sg>summary::after{transition:none}}
 .gstrip{height:4px;border-radius:4px;margin:0 2px 12px;opacity:.95}
@@ -692,11 +697,11 @@ S.forEach(function(s,i){
 })();
 var home=document.getElementById('home');
 var GRP=[
- {n:'Habakkuk — Faith When We Don’t Understand',ids:['hab1','hab2','faith','wins','glory']},
- {n:'Guest speaker — Greg Koukl',ids:['story']},
- {n:'Luke — The Passion',ids:['king','arrest','p1','p2']},
- {n:'Luke 21 — The End of History',ids:['fear','judgment','eoh1','eoh2','eoh3']},
- {n:'Earlier messages',ids:['contentment','money1','money','obey','obey2']}];
+ {n:'Habakkuk — Faith When We Don’t Understand',c:'#1f8f8a',ids:['hab1','hab2','faith','wins','glory']},
+ {n:'Guest speaker — Greg Koukl',c:'#7a5ac8',ids:['story']},
+ {n:'Luke — The Passion',c:'#c0392b',ids:['king','arrest','p1','p2']},
+ {n:'Luke 21 — The End of History',c:'#d9821b',ids:['fear','judgment','eoh1','eoh2','eoh3']},
+ {n:'Earlier messages',c:'#6b7a90',ids:['contentment','money1','money','obey','obey2']}];
 (function(){[].forEach.call(document.querySelectorAll('.sbk[data-g]'),function(e){GRP.forEach(function(g){if(g.ids.indexOf(e.dataset.g)>=0)e.querySelector('.gn').textContent=g.n})})})();
 function idxOf(id){for(var k=0;k<S.length;k++)if(S[k].id===id)return k;return -1}
 var FLAT=[];GRP.forEach(function(g){g.ids.forEach(function(id){var k=idxOf(id);if(k>=0)FLAT.push(k)})});
@@ -754,7 +759,7 @@ function buildHome(){
  var favs=S.map(function(s,k){return k}).filter(function(k){return isFav(S[k].id)});
  if(favs.length){h+='<div class="sec">★ Saved</div>';favs.forEach(function(k){var s=S[k];h+='<button class="card" data-i="'+k+'" style="border-left-color:'+s.color+'"><b>'+s.title+(hasNote(s.id)?' ✎':'')+'</b><span>'+shortMeta(s)+'</span><em>'+s.ref+'</em></button>'})}
  GRP.forEach(function(g){
-  var gd=gOf(S.length-1)===g;h+='<details class="grp" data-g="'+g.n.replace(/"/g,'&quot;')+'"'+(gOpen(g,gd)?' open':'')+'><summary class="sec"><span class="gnm">'+g.n+'</span><span class="gct">'+g.ids.length+'</span></summary><div class="gstrip" style="background:linear-gradient(90deg,'+g.ids.map(function(id,q){var k=idxOf(id);var c=k>=0?S[k].color:'#999';var a=q*100/g.ids.length,b=(q+1)*100/g.ids.length;return c+' '+a+'%,'+c+' '+b+'%'}).join(',')+')"></div>';
+  var gd=gOf(S.length-1)===g;h+='<details class="grp" data-g="'+g.n.replace(/"/g,'&quot;')+'"'+(gOpen(g,gd)?' open':'')+' style="--gc:'+(g.c||'#6b7a90')+'"><summary class="sec"><span class="gnm">'+g.n+'</span><span class="gct">'+g.ids.length+'</span></summary><div class="gstrip" style="background:linear-gradient(90deg,'+g.ids.map(function(id,q){var k=idxOf(id);var c=k>=0?S[k].color:'#999';var a=q*100/g.ids.length,b=(q+1)*100/g.ids.length;return c+' '+a+'%,'+c+' '+b+'%'}).join(',')+')"></div>';
   g.ids.forEach(function(id){var k=idxOf(id);if(k<0)return;var s=S[k];
    h+='<button class="card" data-i="'+k+'" style="border-left-color:'+s.color+'"><b>'+s.title+(isNew(k)?'<span class="nw">New</span>':'')+(hasNote(s.id)?' ✎':'')+'</b><span>'+shortMeta(s)+'</span><em>'+s.ref+'</em></button>';});
   h+='</details>';
@@ -904,7 +909,7 @@ main.addEventListener('input',function(e){var t=e.target;if(!t.matches||!t.match
 var side=document.getElementById('side');
 function buildSide(){
  var s='';
- GRP.forEach(function(g){var cur=view>=0&&view<S.length&&gOf(view)===g;s+='<details class="sg" data-g="'+g.n.replace(/"/g,'&quot;')+'"'+(gOpen(g,cur||gOf(S.length-1)===g)?' open':'')+'><summary><span class="gnm">'+g.n+'</span><span class="gct">'+g.ids.length+'</span></summary>';g.ids.forEach(function(id){var k=idxOf(id);if(k<0)return;
+ GRP.forEach(function(g){var cur=view>=0&&view<S.length&&gOf(view)===g;s+='<details class="sg" data-g="'+g.n.replace(/"/g,'&quot;')+'"'+(gOpen(g,cur||gOf(S.length-1)===g)?' open':'')+' style="--gc:'+(g.c||'#6b7a90')+'"><summary><span class="gnm">'+g.n+'</span><span class="gct">'+g.ids.length+'</span></summary>';g.ids.forEach(function(id){var k=idxOf(id);if(k<0)return;
   s+='<button data-i="'+k+'" style="--c:'+S[k].color+'">'+(isFav(S[k].id)?'★ ':'')+S[k].title+(hasNote(S[k].id)?' ✎':'')+'<small>'+shortMeta(S[k])+'</small></button>'});s+='</details>'});
  side.innerHTML=s;
 }
