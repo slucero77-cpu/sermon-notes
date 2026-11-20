@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta name="build" content="1795127578671">
+<meta name="build" content="1795138048959">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -154,7 +154,10 @@ summary{cursor:pointer}
  main{max-width:860px;padding:24px 32px 60px}
  #home{max-width:860px;padding:24px 32px}
  #res{max-width:860px;margin:0 auto;padding:24px 32px}
- nav{padding:10px 32px;overflow:visible}
+ nav{padding:10px max(32px,calc((100% - 860px)/2 + 14px));overflow:visible}
+ body #tabbar{left:290px;justify-content:center;gap:12px;padding:8px 32px calc(8px + env(safe-area-inset-bottom))}
+ body #tabbar button{flex:0 1 240px;min-height:44px;cursor:pointer}
+ body #tabbar button:not(.on2):hover{border-color:var(--a);color:var(--a)}
  #sheet .pn{top:50%;bottom:auto;left:50%;right:auto;transform:translate(-50%,-50%);border-radius:16px;width:560px;max-width:90vw;margin:0}
  .fs button,#th{cursor:pointer}
  body.gm .qa .qq,body.gm ol.dq li{font-size:1.3em}
