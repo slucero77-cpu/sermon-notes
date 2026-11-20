@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta name="build" content="1795138048959">
+<meta name="build" content="1795138214496">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -842,14 +842,14 @@ function chkUpd(){var m=document.getElementById('updMsg'),b=document.getElementB
    try{(navigator.serviceWorker&&navigator.serviceWorker.getRegistration?navigator.serviceWorker.getRegistration():Promise.resolve()).then(function(g){return g?g.update():0}).then(function(){return window.caches?caches.keys().then(function(k){return Promise.all(k.map(function(n){return caches.delete(n)}))}):0}).then(go,go)}catch(e){go()}}
   else done('You’re up to date ✓')}).catch(function(){done('Couldn’t check. Please connect to the internet and try again.')})}
 /* text size */
-var fs=17;try{var f=parseInt(localStorage.getItem('fs'),10);if(f>=14&&f<=24)fs=f}catch(e){}
+var fs=(window.matchMedia&&matchMedia('(min-width:1000px)').matches)?19:17;try{var f=parseInt(localStorage.getItem('fs'),10);if(f>=14&&f<=24)fs=f}catch(e){}
 function setFs(n){fs=Math.max(14,Math.min(24,n));document.documentElement.style.setProperty('--fs',fs+'px');try{localStorage.setItem('fs',fs)}catch(e){}}
 var th=null;try{th=localStorage.getItem('th')}catch(e){}
 if(!th)th=(window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches)?'dark':'light';
 function setTh(v){th=v;document.documentElement.setAttribute('data-th',v);var tb=document.getElementById('th');tb.textContent=v==='dark'?'☀':'☾';tb.setAttribute('aria-pressed',v==='dark'?'true':'false');try{localStorage.setItem('th',v)}catch(e){}}
 document.getElementById('th').onclick=function(){setTh(th==='dark'?'light':'dark')};
 setTh(th);
-setFs(fs);
+document.documentElement.style.setProperty('--fs',fs+'px');
 document.getElementById('fm').onclick=function(){setFs(fs-1)};
 document.getElementById('fp').onclick=function(){setFs(fs+1)};
 
