@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta name="build" content="1795154615412">
+<meta name="build" content="1795154837905">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -636,6 +636,20 @@ html[lang=es] body.sbs .sermon.on>.qsec::before{content:'Preguntas de discusión
 html[data-th=dark] body.sbs .sermon.on>.qsec::before{color:#9db8f0}
 html[data-th=dark] body.sbs .sermon.on>.qsec{border-top-color:#5b82d6;box-shadow:0 6px 22px rgba(0,0,0,.35)}
 }
+/* qtabs */
+.qtabs{display:none}
+@media (min-width:1280px){
+body.sbs .sermon.on>.qsec::before,html[lang=es] body.sbs .sermon.on>.qsec::before{display:none!important;content:none!important}
+body.sbs .qtabs{display:flex;gap:6px;position:sticky;top:0;z-index:3;margin:0 -22px 10px;padding:12px 22px 0;background:color-mix(in srgb,var(--accent,#2f4fa0) 7%,var(--card));border-bottom:1px solid var(--rule)}
+body.sbs .qtabs button{appearance:none;border:0;background:transparent;font:800 13px/1 inherit;font-family:inherit;letter-spacing:.08em;text-transform:uppercase;color:var(--mut);padding:10px 16px 12px;border-bottom:3px solid transparent;margin-bottom:-1px;cursor:pointer;border-radius:8px 8px 0 0}
+body.sbs .qtabs button:hover{color:var(--ink)}
+body.sbs .qtabs button[aria-selected=true]{color:var(--accent,#2f4fa0);border-bottom-color:var(--accent,#2f4fa0)}
+html[data-th=dark] body.sbs .qtabs button[aria-selected=true]{color:#9db8f0;border-bottom-color:#9db8f0}
+body.sbs:not(.qn) .qsec>.sec.mn,body.sbs:not(.qn) .qsec>textarea.mynotes{display:none!important}
+body.sbs.qn .qsec>*:not(.qtabs):not(.sec.mn):not(textarea.mynotes){display:none!important}
+body.sbs.qn .qsec>.sec.mn{display:block!important;margin-top:8px}
+body.sbs.qn .qsec>textarea.mynotes{display:block!important;min-height:340px;font-size:17px}
+}
 </style>
 </head>
 <body>
@@ -735,7 +749,7 @@ S.forEach(function(s,i){
   IDX.push({i:i,k:k,L:'Outline',t:x.t,x:strip(x.t+' '+x.h)});
  });
  h+='</div>';
- h+='<p class="gref">'+s.ref+'</p><div class="qsec"><button class="qgo" type="button">Open discussion questions ›</button>';
+ h+='<p class="gref">'+s.ref+'</p><div class="qsec"><div class="qtabs" role="tablist"><button type="button" role="tab" data-qt="q" aria-selected="true">'+(LG==='es'?'Preguntas de discusión':'Discussion Questions')+'</button><button type="button" role="tab" data-qt="n" aria-selected="false">'+(LG==='es'?'Mis notas':'My Notes')+'</button></div><button class="qgo" type="button">Open discussion questions ›</button>';
  if(s.qa){
   h+='<div class="sec">Discussion Questions<span class="tools">'+(LEADER?'<button data-lead="'+i+'">Lead</button><button data-pk="'+i+'">★ Picks</button>':'')+'<button data-copy="'+i+'">'+(LEADER?'Copy':'Copy questions')+'</button>'+(LEADER?'<button data-x="auto" class="aob" aria-pressed="true">Auto-open: On</button><button data-qz="-1" aria-label="Smaller question text">A−</button><button data-qz="1" aria-label="Larger question text">A+</button>':'')+'</span></div><details open id="dq'+i+'"><summary>10 questions with sermon notes</summary><div class="body">'+s.qa.map(function(o,n){return '<div class="qa" data-qn="'+n+'">'+(LEADER?'<button class="qstar" data-qs="'+i+','+n+'" aria-label="Pick this question">☆</button>':'')+'<div class="qq">'+(n+1)+'. '+qL(o.q,s)+'</div>'+(o.a?'<details><summary>What the sermon says</summary><div class="body"><p>'+o.a+'</p></div></details>':'')+'</div>'}).join('')+'</div></details>';
  } else {
@@ -871,7 +885,7 @@ buildNav();
 var SBS=window.matchMedia?matchMedia('(min-width:1280px)'):{matches:false};
 var gm=false,wl=null;
 var SP={};
-function tabTo(v){if(SBS.matches){var qq=document.querySelector('.sermon.on .qsec');if(v&&qq)qq.scrollTop=0;return}if(v===gm)return;var id=typeof view==='number'?S[view].id:'';SP[id+(gm?'q':'n')]=window.scrollY;setGm(v);var y=SP[id+(v?'q':'n')]||0;var go=function(){window.scrollTo(0,y)};go();requestAnimationFrame(go);setTimeout(go,120)}
+function tabTo(v){if(SBS.matches){var qq=document.querySelector('.sermon.on .qsec');if(v){document.body.classList.remove('qn');qtSync();if(qq)qq.scrollTop=0}return}if(v===gm)return;var id=typeof view==='number'?S[view].id:'';SP[id+(gm?'q':'n')]=window.scrollY;setGm(v);var y=SP[id+(v?'q':'n')]||0;var go=function(){window.scrollTo(0,y)};go();requestAnimationFrame(go);setTimeout(go,120)}
 function setGm(v){if(v&&SBS.matches)return;gm=v;document.body.classList.toggle('gm',v);var a=document.getElementById('nNotes'),q=document.getElementById('nQs');if(a){a.classList.toggle('on2',!v);q.classList.toggle('on2',v);a.setAttribute('aria-pressed',v?'false':'true');q.setAttribute('aria-pressed',v?'true':'false')}
  try{if(v&&navigator.wakeLock){navigator.wakeLock.request('screen').then(function(l){wl=l}).catch(function(){})}else if(wl){wl.release();wl=null}}catch(e){}
  window.scrollTo(0,0)}
@@ -1001,6 +1015,10 @@ home.addEventListener('click',function(e){var h=e.target.closest('#hwhome');if(h
 side.addEventListener('click',function(e){var b=e.target.closest('button');if(b){if(b.id==='hwbtn'){hwOpen();return}show(+b.dataset.i);markSide()}});
 var _applyView=applyView;applyView=function(){_applyView();markSide()};
 markSide();
+
+/* questions / my notes tabs (side-by-side) */
+function qtSync(){var n=document.body.classList.contains('qn');[].forEach.call(document.querySelectorAll('.qtabs button'),function(b){b.setAttribute('aria-selected',(b.dataset.qt==='n')===n?'true':'false')})}
+main.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('.qtabs button');if(!b)return;document.body.classList.toggle('qn',b.dataset.qt==='n');qtSync();var q=b.closest('.qsec');if(q)q.scrollTop=0;if(b.dataset.qt==='n'){var t=q&&q.querySelector('textarea.mynotes');if(t)try{t.focus({preventScroll:true})}catch(x){}}});
 /* ===== highlights, jump list, side-by-side ===== */
 function navH(){var v=parseInt(getComputedStyle(document.documentElement).getPropertyValue('--nh'));return v>0?v:56}
 function jumpTo(t){var el=typeof t==='number'?document.getElementById('d'+view+'_'+t):document.getElementById(t);if(!el)return;
