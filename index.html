@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta name="build" content="1795199338909">
+<meta name="build" content="1795221796431">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -331,6 +331,7 @@ details.grp,#side details.sg{background:transparent!important;border:0!important
 .grp>summary .gnm,#side .sg>summary .gnm{flex:1;min-width:0}
 .grp>summary.sec,#side .sg>summary{border-left:5px solid var(--gc);border-radius:0 12px 12px 0;background:color-mix(in srgb,var(--gc) 13%,transparent);padding-left:12px!important;color:var(--ink)}
 .grp>summary.sec .gnm,#side .sg>summary .gnm{color:inherit}
+.sb .gp{white-space:nowrap}
 .gct{font:700 11px -apple-system,system-ui,sans-serif;letter-spacing:0;background:var(--gc);color:#fff;border-radius:10px;padding:2px 8px}
 .grp>.gstrip{display:none}
 details.grp{--gb:var(--gc)}
@@ -804,7 +805,7 @@ var GRP=[
  {n:'Luke — The Passion',c:'#c0392b',ids:['king','arrest','p1','p2']},
  {n:'Luke 21 — The End of History',c:'#d9821b',ids:['fear','judgment','eoh1','eoh2','eoh3']},
  {n:'Earlier messages',c:'#6b7a90',ids:['contentment','money1','money','obey','obey2']}];
-(function(){[].forEach.call(document.querySelectorAll('.sbk[data-g]'),function(e){GRP.forEach(function(g){if(g.ids.indexOf(e.dataset.g)>=0)e.querySelector('.gn').textContent=g.n})})})();
+(function(){[].forEach.call(document.querySelectorAll('.sbk[data-g]'),function(e){GRP.forEach(function(g){var q=g.ids.indexOf(e.dataset.g);if(q<0)return;e.querySelector('.gn').textContent=g.n;if(g.ids.length>1&&g.n!=='Earlier messages'){var sp=document.createElement('span');sp.className='gp';sp.textContent=' · '+(LG==='es'?'Parte ':'Part ')+(q+1)+(LG==='es'?' de ':' of ')+g.ids.length;e.querySelector('.gn').insertAdjacentElement('afterend',sp)}})})})();
 function idxOf(id){for(var k=0;k<S.length;k++)if(S[k].id===id)return k;return -1}
 var FLAT=[];GRP.forEach(function(g){g.ids.forEach(function(id){var k=idxOf(id);if(k>=0)FLAT.push(k)})});
 var view='home';
