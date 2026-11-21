@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta name="build" content="1795291614780">
+<meta name="build" content="1795302372685">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -271,6 +271,13 @@ html[data-th=dark] .sb{filter:brightness(.88)}
 .big{background:linear-gradient(135deg,color-mix(in srgb,var(--a) 13%,var(--card)),var(--tint));box-shadow:0 4px 14px rgba(15,42,92,.10);border-left-width:6px;font-family:Georgia,'Times New Roman',serif;font-size:1.26em;line-height:1.45;font-weight:600;padding:16px 20px 20px;border-radius:8px 18px 18px 8px}
 .big>b{font-size:11px}
 .big>b{display:block;font:700 11px -apple-system,system-ui,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--at);margin-bottom:6px}
+/* sparkle on the New badge */
+.nw{position:relative;background-image:linear-gradient(110deg,rgba(255,255,255,0) 35%,rgba(255,255,255,.75) 50%,rgba(255,255,255,0) 65%);background-size:250% 100%;background-repeat:no-repeat;background-position:150% 0;animation:shine 2.4s ease 1s 1,nwsweep 3.2s ease-in-out 1s infinite}
+.nw::before,.nw::after{content:"\2726";position:absolute;pointer-events:none;color:#fff3c4;text-shadow:0 0 4px #f2b84b,0 0 8px #f2b84b;font-size:11px;line-height:1;opacity:0;animation:nwtw 3.2s ease-in-out infinite}
+.nw::before{top:-7px;right:-6px;animation-delay:.4s}
+.nw::after{bottom:-6px;left:-5px;font-size:9px;animation-delay:1.7s}
+@keyframes nwsweep{0%,55%{background-position:150% 0}100%{background-position:-50% 0}}
+@keyframes nwtw{0%,100%{opacity:0;transform:scale(.3) rotate(0)}18%{opacity:1;transform:scale(1.15) rotate(45deg)}38%{opacity:0;transform:scale(.4) rotate(90deg)}}
 @keyframes shine{0%,100%{box-shadow:0 0 0 0 rgba(242,184,75,0)}40%{box-shadow:0 0 0 6px rgba(242,184,75,.35)}}
 
 body::before{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;
