@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta name="build" content="1795225265546">
+<meta name="build" content="1795276806871">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -666,6 +666,30 @@ body.sbs.qn .qsec>textarea.mynotes{display:block!important;min-height:340px;font
 html[data-th=dark] #sheet .lk a.blb{filter:none;color:#9db8f0;border-color:#9db8f0}
 .vlink a.blb{white-space:nowrap}
 a.vq{cursor:pointer}
+/* phone menu */
+button#mnu{display:none;width:auto!important;padding:0 14px;gap:8px;font-weight:700}
+@media (max-width:999px){.fs #th,.fs #fm,.fs #fp,.fs #lgb{display:none!important}button#mnu{display:inline-flex}}
+#mnud{display:none;position:fixed;inset:0;z-index:210;background:rgba(10,18,36,.55);align-items:flex-end;justify-content:center;padding:12px}
+#mnud .mc{background:var(--card);color:var(--ink);border:1px solid var(--rule);border-radius:16px;width:100%;max-width:560px;max-height:86vh;overflow:auto;box-shadow:0 18px 50px rgba(0,0,0,.35);font-family:-apple-system,system-ui,sans-serif;padding-bottom:8px}
+#mnud .mh{display:flex;align-items:center;justify-content:space-between;padding:14px 16px 4px 20px;font-size:18px}
+#mnud .mx{width:40px;height:40px;border-radius:50%;border:0;background:var(--tint);color:var(--mut);font-size:24px;line-height:1;cursor:pointer}
+#mnud .mr{padding:12px 20px;border-bottom:1px solid var(--rule)}
+#mnud .mr:last-child{border-bottom:0}
+#mnud .ml{font:700 12px/1 -apple-system,system-ui,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:var(--mut);margin-bottom:9px}
+#mnud .mseg{display:flex;border:1.5px solid #2f4fa0;border-radius:10px;overflow:hidden}
+#mnud .mseg button{flex:1;min-height:46px;border:0;border-right:1px solid #2f4fa0;background:transparent;color:var(--ink);font:600 15px -apple-system,system-ui,sans-serif;cursor:pointer}
+#mnud .mseg button:last-child{border-right:0}
+#mnud .mseg button[aria-pressed=true]{background:#2f4fa0;color:#fff}
+#mnud .msz{display:flex;align-items:center;gap:12px}
+#mnud .msz b{font-weight:700;color:var(--mut)}
+#mnud .msz input{flex:1;height:34px;accent-color:#2f4fa0}
+#mnud .mgo{display:flex;align-items:center;gap:12px;width:100%;min-height:50px;border:0;background:transparent;color:var(--ink);font:600 16px -apple-system,system-ui,sans-serif;text-align:left;cursor:pointer;padding:0}
+#mnud .mgo .tn{flex:none;display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:#2f4fa0;color:#fff;font:700 15px -apple-system,system-ui,sans-serif}
+html[data-th=dark] #mnud .mseg{border-color:#5b82d6}
+html[data-th=dark] #mnud .mseg button{border-right-color:#5b82d6}
+html[data-th=dark] #mnud .mseg button[aria-pressed=true]{background:#3a5fb8}
+html[data-th=dark] #mnud .msz input{accent-color:#7ea0e8}
+@media (min-width:1000px){#mnud{display:none!important}}
 </style>
 </head>
 <body>
@@ -674,7 +698,7 @@ a.vq{cursor:pointer}
 <a class="skip" href="#main" id="skip">Skip to sermon content</a>
 <header>
  <div class="hrow"><div><small>Hope Chapel</small><h1>Sermon Notes</h1></div>
- <div class="fs"><button id="th" aria-label="Dark mode"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button><button id="fm" aria-label="Smaller text">A−</button><button id="fp" aria-label="Larger text">A+</button><button id="lgb" aria-label="Español">ES</button></div></div>
+ <div class="fs"><button id="th" aria-label="Dark mode"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button><button id="fm" aria-label="Smaller text">A−</button><button id="fp" aria-label="Larger text">A+</button><button id="lgb" aria-label="Español">ES</button><button id="mnu" type="button" aria-haspopup="dialog" aria-label="Menu"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg><span id="mnul">Menu</span></button></div></div>
  <div class="search" role="search"><input id="q" type="search" aria-label="Search all sermons" placeholder="Search all sermons…" autocomplete="off" autocapitalize="off"></div>
 </header>
 <aside id="side" aria-label="All sermons"></aside>
@@ -1269,6 +1293,35 @@ walk(document.body);
 document.title='Notas del Sermón — Hope Chapel';
 new MutationObserver(function(ms){ms.forEach(function(m){if(m.type==='characterData'){if(m.target.parentNode&&/^(SCRIPT|STYLE|TEXTAREA)$/.test(m.target.parentNode.tagName))return;walk(m.target)}
  else if(m.type==='attributes'){attrs(m.target)}else m.addedNodes.forEach(walk)})}).observe(document.body,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:['aria-label','placeholder','title']});
+})();
+
+/* phone menu sheet */
+(function(){
+var btn=document.getElementById('mnu');if(!btn)return;
+var es=LG==='es';
+document.getElementById('mnul').textContent=es?'Menú':'Menu';btn.setAttribute('aria-label',es?'Menú':'Menu');
+function mq(){try{return matchMedia('(prefers-color-scheme: dark)').matches}catch(e){return false}}
+function saved(){try{return localStorage.getItem('th')}catch(e){return null}}
+function build(){
+ var cur=document.documentElement.getAttribute('data-th'),sv=saved(),mode=sv?cur:'auto';
+ var seg=function(items,sel,attr){return '<div class="mseg" role="group">'+items.map(function(x){return '<button type="button" '+attr+'="'+x[0]+'" aria-pressed="'+(x[0]===sel)+'">'+x[1]+'</button>'}).join('')+'</div>'};
+ return '<div class="mc"><div class="mh"><b>'+(es?'Menú':'Menu')+'</b><button type="button" class="mx" aria-label="'+(es?'Cerrar':'Close')+'">×</button></div>'
+  +'<div class="mr"><div class="ml">'+(es?'Idioma':'Language')+'</div>'+seg([['en','English'],['es','Español']],es?'es':'en','data-lg')+'</div>'
+  +'<div class="mr"><div class="ml">'+(es?'Apariencia':'Appearance')+'</div>'+seg([['auto',es?'Como el teléfono':'Match phone'],['light',es?'Claro':'Light'],['dark',es?'Oscuro':'Dark']],mode,'data-th2')+'</div>'
+  +'<div class="mr"><div class="ml">'+(es?'Tamaño del texto':'Text size')+'</div><div class="msz"><b style="font-size:14px">A</b><input type="range" min="14" max="24" step="1" value="'+fs+'" aria-label="'+(es?'Tamaño del texto':'Text size')+'"><b style="font-size:22px">A</b></div></div>'
+  +'<div class="mr"><button type="button" class="mgo" data-go="how"><span class="tn">?</span><span>'+(es?'Cómo usar esta página':'How to use this')+'</span></button></div></div>'}
+function open(){var d=document.getElementById('mnud');if(!d){d=document.createElement('div');d.id='mnud';d.setAttribute('role','dialog');d.setAttribute('aria-modal','true');document.body.appendChild(d);
+  d.addEventListener('click',function(e){var b=e.target.closest('button');if(e.target===d||(b&&b.classList.contains('mx'))){close();return}if(!b)return;
+   if(b.dataset.lg){if(b.dataset.lg!==(es?'es':'en'))document.getElementById('lgb').click();return}
+   if(b.dataset.th2){var v=b.dataset.th2;if(v==='auto'){try{localStorage.removeItem('th')}catch(x){}setTh(mq()?'dark':'light',false)}else setTh(v);
+    d.querySelectorAll('[data-th2]').forEach(function(x){x.setAttribute('aria-pressed',String(x===b))});return}
+   if(b.dataset.go==='how'){close();setTimeout(hwOpen,60)}});
+  d.addEventListener('input',function(e){if(e.target.type==='range')setFs(+e.target.value)})}
+ d.setAttribute('aria-label',es?'Menú':'Menu');d.innerHTML=build();d.style.display='flex';
+ var x=d.querySelector('.mx');if(x)x.focus()}
+function close(){var d=document.getElementById('mnud');if(d&&d.style.display==='flex'){d.style.display='none';btn.focus()}}
+btn.addEventListener('click',open);
+document.addEventListener('keydown',function(e){if(e.key==='Escape'){var d=document.getElementById('mnud');if(d&&d.style.display==='flex'){close();e.stopImmediatePropagation()}}},true);
 })();
 </script>
 <script data-goatcounter="https://slucero77.goatcounter.com/count" data-goatcounter-settings='{"no_onload":true}' async src="//gc.zgo.at/count.js" onload="trk()"></script>
