@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta name="build" content="1795277526926">
+<meta name="build" content="1795278922244">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -888,19 +888,20 @@ function wnote(){try{if(localStorage.getItem('wn1'))return''}catch(z){}return LG
 var GX={};try{GX=JSON.parse(localStorage.getItem('gx')||'{}')||{}}catch(e){}
 function gOpen(g,dflt){return (g.n in GX)?!!GX[g.n]:dflt}
 function gSave(n,o){GX[n]=o?1:0;try{localStorage.setItem('gx',JSON.stringify(GX))}catch(e){}}
+function scol(k){var g=gOf(k);return (g&&g.c)||S[k].color}
 function gOf(k){for(var q=0;q<GRP.length;q++)if(GRP[q].ids.indexOf(S[k].id)>=0)return GRP[q];return null}
 function buildHome(){
- var nw=S.length-1,h='<button class="card wk" data-i="'+nw+'" style="border-left-color:'+S[nw].color+';--hc:'+S[nw].color+'"><em>This week’s sermon'+(isNew(nw)?'<span class="nw">New</span>':'')+'</em><b>'+S[nw].title+'</b><span>'+shortMeta(S[nw])+'</span><u class="pass">'+S[nw].ref+'</u><i class="go">Start reading ›</i></button><button class="card wkq" data-i="'+nw+'" data-q="1" type="button">Open this week’s questions ›</button><p class="hint"><b>'+notesUpd()+'</b> New notes post Tuesday evening, or Wednesday at the latest. Or tap any sermon below.</p>'+wnote()+a2hs()+howBtn()+(nxHas()?'<div class="nxhome"><button type="button" class="xpb" data-nxall="1">'+(LG==='es'?'Copiar todas mis notas':'Copy all my notes')+'</button></div>':'');
+ var nw=S.length-1,h='<button class="card wk" data-i="'+nw+'" style="border-left-color:'+scol(nw)+';--hc:'+scol(nw)+'"><em>This week’s sermon'+(isNew(nw)?'<span class="nw">New</span>':'')+'</em><b>'+S[nw].title+'</b><span>'+shortMeta(S[nw])+'</span><u class="pass">'+S[nw].ref+'</u><i class="go">Start reading ›</i></button><button class="card wkq" data-i="'+nw+'" data-q="1" type="button">Open this week’s questions ›</button><p class="hint"><b>'+notesUpd()+'</b> New notes post Tuesday evening, or Wednesday at the latest. Or tap any sermon below.</p>'+wnote()+a2hs()+howBtn()+(nxHas()?'<div class="nxhome"><button type="button" class="xpb" data-nxall="1">'+(LG==='es'?'Copiar todas mis notas':'Copy all my notes')+'</button></div>':'');
  var last=null;try{last=localStorage.getItem('sid')}catch(e){}
  var lr=null;try{lr=JSON.parse(localStorage.getItem('lr')||'null')}catch(e){}
  var li2=(lr&&idxOf(lr.id)>=0)?idxOf(lr.id):(last?idxOf(last):-1);var lrOk=!!(lr&&idxOf(lr.id)===li2);
- if(li2>=0)h+='<button class="card cont" data-i="'+li2+'"'+(lrOk?' data-rs="1"':'')+' style="border-left-color:'+S[li2].color+'"><em>Continue reading</em><b>'+S[li2].title+'</b><span>'+(lrOk&&lr.l?'You were in: '+String(lr.l).replace(/</g,'&lt;'):shortMeta(S[li2]))+'</span></button>';
+ if(li2>=0)h+='<button class="card cont" data-i="'+li2+'"'+(lrOk?' data-rs="1"':'')+' style="border-left-color:'+scol(li2)+'"><em>Continue reading</em><b>'+S[li2].title+'</b><span>'+(lrOk&&lr.l?'You were in: '+String(lr.l).replace(/</g,'&lt;'):shortMeta(S[li2]))+'</span></button>';
  var favs=S.map(function(s,k){return k}).filter(function(k){return isFav(S[k].id)});
- if(favs.length){h+='<div class="sec">★ Saved</div>';favs.forEach(function(k){var s=S[k];h+='<button class="card" data-i="'+k+'" style="border-left-color:'+s.color+'"><b>'+s.title+(hasNote(s.id)?' ✎':'')+'</b><span>'+shortMeta(s)+'</span><em>'+s.ref+'</em></button>'})}
+ if(favs.length){h+='<div class="sec">★ Saved</div>';favs.forEach(function(k){var s=S[k];h+='<button class="card" data-i="'+k+'" style="border-left-color:'+scol(k)+'"><b>'+s.title+(hasNote(s.id)?' ✎':'')+'</b><span>'+shortMeta(s)+'</span><em>'+s.ref+'</em></button>'})}
  GRP.forEach(function(g){
   var gd=gOf(S.length-1)===g;h+='<details class="grp" data-g="'+g.n.replace(/"/g,'&quot;')+'"'+(gOpen(g,gd)?' open':'')+' style="--gc:'+(g.c||'#6b7a90')+'"><summary class="sec"><span class="gnm">'+g.n+'</span><span class="gct">'+g.ids.length+'</span></summary><div class="gstrip" style="background:linear-gradient(90deg,'+g.ids.map(function(id,q){var k=idxOf(id);var c=k>=0?S[k].color:'#999';var a=q*100/g.ids.length,b=(q+1)*100/g.ids.length;return c+' '+a+'%,'+c+' '+b+'%'}).join(',')+')"></div>';
   g.ids.forEach(function(id){var k=idxOf(id);if(k<0)return;var s=S[k];
-   h+='<button class="card" data-i="'+k+'" style="border-left-color:'+s.color+'"><b>'+s.title+(isNew(k)?'<span class="nw">New</span>':'')+(hasNote(s.id)?' ✎':'')+'</b><span>'+shortMeta(s)+'</span><em>'+s.ref+'</em></button>';});
+   h+='<button class="card" data-i="'+k+'" style="border-left-color:'+scol(k)+'"><b>'+s.title+(isNew(k)?'<span class="nw">New</span>':'')+(hasNote(s.id)?' ✎':'')+'</b><span>'+shortMeta(s)+'</span><em>'+s.ref+'</em></button>';});
   h+='</details>';
  });
  
@@ -923,7 +924,7 @@ function trk(){try{if(!window.goatcounter||!goatcounter.count)return;var v=(type
 function goHome(){view='home';setTimeout(trk,0);try{if(IS_PUB&&location.hash)history.replaceState(null,'',location.pathname)}catch(e){}qin.value='';buildHome();applyView();window.scrollTo(0,0)}
 function show(i,openK){
  var pv=view;if(pv!==i)SP={};view=i;var s=S[i];setTimeout(trk,0);qin.value='';try{if(IS_PUB&&location.hash!=='#'+s.id)history.replaceState(null,'','#'+s.id)}catch(e){}
- document.documentElement.style.setProperty('--a',s.color);
+ document.documentElement.style.setProperty('--a',scol(i));
  [].forEach.call(document.querySelectorAll('.sermon'),function(e,k){e.classList.toggle('on',k==i)});
  document.getElementById('nCur').textContent=s.tab;
  try{if(typeof pv==='number'&&pv!==i&&!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)){var ne=document.querySelectorAll('.sermon')[i],fw=FLAT.indexOf(i)>FLAT.indexOf(pv);ne.classList.remove('sl-r','sl-l');void ne.offsetWidth;ne.classList.add(fw?'sl-r':'sl-l');setTimeout(function(){ne.classList.remove('sl-r','sl-l')},400)}}catch(e){}
@@ -1007,7 +1008,7 @@ qin.addEventListener('input',function(){
   var sn=esc(r.x.slice(a,z));
   ws.forEach(function(w){if(w.length>1){var re=new RegExp('('+w.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','ig');sn=sn.replace(re,'<em>$1</em>')}});
   var tg=r.id?'data-id="'+r.id+'"':'data-k="'+r.k+'"';
-  return '<div class="r" data-i="'+r.i+'" '+tg+'><b style="color:'+S[r.i].color+'">'+S[r.i].tab+' · '+esc(r.t)+'</b><i>'+r.L+'</i><br>'+(a>0?'…':'')+sn+(z<r.x.length?'…':'')+'</div>';
+  return '<div class="r" data-i="'+r.i+'" '+tg+'><b style="color:'+scol(r.i)+'">'+S[r.i].tab+' · '+esc(r.t)+'</b><i>'+r.L+'</i><br>'+(a>0?'…':'')+sn+(z<r.x.length?'…':'')+'</div>';
  });
  home.style.display='none';nav.style.display='none';main.style.display='none';res.style.display='block';
  res.innerHTML=out.length?out.join(''):'<p class="none">No matches for “'+esc(qin.value.trim())+'”.</p>';var srx=document.getElementById('sr');if(srx)srx.textContent=out.length?out.length+(out.length===1?' result':' results')+' found':'No matches found';
@@ -1092,7 +1093,7 @@ var side=document.getElementById('side');
 function buildSide(){
  var s='<button type="button" class="hwbtn" id="hwbtn"><span class="hwq" aria-hidden="true">?</span>'+(LG==='es'?'Cómo usar esta página':'How to use this')+'</button>';
  GRP.forEach(function(g){var cur=view>=0&&view<S.length&&gOf(view)===g;s+='<details class="sg" data-g="'+g.n.replace(/"/g,'&quot;')+'"'+(gOpen(g,cur||gOf(S.length-1)===g)?' open':'')+' style="--gc:'+(g.c||'#6b7a90')+'"><summary><span class="gnm">'+g.n+'</span><span class="gct">'+g.ids.length+'</span></summary>';g.ids.forEach(function(id){var k=idxOf(id);if(k<0)return;
-  s+='<button data-i="'+k+'" style="--c:'+S[k].color+'">'+(isFav(S[k].id)?'★ ':'')+S[k].title+(hasNote(S[k].id)?' ✎':'')+'<small>'+shortMeta(S[k])+'</small></button>'});s+='</details>'});
+  s+='<button data-i="'+k+'" style="--c:'+scol(k)+'">'+(isFav(S[k].id)?'★ ':'')+S[k].title+(hasNote(S[k].id)?' ✎':'')+'<small>'+shortMeta(S[k])+'</small></button>'});s+='</details>'});
  side.innerHTML=s;
 }
 function markSide(){[].forEach.call(side.querySelectorAll('button'),function(b){var on=+b.dataset.i===view;b.classList.toggle('on',on);if(on){var d=b.closest('details');if(d&&!d.open)d.open=true}})}
@@ -1188,7 +1189,7 @@ function leadDraw(){var s=S[LS.i],x=LS.l[LS.p],t=x.q,sec='',body=t,lk='';
  +'<div class="lf"><button class="pv"'+(LS.p?'':' disabled')+'>← Back</button><button class="nx"'+(LS.p<LS.l.length-1?'':' disabled')+'>Next →</button></div>';
 }
 function leadOpen(i){LS.i=i;var pk=pkOf(S[i].id).length>0;LS.pk=pk;LS.l=qList(i,pk);LS.p=0;if(!LS.l.length)return;
- document.documentElement.style.setProperty('--a',S[i].color);leadDraw();lead.classList.add('on');document.body.classList.add('lk');
+ document.documentElement.style.setProperty('--a',scol(i));leadDraw();lead.classList.add('on');document.body.classList.add('lk');
  try{if(navigator.wakeLock)navigator.wakeLock.request('screen').then(function(w){wl=w},function(){})}catch(e){}}
 function leadClose(){lead.classList.remove('on');document.body.classList.remove('lk');try{if(wl){wl.release();wl=null}}catch(e){}}
 function leadStep(d){var n=LS.p+d;if(n<0||n>=LS.l.length)return;LS.p=n;leadDraw()}
