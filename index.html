@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta name="build" content="1795278922244">
+<meta name="build" content="1795291614780">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -690,6 +690,25 @@ html[data-th=dark] #mnud .mseg button{border-right-color:#5b82d6}
 html[data-th=dark] #mnud .mseg button[aria-pressed=true]{background:#3a5fb8}
 html[data-th=dark] #mnud .msz input{accent-color:#7ea0e8}
 @media (min-width:1000px){#mnud{display:none!important}}
+/* five small UI additions */
+.kr{margin:18px 0 6px;padding:14px;border:1.5px solid var(--rule);border-radius:14px;background:color-mix(in srgb,var(--a) 6%,var(--card))}
+.kr .krh{font:700 12px/1 -apple-system,system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--mut);margin-bottom:10px}
+.kr .krb{display:block;width:100%;text-align:left;min-height:48px;margin:0 0 8px;padding:10px 14px;border:1.5px solid var(--at);border-radius:12px;background:var(--card);color:var(--at);font:700 15px/1.3 -apple-system,system-ui,sans-serif;cursor:pointer}
+.kr .krb:last-child{margin-bottom:0}
+body.gm .kr,body.sbs .kr{display:none}
+#btt{position:fixed;right:14px;bottom:calc(env(safe-area-inset-bottom) + 74px);z-index:80;width:48px;height:48px;border-radius:50%;border:1.5px solid var(--at);background:var(--card);color:var(--at);box-shadow:0 4px 14px rgba(0,0,0,.25);display:none;align-items:center;justify-content:center;cursor:pointer;padding:0}
+#btt.on{display:flex}
+body.kb #btt,body.lk #btt{display:none!important}
+body.sbs #btt{bottom:24px}
+#swh{position:fixed;left:12px;right:12px;bottom:calc(env(safe-area-inset-bottom) + 72px);z-index:85;display:none;align-items:center;gap:10px;max-width:520px;margin:0 auto;padding:12px 12px 12px 16px;border-radius:14px;background:#1f3a75;color:#fff;font:600 14px/1.35 -apple-system,system-ui,sans-serif;box-shadow:0 8px 24px rgba(0,0,0,.35)}
+#swh.on{display:flex}
+#swh span{flex:1}
+#swh button{flex:none;width:44px;height:44px;border-radius:50%;border:0;background:rgba(255,255,255,.18);color:#fff;font-size:20px;line-height:1;cursor:pointer}
+@media (min-width:1000px){#swh{display:none!important}}
+#nHome{min-height:44px}
+.ytl,a.blb,.xpb{min-height:44px}
+.vlink a:not(.blb){padding:11px 3px}
+#tabbar button{min-height:46px}
 </style>
 </head>
 <body>
@@ -804,7 +823,7 @@ S.forEach(function(s,i){
  } else {
   h+='<div class="sec">'+'Discussion Questions'+'<span class="tools">'+(LEADER?'<button data-lead="'+i+'">Lead</button><button data-pk="'+i+'">★ Picks</button>':'')+'<button data-copy="'+i+'">'+(LEADER?'Copy':'Copy questions')+'</button>'+(LEADER?'<button data-qz="-1" aria-label="Smaller question text">A−</button><button data-qz="1" aria-label="Larger question text">A+</button>':'')+'</span></div><details open id="dq'+i+'"><summary>'+(s.official?'Official Minichurch questions':'Discuss')+'</summary><div class="body"><ol class="dq">'+s.qs.map(function(q,n){return '<li data-qn="'+n+'">'+qL(q,s)+(LEADER?'<button class="qstar" data-qs="'+i+','+n+'" aria-label="Pick this question">☆</button>':'')+'</li>'}).join('')+'</ol></div></details>';
  }
- h+='<div class="sec mn">My notes <span class="priv">only on this device</span></div><textarea class="mynotes" data-note="'+i+'" aria-label="My private notes for '+s.title.replace(/"/g,'')+'" rows="4" placeholder="Jot your own notes for this sermon here…"></textarea>'+'<div class="nxrow"><button type="button" class="xpb" data-nx="'+i+'">'+(LG==='es'?'Copiar mis notas':'Copy my notes')+'</button>'+(navigator.share?'<button type="button" class="xpb" data-nxs="'+i+'">'+(LG==='es'?'Compartir':'Share')+'</button>':'')+'</div>';
+ h+='<div class="sec mn">My notes <span class="priv">only on this device</span></div><textarea class="mynotes" data-note="'+i+'" aria-label="My private notes for '+s.title.replace(/"/g,'')+'" rows="4" placeholder="'+(LG==='es'?'¿Qué te llamó la atención?&#10;¿Qué vas a hacer esta semana?&#10;¿Con quién podrías compartirlo?':'What stood out to you?&#10;What is one thing you will do this week?&#10;Who could you share this with?')+'"></textarea>'+'<div class="nxrow"><button type="button" class="xpb" data-nx="'+i+'">'+(LG==='es'?'Copiar mis notas':'Copy my notes')+'</button>'+(navigator.share?'<button type="button" class="xpb" data-nxs="'+i+'">'+(LG==='es'?'Compartir':'Share')+'</button>':'')+'</div>';
  h+='</div>';
  if(s.app){h+='<div class="sec">Personal Application</div><details><summary>This week, consider…</summary><div class="body"><ul>'+li(s.app)+'</ul></div></details>'}
  IDX.push({i:i,id:'dt'+i,L:'Takeaway',t:'Key takeaways',x:strip(s.big+' '+s.take.join(' '))});
@@ -934,6 +953,8 @@ function show(i,openK){
  else window.scrollTo(0,0);
  try{localStorage.setItem('sid',s.id)}catch(e){}
 }
+function krCard(i){var es=LG==='es',p=FLAT.indexOf(i),nk=(p>=0&&p+1<FLAT.length&&gOf(FLAT[p+1])===gOf(i))?FLAT[p+1]:-1;
+ return '<div class="kr"><div class="krh">'+(es?'Sigue leyendo':'Keep going')+'</div><button type="button" class="krb" data-kr="q">'+(es?'Siguiente: Preguntas de discusión':'Next: Discussion Questions')+' ›</button>'+(nk>=0?'<button type="button" class="krb" data-kr="n" data-ki="'+nk+'">'+(es?'Siguiente sermón de la serie: ':'Next in this series: ')+((es&&S[nk].es&&S[nk].es.title)||S[nk].title).replace(/</g,'&lt;')+' ›</button>':'')+'</div>'}
 function step(d){var p=FLAT.indexOf(view);if(p<0)return;var n=p+d;if(n<0||n>=FLAT.length)return;show(FLAT[n])}
 buildNav();
 var SBS=window.matchMedia?matchMedia('(min-width:1280px)'):{matches:false};
@@ -1323,6 +1344,26 @@ function open(){var d=document.getElementById('mnud');if(!d){d=document.createEl
 function close(){var d=document.getElementById('mnud');if(d&&d.style.display==='flex'){d.style.display='none';btn.focus()}}
 btn.addEventListener('click',open);
 document.addEventListener('keydown',function(e){if(e.key==='Escape'){var d=document.getElementById('mnud');if(d&&d.style.display==='flex'){close();e.stopImmediatePropagation()}}},true);
+})();
+
+/* back to top, swipe hint, keep-going card */
+(function(){
+var es=LG==='es';
+var b=document.createElement('button');b.id='btt';b.type='button';b.setAttribute('aria-label',es?'Volver arriba':'Back to top');
+b.innerHTML='<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>';
+document.body.appendChild(b);
+[].forEach.call(document.querySelectorAll('.sermon'),function(el,k){var o=el.querySelector('.outline');if(o&&!el.querySelector('.kr'))o.insertAdjacentHTML('afterend',krCard(k))});
+function bt(){var on=typeof view==='number'&&view>=0&&window.scrollY>900;b.classList.toggle('on',on)}
+window.addEventListener('scroll',bt,{passive:true});
+b.addEventListener('click',function(){var rm=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;window.scrollTo({top:0,behavior:rm?'auto':'smooth'})});
+var sh=null;function shDone(){try{localStorage.setItem('sw1','1')}catch(e){}if(sh){sh.classList.remove('on')}}
+function shShow(){var seen=false;try{seen=localStorage.getItem('sw1')}catch(e){}if(seen||window.innerWidth>=1000||document.body.classList.contains('sbs'))return;
+ if(!sh){sh=document.createElement('div');sh.id='swh';sh.setAttribute('role','status');sh.innerHTML='<span>'+(es?'Consejo: desliza a la izquierda para ver las Preguntas y Mis notas.':'Tip: swipe left to see Questions and My Notes.')+'</span><button type="button" aria-label="'+(es?'Cerrar':'Dismiss')+'">×</button>';document.body.appendChild(sh);sh.querySelector('button').addEventListener('click',shDone)}
+ sh.classList.add('on');setTimeout(function(){if(sh&&sh.classList.contains('on'))shDone()},9000)}
+var _s=show;show=function(i){var f=(typeof view!=='number'||view<0);var r=_s.apply(this,arguments);bt();if(f)setTimeout(shShow,700);return r};
+var _t=tabTo;tabTo=function(){shDone();var r=_t.apply(this,arguments);bt();return r};
+document.addEventListener('click',function(e){var k=e.target.closest('button.krb');if(!k)return;e.preventDefault();
+ if(k.dataset.kr==='q'){tabTo(true)}else{show(+k.dataset.ki);window.scrollTo(0,0)}},true);
 })();
 </script>
 <script data-goatcounter="https://slucero77.goatcounter.com/count" data-goatcounter-settings='{"no_onload":true}' async src="//gc.zgo.at/count.js" onload="trk()"></script>
