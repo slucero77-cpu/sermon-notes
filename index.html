@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta name="build" content="1795276806871">
+<meta name="build" content="1795277526926">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -867,8 +867,8 @@ function howToEs(){return '<details class="how"><summary>Cómo usar esta página
  +'<li><b>Notas:</b> cada sección del esquema se abre sola mientras bajas. Toca un versículo para abrir una tarjeta con enlaces para leerlo en la LBLA o estudiarlo en Blue Letter Bible, o toca <b>Ver esta parte</b> para ir a ese momento del video.</li>'
  +'<li><b>Preguntas:</b> toca un versículo en una pregunta (como Ver: Habacuc 2:15) para abrir la misma tarjeta.</li>'
  +'<li><b>En una computadora:</b> los sermones están agrupados por serie a la izquierda; toca un grupo para abrirlo o cerrarlo. Debajo del sermón que lees hay una lista numerada de sus secciones para ir directo a una. En una pantalla ancha, las Preguntas aparecen junto a las Notas, con pestañas de <b>Preguntas de discusión</b> y <b>Mis notas</b>.</li>'
- +'<li><b>Inglés:</b> toca <b>EN</b> arriba para volver al inglés. Toca <b>ES</b> para leer todo en español.</li>'
- +'<li><b>También:</b> la búsqueda encuentra palabras, versículos y preguntas. Usa <b>← →</b> para cambiar de sermón. <b>A− A+</b> cambia el tamaño del texto y <b>☾</b> es el modo oscuro. En una computadora, presiona <b>/</b> para buscar, <b>g</b> para Preguntas y <b>n</b> para Notas.</li>'
+ +'<li><b>Inglés:</b> en el teléfono, toca <b>Menú</b> arriba y elige <b>English</b>; en una computadora, toca <b>EN</b>. Para leer todo en español, elige <b>Español</b> o toca <b>ES</b>.</li>'
+ +'<li><b>También:</b> la búsqueda encuentra palabras, versículos y preguntas. Usa <b>← →</b> para cambiar de sermón. En el teléfono, <b>Menú</b> también cambia entre claro y oscuro (o Como el teléfono) y el tamaño del texto; en una computadora usa <b>A− A+</b> y <b>☾</b>. En una computadora, presiona <b>/</b> para buscar, <b>g</b> para Preguntas y <b>n</b> para Notas.</li>'
  +'</ul></div></details>'}
 function howBtn(){return '<button type="button" class="hwhome" id="hwhome"><span class="hwq" aria-hidden="true">?</span>'+(LG==='es'?'Cómo usar esta página':'How to use this')+'</button>'}
 function howTo(){
@@ -879,8 +879,8 @@ function howTo(){
  +'<li><b>Notes:</b> each outline section opens as you scroll. Tap a verse to open a card with links to read it in the ESV or study it in Blue Letter Bible, or tap <b>Watch this part</b> to jump to that spot in the video.</li>'
  +'<li><b>Questions:</b> tap a verse in a question (like Look at: Habakkuk 2:15) to open the same verse card.</li>'
  +'<li><b>On a computer:</b> sermons are grouped by series on the left; tap a group to open or close it. Under the sermon you are reading is a numbered list of its sections, so you can jump straight to one. On a wide screen, Questions sit beside the Notes, with tabs for <b>Discussion Questions</b> and <b>My Notes</b>.</li>'
- +'<li><b>Spanish:</b> tap <b>ES</b> at the top to read everything in Spanish (verses open in the LBLA). Tap <b>EN</b> to switch back.</li>'
- +'<li><b>Also:</b> Search finds words, verses and questions. Use <b>← →</b> to change sermons. <b>A− A+</b> changes text size and <b>☾</b> is dark mode. On a laptop, press <b>/</b> to search, <b>g</b> for Questions and <b>n</b> for Notes.</li>'
+ +'<li><b>Spanish:</b> on a phone, tap <b>Menu</b> at the top and choose <b>Español</b>; on a computer, tap <b>ES</b>. Everything is then in Spanish (verses open in the LBLA). Switch back the same way with <b>English</b> or <b>EN</b>.</li>'
+ +'<li><b>Also:</b> Search finds words, verses and questions. Use <b>← →</b> to change sermons. On a phone, <b>Menu</b> also sets light or dark (or Match phone) and the text size; on a computer use <b>A− A+</b> and <b>☾</b>. On a laptop, press <b>/</b> to search, <b>g</b> for Questions and <b>n</b> for Notes.</li>'
  +'</ul></div></details>';
 }
 function notesUpd(){try{var m=(S[S.length-1].metaEn||S[S.length-1].meta).match(/([A-Z][a-z]{2} \d{1,2}, \d{4})/);if(!m)return 'Notes updated weekly.';var d=new Date(m[1]);if(isNaN(d))return 'Notes updated weekly.';d.setDate(d.getDate()+((2-d.getDay()+7)%7||7));var D=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],M=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];return 'Notes updated '+D[d.getDay()]+', '+M[d.getMonth()]+' '+d.getDate()+'.'}catch(e){return 'Notes updated weekly.'}}
