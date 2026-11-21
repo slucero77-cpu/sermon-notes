@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta name="build" content="1795224126156">
+<meta name="build" content="1795225265546">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -332,6 +332,14 @@ details.grp,#side details.sg{background:transparent!important;border:0!important
 .grp>summary.sec,#side .sg>summary{border-left:5px solid var(--gc);border-radius:0 12px 12px 0;background:color-mix(in srgb,var(--gc) 13%,transparent);padding-left:12px!important;color:var(--ink)}
 .grp>summary.sec .gnm,#side .sg>summary .gnm{color:inherit}
 .nxrow{display:flex;gap:8px;margin:8px 0 4px}
+/* phone My Notes tab */
+#tabbar button{padding:0 4px}
+body.gm:not(.mn) .qsec>.sec.mn,body.gm:not(.mn) .qsec>textarea.mynotes,body.gm:not(.mn) .qsec>.nxrow{display:none!important}
+body.gm.mn .qsec>*:not(.sec.mn):not(textarea.mynotes):not(.nxrow){display:none!important}
+body.gm.mn .qsec>textarea.mynotes{display:block;min-height:34vh;font-size:17px}
+body.gm.mn .qsec>.nxrow{display:flex}
+body.gm.mn .sermon>.sb{display:block!important;margin-bottom:12px}
+body.gm.mn .gref{display:none}
 .xpb{font:600 13px -apple-system,system-ui,sans-serif;padding:8px 14px;border-radius:10px;border:1px solid var(--rule);background:var(--btn);color:var(--ink);cursor:pointer}
 .xpb:hover{background:var(--tint)}
 .nxhome{margin:10px 0}
@@ -671,7 +679,7 @@ a.vq{cursor:pointer}
 </header>
 <aside id="side" aria-label="All sermons"></aside>
 <nav id="nav"></nav>
-<div id="tabbar" hidden><button id="tbN" type="button" aria-pressed="true">Notes</button><button id="tbQ" type="button" aria-pressed="false">Questions</button></div>
+<div id="tabbar" hidden><button id="tbN" type="button" aria-pressed="true">Notes</button><button id="tbQ" type="button" aria-pressed="false">Questions</button><button id="tbM" type="button" aria-pressed="false">My Notes</button></div>
 <div id="home"></div>
 <div id="sr" class="sr" role="status" aria-live="polite"></div>
 <div id="res"></div>
@@ -831,7 +839,7 @@ function a2hs(){var d=false,st=false;try{d=localStorage.getItem('a2')==='1'}catc
 
 function howToEs(){return '<details class="how"><summary>Cómo usar esta página</summary><div class="body"><ul>'
  +(IS_PUB?'<li><b>Agrégala a tu pantalla de inicio</b> para que se abra como una app.<br><b>iPhone:</b> en <b>Safari</b>, toca <b>Compartir</b> (el cuadro con una flecha) y luego <b>Agregar a pantalla de inicio</b>.<br><b>Android:</b> en <b>Chrome</b>, toca <b>⋮</b> y luego <b>Agregar a la pantalla de inicio</b> (o <b>Instalar app</b>).</li>':'')
- +'<li><b>Abre un sermón</b> y usa las pestañas de abajo para cambiar entre <b>Notas</b> y <b>Preguntas</b>. En el teléfono también puedes <b>deslizar a la izquierda</b> para ir a Preguntas y <b>deslizar a la derecha</b> para volver a Notas. Las pestañas se esconden al bajar y vuelven cuando subes.</li>'
+ +'<li><b>Abre un sermón</b> y usa las pestañas de abajo para cambiar entre <b>Notas</b>, <b>Preguntas</b> y <b>Mis notas</b> (un lugar privado para escribir tus propias notas, con botones de Copiar y Compartir). En el teléfono también puedes <b>deslizar a la izquierda</b> para ir a la siguiente pestaña y <b>deslizar a la derecha</b> para volver. Las pestañas se esconden al bajar y vuelven cuando subes.</li>'
  +'<li><b>Notas:</b> cada sección del esquema se abre sola mientras bajas. Toca un versículo para abrir una tarjeta con enlaces para leerlo en la LBLA o estudiarlo en Blue Letter Bible, o toca <b>Ver esta parte</b> para ir a ese momento del video.</li>'
  +'<li><b>Preguntas:</b> toca un versículo en una pregunta (como Ver: Habacuc 2:15) para abrir la misma tarjeta.</li>'
  +'<li><b>En una computadora:</b> los sermones están agrupados por serie a la izquierda; toca un grupo para abrirlo o cerrarlo. Debajo del sermón que lees hay una lista numerada de sus secciones para ir directo a una. En una pantalla ancha, las Preguntas aparecen junto a las Notas, con pestañas de <b>Preguntas de discusión</b> y <b>Mis notas</b>.</li>'
@@ -843,7 +851,7 @@ function howTo(){
  if(LG==='es')return howToEs();
  return '<details class="how"><summary>How to use this</summary><div class="body"><ul>'
  +(IS_PUB?'<li><b>Add it to your Home Screen</b> so it opens like an app.<br><b>iPhone:</b> in <b>Safari</b>, tap <b>Share</b> (the square with an arrow), then <b>Add to Home Screen</b>.<br><b>Android:</b> in <b>Chrome</b>, tap <b>⋮</b>, then <b>Add to Home screen</b> (or <b>Install app</b>).</li>':'')
- +'<li><b>Open a sermon</b>, then use the tabs at the bottom to switch between <b>Notes</b> and <b>Questions</b>. On a phone you can also <b>swipe left</b> to go to Questions and <b>swipe right</b> to go back to Notes. The tabs slide away as you scroll down and return when you scroll up.</li>'
+ +'<li><b>Open a sermon</b>, then use the tabs at the bottom to switch between <b>Notes</b>, <b>Questions</b> and <b>My Notes</b> (a private place to type your own notes, with Copy and Share buttons). On a phone you can also <b>swipe left</b> to move to the next tab and <b>swipe right</b> to go back. The tabs slide away as you scroll down and return when you scroll up.</li>'
  +'<li><b>Notes:</b> each outline section opens as you scroll. Tap a verse to open a card with links to read it in the ESV or study it in Blue Letter Bible, or tap <b>Watch this part</b> to jump to that spot in the video.</li>'
  +'<li><b>Questions:</b> tap a verse in a question (like Look at: Habakkuk 2:15) to open the same verse card.</li>'
  +'<li><b>On a computer:</b> sermons are grouped by series on the left; tap a group to open or close it. Under the sermon you are reading is a numbered list of its sections, so you can jump straight to one. On a wide screen, Questions sit beside the Notes, with tabs for <b>Discussion Questions</b> and <b>My Notes</b>.</li>'
@@ -906,8 +914,14 @@ buildNav();
 var SBS=window.matchMedia?matchMedia('(min-width:1280px)'):{matches:false};
 var gm=false,wl=null;
 var SP={};
-function tabTo(v){if(SBS.matches){var qq=document.querySelector('.sermon.on .qsec');if(v){document.body.classList.remove('qn');qtSync();if(qq)qq.scrollTop=0}return}if(v===gm)return;var id=typeof view==='number'?S[view].id:'';SP[id+(gm?'q':'n')]=window.scrollY;setGm(v);var y=SP[id+(v?'q':'n')]||0;var go=function(){window.scrollTo(0,y)};go();requestAnimationFrame(go);setTimeout(go,120)}
-function setGm(v){if(v&&SBS.matches)return;gm=v;document.body.classList.toggle('gm',v);var a=document.getElementById('nNotes'),q=document.getElementById('nQs');if(a){a.classList.toggle('on2',!v);q.classList.toggle('on2',v);a.setAttribute('aria-pressed',v?'false':'true');q.setAttribute('aria-pressed',v?'true':'false')}
+function tabCur(){return !gm?'n':(document.body.classList.contains('mn')?'m':'q')}
+function tabTo(v){var t=v==='n'?'m':(v?'q':'n');
+ if(SBS.matches){var qq=document.querySelector('.sermon.on .qsec');if(t==='q'){document.body.classList.remove('qn');qtSync();if(qq)qq.scrollTop=0}else if(t==='m'){document.body.classList.add('qn');qtSync()}return}
+ var c=tabCur();if(t===c)return;var id=typeof view==='number'?S[view].id:'';SP[id+c]=window.scrollY;
+ document.body.classList.toggle('mn',t==='m');
+ if(t==='n'||!gm)setGm(t!=='n');else if(window.tabUpd)window.tabUpd();
+ var y=SP[id+t]||0;var go=function(){window.scrollTo(0,y)};go();requestAnimationFrame(go);setTimeout(go,120)}
+function setGm(v){if(v&&SBS.matches)return;gm=v;if(!v)document.body.classList.remove('mn');document.body.classList.toggle('gm',v);var a=document.getElementById('nNotes'),q=document.getElementById('nQs');if(a){a.classList.toggle('on2',!v);q.classList.toggle('on2',v);a.setAttribute('aria-pressed',v?'false':'true');q.setAttribute('aria-pressed',v?'true':'false')}
  try{if(v&&navigator.wakeLock){navigator.wakeLock.request('screen').then(function(l){wl=l}).catch(function(){})}else if(wl){wl.release();wl=null}}catch(e){}
  window.scrollTo(0,0)}
 document.addEventListener('visibilitychange',function(){try{if(gm&&document.visibilityState==='visible'&&navigator.wakeLock)navigator.wakeLock.request('screen').then(function(l){wl=l}).catch(function(){})}catch(e){}});
@@ -1003,7 +1017,8 @@ document.getElementById('fp').onclick=function(){setFs(fs+1)};
  main.addEventListener('touchstart',function(e){ok=false;if(typeof view!=='number'||e.touches.length!==1)return;if(document.getElementById('sheet').classList.contains('on')||document.getElementById('lead').classList.contains('on'))return;if(blocked(e.target))return;var t=e.touches[0];sx=t.clientX;sy=t.clientY;t0=Date.now();ok=true},{passive:true});
  main.addEventListener('touchend',function(e){if(!ok)return;ok=false;var t=e.changedTouches[0],dx=t.clientX-sx,dy=t.clientY-sy;if(Date.now()-t0>700||Math.abs(dx)<70||Math.abs(dx)<Math.abs(dy)*1.8)return;if(window.getSelection&&String(getSelection()).length)return;
   var lf=dx<0;
-  if(!SBS.matches&&((!gm&&lf)||(gm&&!lf))){var se=document.querySelector('.sermon.on');tabTo(lf);
+  var tc=tabCur(),tn=lf?(tc==='n'?'q':tc==='q'?'m':null):(tc==='m'?'q':tc==='q'?'n':null);
+  if(!SBS.matches&&tn){var se=document.querySelector('.sermon.on');tabTo(tn==='n'?false:tn==='q'?true:'n');
    try{if(se&&!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)){se.classList.remove('sl-r','sl-l');void se.offsetWidth;se.classList.add(lf?'sl-r':'sl-l');setTimeout(function(){se.classList.remove('sl-r','sl-l')},400)}}catch(x){}
    return}
   },{passive:true});
@@ -1095,16 +1110,16 @@ side.addEventListener('click',function(e){var b=e.target.closest('button.tc');if
 function jmpOpen(){if(typeof view!=='number')return;var sm=S[view],es=LG==='es';
  var d=document.getElementById('jmpd');if(!d){d=document.createElement('div');d.id='jmpd';d.setAttribute('role','dialog');d.setAttribute('aria-modal','true');document.body.appendChild(d);
   d.addEventListener('click',function(e){var b=e.target.closest('button');if(e.target===d||(b&&b.classList.contains('jx'))){jmpClose();return}
-   if(b&&b.dataset.t){var t=b.dataset.t;jmpClose();setTimeout(function(){if(t==='q'){tabTo(true)}else if(/^\d+$/.test(t)){jumpTo(+t)}else{jumpTo(t)}},60)}})}
+   if(b&&b.dataset.t){var t=b.dataset.t;jmpClose();setTimeout(function(){if(t==='q'){tabTo(true)}else if(t==='mn'){tabTo('n')}else if(/^\d+$/.test(t)){jumpTo(+t)}else{jumpTo(t)}},60)}})}
  d.setAttribute('aria-label',es?'Secciones':'Sections');
  var h='<div class="jc"><div class="jh"><b>'+(es?'Ir a una sección':'Jump to a section')+'</b><button type="button" class="jx" aria-label="'+(es?'Cerrar':'Close')+'">×</button></div><div class="jl">'
   +'<button type="button" data-t="dt'+view+'"><span class="tn">★</span><span class="tt">'+(es?'Puntos clave':'Key takeaways')+'</span></button>'
   +'<button type="button" data-t="ds'+view+'"><span class="tn">✎</span><span class="tt">'+(es?'Escrituras clave':'Key scriptures')+'</span></button>';
  sm.secs.forEach(function(x,k){h+='<button type="button" data-t="'+k+'"><span class="tn">'+(k+1)+'</span><span class="tt">'+x.t+'</span>'+'</button>'});
- h+='<button type="button" data-t="q" class="jq"><span class="tn">?</span><span class="tt">'+(es?'Preguntas':'Questions')+'</span></button></div></div>';
+ h+='<button type="button" data-t="q" class="jq"><span class="tn">?</span><span class="tt">'+(es?'Preguntas':'Questions')+'</span></button><button type="button" data-t="mn" class="jq"><span class="tn">✎</span><span class="tt">'+(es?'Mis notas':'My notes')+'</span></button></div></div>';
  d.innerHTML=h;d.style.display='flex'}
 function jmpClose(){var d=document.getElementById('jmpd');if(d)d.style.display='none'}
-function sbsSync(){var on=!!SBS.matches;document.body.classList.toggle('sbs',on);if(on&&gm){gm=false;document.body.classList.remove('gm')}}
+function sbsSync(){var on=!!SBS.matches;document.body.classList.toggle('sbs',on);if(on&&gm){gm=false;document.body.classList.remove('gm');document.body.classList.remove('mn')}}
 if(SBS.addEventListener)SBS.addEventListener('change',sbsSync);else if(SBS.addListener)SBS.addListener(sbsSync);
 sbsSync();
 
@@ -1203,18 +1218,18 @@ window.csOn=function(d){d.classList.add('cs');setTimeout(function(){d.classList.
 document.addEventListener('click',function(e){var s=e.target.closest&&e.target.closest('.outline summary');if(s&&s.parentNode&&!s.parentNode.open)window.csOn(s.parentNode)},true);
 
 /* bottom tab bar logic */
-(function(){var tb=document.getElementById('tabbar'),bn=document.getElementById('tbN'),bq=document.getElementById('tbQ');
-function upd(){var on=typeof view==='number';tb.hidden=!on;document.body.classList.toggle('hasTab',on);bn.classList.toggle('on2',!gm);bq.classList.toggle('on2',gm);bn.setAttribute('aria-pressed',gm?'false':'true');bq.setAttribute('aria-pressed',gm?'true':'false')}
+(function(){var tb=document.getElementById('tabbar'),bn=document.getElementById('tbN'),bq=document.getElementById('tbQ'),bm=document.getElementById('tbM');
+function upd(){var on=typeof view==='number';tb.hidden=!on;document.body.classList.toggle('hasTab',on);var c=tabCur();bn.classList.toggle('on2',c==='n');bq.classList.toggle('on2',c==='q');bm.classList.toggle('on2',c==='m');bn.setAttribute('aria-pressed',c==='n'?'true':'false');bq.setAttribute('aria-pressed',c==='q'?'true':'false');bm.setAttribute('aria-pressed',c==='m'?'true':'false');bm.textContent=LG==='es'?'Mis notas':'My Notes'}
 var _s=show,_h=goHome,_g=setGm;
 show=function(){var r=_s.apply(this,arguments);upd();return r};
 goHome=function(){var r=_h.apply(this,arguments);upd();return r};
 setGm=function(){var r=_g.apply(this,arguments);upd();return r};
-bn.addEventListener('click',function(){tabTo(false)});bq.addEventListener('click',function(){tabTo(true)});
+bn.addEventListener('click',function(){tabTo(false)});bq.addEventListener('click',function(){tabTo(true)});bm.addEventListener('click',function(){tabTo('n')});
 var ly=window.scrollY;window.addEventListener('scroll',function(){var y=window.scrollY,d=y-ly;if(Math.abs(d)<6)return;var bot=y+innerHeight>=document.documentElement.scrollHeight-8;if(d>0&&y>150&&!bot)tb.classList.add('tbh');else tb.classList.remove('tbh');ly=y},{passive:true});
 var _u=upd;upd=function(){tb.classList.remove('tbh');ly=window.scrollY;return _u.apply(this,arguments)};
 document.addEventListener('focusin',function(e){if(e.target.matches&&e.target.matches('textarea,input'))document.body.classList.add('kb')});
 document.addEventListener('focusout',function(){document.body.classList.remove('kb')});
-upd()})();
+window.tabUpd=function(){upd()};upd()})();
 
 
 
