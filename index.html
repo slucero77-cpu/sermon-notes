@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta name="build" content="1795324361302">
+<meta name="build" content="1795325248146">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -449,6 +449,9 @@ li.tk.in{opacity:1;transform:none}
 .rst+.upd{margin-top:8px}
 .wn{position:relative;margin:12px 0 4px;padding:14px 16px;border-radius:14px;background:var(--tint);border:1.5px solid var(--a);font:15px/1.45 -apple-system,system-ui,sans-serif;color:var(--ink)}.wn h3{margin:0 36px 4px 0;font-size:16px;color:var(--at)}.wn p{margin:0}.wn .x{position:absolute;right:2px;top:2px;width:44px;height:44px;border:0;background:transparent;color:var(--mut);font-size:24px}
 /* pin the open section's title while scrolling */
+#spin{display:none;position:fixed;z-index:4;box-sizing:border-box;padding:12px 16px;background:var(--card);color:var(--ink);border-left:4px solid var(--a,#2f4fa0);border-bottom:1px solid var(--rule);border-radius:0 0 10px 10px;box-shadow:0 3px 10px rgba(0,0,0,.2);font:600 16px/1.3 -apple-system,system-ui,sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer;transition:top .22s ease}
+#spin.on{display:block}
+#spin .n{font-weight:700;margin-right:12px}
 .outline details{overflow:visible}
 @supports (overflow:clip){.outline details{overflow:clip}}
 .outline details[open]>summary{position:sticky;top:var(--nh,56px);transition:top .22s ease;z-index:3;background:var(--card);border-radius:10px 10px 0 0;box-shadow:0 1px 0 var(--rule)}
@@ -1344,6 +1347,7 @@ function applyRS(r){var ds=document.querySelectorAll('.sermon.on details');(r.o|
 try{if('serviceWorker' in navigator&&/^https?:/.test(location.protocol)&&location.hostname.indexOf('claude')<0){navigator.serviceWorker.register('sw.js').catch(function(){})}}catch(e){}
 
 /* measure the top bar so pinned section titles sit just under it */
+(function(){var p=document.createElement('div');p.id='spin';p.setAttribute('aria-hidden','true');document.body.appendChild(p);var cur=null,tk=false;function upd(){tk=false;var nav=document.getElementById('nav'),nb=0;if(nav)nb=Math.max(0,nav.getBoundingClientRect().bottom);var ds=document.querySelectorAll('.sermon.on .outline details[open]'),hit=null,hr=null;for(var i=0;i<ds.length;i++){var d=ds[i],s=d.querySelector('summary');if(!s)continue;var sr=s.getBoundingClientRect(),dr=d.getBoundingClientRect();if(sr.top<nb-3&&dr.bottom>nb+70){hit=d;hr=dr}}if(hit){if(cur!==hit){var c=hit.querySelector('summary').cloneNode(true);[].forEach.call(c.querySelectorAll('button,a'),function(b){b.remove()});p.innerHTML=c.innerHTML;p.style.borderLeftColor=getComputedStyle(hit).borderLeftColor;cur=hit}p.style.top=nb+'px';p.style.left=hr.left+'px';p.style.width=hr.width+'px';p.classList.add('on')}else{p.classList.remove('on');cur=null}}function q(){if(!tk){tk=true;requestAnimationFrame(upd)}}p.addEventListener('click',function(){if(!cur)return;var nav=document.getElementById('nav'),nb=nav?Math.max(0,nav.getBoundingClientRect().bottom):0;window.scrollTo({top:window.pageYOffset+cur.getBoundingClientRect().top-nb-8,behavior:'smooth'})});window.addEventListener('scroll',q,{passive:true});window.addEventListener('resize',q);document.addEventListener('toggle',q,true);q()})();
 (function(){function m(){var n=document.getElementById('nav');if(n&&n.offsetHeight>0)document.documentElement.style.setProperty('--nh',n.offsetHeight+'px')}m();window.addEventListener('resize',m);window.addEventListener('load',m);document.addEventListener('click',function(){setTimeout(m,80);setTimeout(m,500)});window.addEventListener('scroll',m,{passive:true,once:true})})();
 
 /* auto-open the next section as you scroll down */
