@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta name="build" content="1795322040530">
+<meta name="build" content="1795322436857">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -716,6 +716,8 @@ header{background-image:radial-gradient(ellipse 60% 140% at 20% 0%,rgba(255,255,
 .cpd{animation:cpop .45s cubic-bezier(.3,1.7,.5,1)}
 @keyframes cpop{0%{transform:scale(.85)}60%{transform:scale(1.1)}100%{transform:scale(1)}}
 
+/* nav fallback pin (home-screen app) */
+@media (max-width:999px){#nav.nfx{position:fixed;left:0;right:0;top:0;padding-top:calc(10px + env(safe-area-inset-top))}}
 /* press effect on the rest of the buttons */
 nav button,#tabbar button,.tools button,.fs button,button#mnu,button.krb,#hwhome,#hwbtn,button.xpb,#side button,#nHome,#btt{transition:transform .14s cubic-bezier(.3,1.6,.5,1),box-shadow .2s,background-color .2s,color .2s,border-color .2s}
 nav button,#tabbar button,.tools button,.fs button,button#mnu,button.krb,#hwhome,#hwbtn,button.xpb,#side button,#nHome,#btt{--pa:var(--a,#2f4fa0)}
@@ -1516,6 +1518,17 @@ document.addEventListener('input',function(e){var t=e.target;if(!t.matches||!t.m
 window.__tr=false;setTimeout(function(){window.__tr=true},800);
 window.txOn=function(){if(!window.__tr)return;var d=document.documentElement;d.classList.add('tx');clearTimeout(window.__txt);window.__txt=setTimeout(function(){d.classList.remove('tx')},600)};
 var _st=setTh;setTh=function(){window.txOn();return _st.apply(this,arguments)};
+})();
+/* nav fallback pin: if sticky fails (iPhone home-screen app), pin the bar with position:fixed */
+(function(){var n=document.getElementById('nav'),sp=null,fx=false,mq=matchMedia('(max-width:999px)'),t=0;
+function nh(){if(n.offsetHeight>0)document.documentElement.style.setProperty('--nh',n.offsetHeight+'px')}
+function on(){if(fx||!n.offsetHeight)return;sp=document.createElement('div');sp.id='nsp';sp.style.height=n.offsetHeight+'px';n.parentNode.insertBefore(sp,n);n.classList.add('nfx');fx=true;nh()}
+function off(){if(!fx)return;n.classList.remove('nfx');if(sp&&sp.parentNode)sp.parentNode.removeChild(sp);sp=null;fx=false;nh()}
+function chk(){t=0;if(!mq.matches||!n.offsetHeight&&!fx){off();return}
+ if(!fx){if(n.getBoundingClientRect().top<-2)on()}
+ else if(!sp||sp.getBoundingClientRect().top>=0||!n.offsetHeight&&!sp.offsetHeight)off()}
+function q(){if(!t)t=requestAnimationFrame(chk)}
+window.addEventListener('scroll',q,{passive:true});window.addEventListener('resize',function(){if(!mq.matches)off();q()});
 })();
 </script>
 <script data-goatcounter="https://slucero77.goatcounter.com/count" data-goatcounter-settings='{"no_onload":true}' async src="//gc.zgo.at/count.js" onload="trk()"></script>
