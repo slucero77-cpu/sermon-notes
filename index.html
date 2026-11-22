@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta name="build" content="1795330985303">
+<meta name="build" content="1795385861579">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -822,6 +822,8 @@ html[data-th=dark] .gct{color:color-mix(in srgb,var(--gc) 70%,#fff)}
 html[data-th=dark] .grp>summary.sec{border-left-color:color-mix(in srgb,var(--gc) 78%,#fff)}
 html[data-th=dark] .grp>summary::after{border-color:color-mix(in srgb,var(--gc) 78%,#fff);opacity:.85}
 html[data-th=dark] .gct{background:color-mix(in srgb,var(--gc) 28%,transparent);color:color-mix(in srgb,var(--gc) 55%,#fff)}
+/* pin the header on the home page (phones) */
+@media (max-width:999px){body.hmv header{position:sticky;top:0;z-index:60}}
 </style>
 <script id="rdi">try{var _d=document.documentElement,_g=localStorage;if(_g.getItem("rf")==="sans")_d.setAttribute("data-rf","sans");if(_g.getItem("rl")==="roomy")_d.setAttribute("data-rl","roomy");if(_g.getItem("hc")==="1")_d.setAttribute("data-hc","1")}catch(e){}</script>
 </head>
@@ -1045,7 +1047,7 @@ function buildNav(){
  nav.innerHTML='<button id="nHome">‹ All</button><span id="nCur"></span><button id="nJump" type="button" aria-label="'+(LG==='es'?'Secciones':'Sections')+'"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13M3.5 6h.01M3.5 12h.01M3.5 18h.01"/></svg><span class="njl">'+(LG==='es'?'Secciones':'Sections')+'</span></button><button id="nPrev" aria-label="Previous sermon">←</button><button id="nNext" aria-label="Next sermon">→</button>';
 }
 function applyView(){
- res.style.display='none';setTimeout(updPB,0);
+ document.body.classList.toggle('hmv',view==='home');res.style.display='none';setTimeout(updPB,0);
  if(view==='home'){home.style.display='block';nav.style.display='none';main.style.display='none';
   document.documentElement.style.setProperty('--a','#2f63c9')}
  else{home.style.display='none';nav.style.display='flex';main.style.display='block'}
