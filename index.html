@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta name="build" content="1795325928428">
+<meta name="build" content="1795330421138">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -810,6 +810,18 @@ body.sbs #btt{bottom:24px}
 .ytl,a.blb,.xpb{min-height:44px}
 .vlink a:not(.blb){padding:11px 3px}
 #tabbar button{min-height:46px}
+/* home cards v2: neutral surface, thin accent bar, even-lightness palette */
+.grp>summary.sec{background:var(--card)!important;border:1px solid var(--rule);border-left:4px solid var(--gc);border-radius:12px;padding:12px 14px 12px 14px!important;min-height:56px;font:600 16px/1.3 -apple-system,system-ui,sans-serif;letter-spacing:0;text-transform:none;color:var(--ink);margin-top:0!important;margin-bottom:10px!important}
+.grp>summary.sec:hover{background:color-mix(in srgb,var(--gc) 8%,var(--card))!important}
+.grp[open]>summary.sec{margin-bottom:10px!important}
+.grp>summary.sec .gnm{font:inherit;letter-spacing:0;text-transform:none}
+.gct{background:color-mix(in srgb,var(--gc) 18%,transparent);color:color-mix(in srgb,var(--gc) 62%,#000);font-weight:700;font-size:12px;padding:3px 10px}
+html[data-th=dark] .gct{color:color-mix(in srgb,var(--gc) 70%,#fff)}
+.grp>summary::after{opacity:.7}
+.card.cont{background:linear-gradient(135deg,color-mix(in srgb,var(--a) 14%,var(--card)),var(--card));border-color:color-mix(in srgb,var(--a) 35%,var(--rule));box-shadow:0 6px 18px rgba(0,0,0,.18)}
+html[data-th=dark] .grp>summary.sec{border-left-color:color-mix(in srgb,var(--gc) 78%,#fff)}
+html[data-th=dark] .grp>summary::after{border-color:color-mix(in srgb,var(--gc) 78%,#fff);opacity:.85}
+html[data-th=dark] .gct{background:color-mix(in srgb,var(--gc) 28%,transparent);color:color-mix(in srgb,var(--gc) 55%,#fff)}
 </style>
 <script id="rdi">try{var _d=document.documentElement,_g=localStorage;if(_g.getItem("rf")==="sans")_d.setAttribute("data-rf","sans");if(_g.getItem("rl")==="roomy")_d.setAttribute("data-rl","roomy");if(_g.getItem("hc")==="1")_d.setAttribute("data-hc","1")}catch(e){}</script>
 </head>
@@ -956,11 +968,11 @@ S.forEach(function(s,i){
 })();
 var home=document.getElementById('home');
 var GRP=[
- {n:'Habakkuk — Faith When We Don’t Understand',c:'#1f8f8a',ids:['hab1','hab2','faith','wins','glory']},
- {n:'Guest speaker — Greg Koukl',c:'#7a5ac8',ids:['story']},
- {n:'Luke — The Passion',c:'#c0392b',ids:['king','arrest','p1','p2']},
- {n:'Luke 21 — The End of History',c:'#d9821b',ids:['fear','judgment','eoh1','eoh2','eoh3']},
- {n:'Earlier messages',c:'#6b7a90',ids:['contentment','money1','money','obey','obey2']}];
+ {n:'Habakkuk — Faith When We Don’t Understand',c:'#3fa89b',ids:['hab1','hab2','faith','wins','glory']},
+ {n:'Guest speaker — Greg Koukl',c:'#8f7fe0',ids:['story']},
+ {n:'Luke — The Passion',c:'#d9707a',ids:['king','arrest','p1','p2']},
+ {n:'Luke 21 — The End of History',c:'#d9a441',ids:['fear','judgment','eoh1','eoh2','eoh3']},
+ {n:'Earlier messages',c:'#7c8ba3',ids:['contentment','money1','money','obey','obey2']}];
 (function(){[].forEach.call(document.querySelectorAll('.sbk[data-g]'),function(e){GRP.forEach(function(g){if(g.ids.indexOf(e.dataset.g)>=0)e.querySelector('.gn').textContent=g.n})})})();
 function idxOf(id){for(var k=0;k<S.length;k++)if(S[k].id===id)return k;return -1}
 var FLAT=[];GRP.forEach(function(g){g.ids.forEach(function(id){var k=idxOf(id);if(k>=0)FLAT.push(k)})});
