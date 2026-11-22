@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta name="build" content="1795321709554">
+<meta name="build" content="1795322040530">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -615,6 +615,7 @@ body.hasTab{padding-bottom:64px}
 
 #nJump{min-width:48px;min-height:48px;padding:6px 12px;display:inline-flex;align-items:center;justify-content:center;margin-left:auto}
 #nJump+#nPrev{margin-left:0}
+#nJump{gap:6px;padding:6px 14px}#nJump .njl{font:700 14px -apple-system,system-ui,sans-serif}
 body.gm #nJump{display:none}
 @media (min-width:1000px){#nJump{display:none!important}}
 #jmpd{display:none;position:fixed;inset:0;z-index:200;background:rgba(10,18,36,.55);align-items:flex-end;justify-content:center;padding:12px}
@@ -1022,7 +1023,7 @@ function buildHome(){
  home.innerHTML=h;
 }
 function buildNav(){
- nav.innerHTML='<button id="nHome">‹ All</button><span id="nCur"></span><button id="nJump" type="button" aria-label="'+(LG==='es'?'Secciones':'Sections')+'"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13M3.5 6h.01M3.5 12h.01M3.5 18h.01"/></svg></button><button id="nPrev" aria-label="Previous sermon">←</button><button id="nNext" aria-label="Next sermon">→</button>';
+ nav.innerHTML='<button id="nHome">‹ All</button><span id="nCur"></span><button id="nJump" type="button" aria-label="'+(LG==='es'?'Secciones':'Sections')+'"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13M3.5 6h.01M3.5 12h.01M3.5 18h.01"/></svg><span class="njl">'+(LG==='es'?'Secciones':'Sections')+'</span></button><button id="nPrev" aria-label="Previous sermon">←</button><button id="nNext" aria-label="Next sermon">→</button>';
 }
 function applyView(){
  res.style.display='none';setTimeout(updPB,0);
