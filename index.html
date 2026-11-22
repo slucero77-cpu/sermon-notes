@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta name="build" content="1795313107966">
+<meta name="build" content="1795314783880">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -727,6 +727,24 @@ nav button,#tabbar button,.tools button,.fs button,button#mnu,button.krb,#hwhome
 #tabbar.hp button.on2{background:transparent}
 #tbi{position:absolute;left:0;top:0;z-index:0;border-radius:12px;background:var(--a);pointer-events:none;opacity:0;transition:transform .34s cubic-bezier(.3,1.25,.5,1),width .3s ease,opacity .15s}
 #tbi.on{opacity:1}
+
+/* reading comfort (Menu) */
+html[data-rf=sans] body,html[data-rf=sans] .big,html[data-rf=sans] .card.wk b,html[data-rf=sans] .n{font-family:-apple-system,system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+html[data-rl=roomy] body{line-height:1.9}
+html[data-rl=roomy] .outline .body p,html[data-rl=roomy] .outline .body li,html[data-rl=roomy] .q,html[data-rl=roomy] .qa{line-height:1.9}
+html[data-rl=roomy] .outline .body p{margin-bottom:1em}
+html[data-hc="1"]:not([data-th=dark]){--ink:#000;--mut:#2f2a23;--rule:#7d725f}
+html[data-hc="1"][data-th=dark]{--ink:#fff;--mut:#d4dcee;--rule:#566690}
+html[data-hc="1"] body{font-weight:500}
+#mnud[style*="flex"] .mc>:nth-child(6){animation-delay:.40s}
+#mnud[style*="flex"] .mc>:nth-child(7){animation-delay:.46s}
+
+/* reading progress line */
+#rp{position:fixed;top:env(safe-area-inset-top,0px);left:0;right:0;height:4px;z-index:8;pointer-events:none;background:transparent;opacity:0;transition:opacity .25s}
+#rp.on{opacity:1}
+#rp i{display:block;height:100%;width:100%;background:var(--a,#2f4fa0);transform-origin:0 50%;transform:scaleX(0);transition:transform .12s linear;border-radius:0 4px 4px 0;box-shadow:0 0 8px color-mix(in srgb,var(--a,#2f4fa0) 60%,transparent)}
+@media (min-width:1000px){#rp{left:290px}}
+body.gm #rp{opacity:0}
 /* menu animation */
 button#mnu{transition:transform .16s cubic-bezier(.3,1.6,.5,1),background .2s}
 button#mnu:active{transform:scale(.92)}
@@ -766,6 +784,7 @@ body.sbs #btt{bottom:24px}
 .vlink a:not(.blb){padding:11px 3px}
 #tabbar button{min-height:46px}
 </style>
+<script id="rdi">try{var _d=document.documentElement,_g=localStorage;if(_g.getItem("rf")==="sans")_d.setAttribute("data-rf","sans");if(_g.getItem("rl")==="roomy")_d.setAttribute("data-rl","roomy");if(_g.getItem("hc")==="1")_d.setAttribute("data-hc","1")}catch(e){}</script>
 </head>
 <body>
 <div id="pb" aria-hidden="true"></div>
@@ -1380,6 +1399,12 @@ var es=LG==='es';
 document.getElementById('mnul').textContent=es?'Menú':'Menu';btn.setAttribute('aria-label',es?'Menú':'Menu');
 function mq(){try{return matchMedia('(prefers-color-scheme: dark)').matches}catch(e){return false}}
 function saved(){try{return localStorage.getItem('th')}catch(e){return null}}
+function rd(k,def){try{return localStorage.getItem(k)||def}catch(e){return def}}
+function seg2(items,sel,k){return '<div class="mseg" role="group">'+items.map(function(x){return '<button type="button" data-rd="'+k+':'+x[0]+'" aria-pressed="'+(x[0]===sel)+'">'+x[1]+'</button>'}).join('')+'</div>'}
+function setRd(k,v){var d=document.documentElement;try{localStorage.setItem(k,v)}catch(e){}
+ if(k==='rf'){if(v==='sans')d.setAttribute('data-rf','sans');else d.removeAttribute('data-rf')}
+ if(k==='rl'){if(v==='roomy')d.setAttribute('data-rl','roomy');else d.removeAttribute('data-rl')}
+ if(k==='hc'){if(v==='1')d.setAttribute('data-hc','1');else d.removeAttribute('data-hc')}}
 function build(){
  var cur=document.documentElement.getAttribute('data-th'),sv=saved(),mode=sv?cur:'auto';
  var seg=function(items,sel,attr){return '<div class="mseg" role="group">'+items.map(function(x){return '<button type="button" '+attr+'="'+x[0]+'" aria-pressed="'+(x[0]===sel)+'">'+x[1]+'</button>'}).join('')+'</div>'};
@@ -1387,10 +1412,14 @@ function build(){
   +'<div class="mr"><div class="ml">'+(es?'Idioma':'Language')+'</div>'+seg([['en','English'],['es','Español']],es?'es':'en','data-lg')+'</div>'
   +'<div class="mr"><div class="ml">'+(es?'Apariencia':'Appearance')+'</div>'+seg([['auto',es?'Como el teléfono':'Match phone'],['light',es?'Claro':'Light'],['dark',es?'Oscuro':'Dark']],mode,'data-th2')+'</div>'
   +'<div class="mr"><div class="ml">'+(es?'Tamaño del texto':'Text size')+'</div><div class="msz"><b style="font-size:14px">A</b><input type="range" min="14" max="24" step="1" value="'+fs+'" aria-label="'+(es?'Tamaño del texto':'Text size')+'"><b style="font-size:22px">A</b></div></div>'
+  +'<div class="mr"><div class="ml">'+(es?'Letra':'Font')+'</div>'+seg2([['serif',es?'Con serifa':'Serif'],['sans',es?'Sin serifa':'Sans']],rd('rf','serif'),'rf')+'</div>'
+  +'<div class="mr"><div class="ml">'+(es?'Espaciado de líneas':'Line spacing')+'</div>'+seg2([['normal',es?'Normal':'Normal'],['roomy',es?'Amplio':'Roomy']],rd('rl','normal'),'rl')+'</div>'
+  +'<div class="mr"><div class="ml">'+(es?'Contraste':'Contrast')+'</div>'+seg2([['0',es?'Estándar':'Standard'],['1',es?'Alto':'High']],rd('hc','0'),'hc')+'</div>'
   +'<div class="mr"><button type="button" class="mgo" data-go="how"><span class="tn">?</span><span>'+(es?'Cómo usar esta página':'How to use this')+'</span></button></div></div>'}
 function open(){var d=document.getElementById('mnud');if(!d){d=document.createElement('div');d.id='mnud';d.setAttribute('role','dialog');d.setAttribute('aria-modal','true');document.body.appendChild(d);
   d.addEventListener('click',function(e){var b=e.target.closest('button');if(e.target===d||(b&&b.classList.contains('mx'))){close();return}if(!b)return;
    if(b.dataset.lg){if(b.dataset.lg!==(es?'es':'en'))document.getElementById('lgb').click();return}
+   if(b.dataset.rd){var kv=b.dataset.rd.split(':');setRd(kv[0],kv[1]);b.parentNode.querySelectorAll('[data-rd]').forEach(function(x){x.setAttribute('aria-pressed',String(x===b))});return}
    if(b.dataset.th2){var v=b.dataset.th2;if(v==='auto'){try{localStorage.removeItem('th')}catch(x){}setTh(mq()?'dark':'light',false)}else setTh(v);
     d.querySelectorAll('[data-th2]').forEach(function(x){x.setAttribute('aria-pressed',String(x===b))});return}
    if(b.dataset.go==='how'){close();setTimeout(hwOpen,60)}});
@@ -1445,6 +1474,16 @@ document.addEventListener('click',function(e){var c=e.target.closest&&e.target.c
 /* press effect on the rest of the buttons */
 document.addEventListener('pointerdown',function(e){var b=e.target.closest&&e.target.closest('nav button,#tabbar button,.tools button,.fs button,button#mnu,button.krb,#hwhome,#hwbtn,button.xpb,#side button,#nHome,#btt');
  if(!b)return;b.classList.remove('pp');void b.offsetWidth;b.classList.add('pp');setTimeout(function(){b.classList.remove('pp')},460)},true);
+
+/* reading progress line */
+(function(){var r=document.createElement('div');r.id='rp';r.setAttribute('aria-hidden','true');r.innerHTML='<i></i>';document.body.appendChild(r);var f=r.firstChild,tk=false;
+function up(){tk=false;var on=typeof view==='number'&&view>=0;r.classList.toggle('on',on);if(!on)return;
+ var sc=document.querySelector('.sermon.on');if(sc){var cs=getComputedStyle(sc).getPropertyValue('--a');if(cs)f.style.setProperty('--a',cs)}
+ var h=document.documentElement.scrollHeight-innerHeight;var p=h>0?Math.max(0,Math.min(1,window.scrollY/h)):0;f.style.transform='scaleX('+p+')'}
+function rq(){if(!tk){tk=true;requestAnimationFrame(up)}}
+window.addEventListener('scroll',rq,{passive:true});window.addEventListener('resize',rq);
+['show','goHome','tabTo'].forEach(function(n){try{var o=window[n]||eval(n);if(typeof o==='function'){var w=function(){var x=o.apply(this,arguments);setTimeout(rq,60);return x};eval(n+'=w')}}catch(e){}});
+rq()})();
 </script>
 <script data-goatcounter="https://slucero77.goatcounter.com/count" data-goatcounter-settings='{"no_onload":true}' async src="//gc.zgo.at/count.js" onload="trk()"></script>
 </body>
