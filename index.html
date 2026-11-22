@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta name="build" content="1795322761686">
+<meta name="build" content="1795323964148">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -451,7 +451,7 @@ li.tk.in{opacity:1;transform:none}
 /* pin the open section's title while scrolling */
 .outline details{overflow:visible}
 @supports (overflow:clip){.outline details{overflow:clip}}
-.outline details[open]>summary{position:sticky;top:var(--nh,56px);z-index:3;background:var(--card);border-radius:10px 10px 0 0;box-shadow:0 1px 0 var(--rule)}
+.outline details[open]>summary{position:sticky;top:var(--nh,56px);transition:top .22s ease;z-index:3;background:var(--card);border-radius:10px 10px 0 0;box-shadow:0 1px 0 var(--rule)}
 /* cascade: when a section is opened by tap or by scrolling, its content rises in piece by piece */
 @keyframes casc{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 .outline details.cs[open]>.body>*,.outline details.cs[open]>.body>ul li,.outline details.cs[open]>.body>ol li{animation:casc .35s ease-out both}
@@ -717,7 +717,7 @@ header{background-image:radial-gradient(ellipse 60% 140% at 20% 0%,rgba(255,255,
 @keyframes cpop{0%{transform:scale(.85)}60%{transform:scale(1.1)}100%{transform:scale(1)}}
 
 /* nav pin (phones) */
-@media (max-width:999px){#nav.nfx{position:fixed;left:0;right:0;top:0;padding-top:calc(10px + env(safe-area-inset-top))}}
+@media (max-width:999px){#nav.nfx{position:fixed;left:0;right:0;top:0;padding-top:calc(10px + env(safe-area-inset-top));transition:transform .22s ease}#nav.nfx.nhd{transform:translateY(-105%);box-shadow:none;pointer-events:none}}
 /* press effect on the rest of the buttons */
 nav button,#tabbar button,.tools button,.fs button,button#mnu,button.krb,#hwhome,#hwbtn,button.xpb,#side button,#nHome,#btt{transition:transform .14s cubic-bezier(.3,1.6,.5,1),box-shadow .2s,background-color .2s,color .2s,border-color .2s}
 nav button,#tabbar button,.tools button,.fs button,button#mnu,button.krb,#hwhome,#hwbtn,button.xpb,#side button,#nHome,#btt{--pa:var(--a,#2f4fa0)}
@@ -1369,8 +1369,13 @@ show=function(){var r=_s.apply(this,arguments);upd();return r};
 goHome=function(){var r=_h.apply(this,arguments);upd();return r};
 setGm=function(){var r=_g.apply(this,arguments);upd();return r};
 bn.addEventListener('click',function(){tabTo(false)});bq.addEventListener('click',function(){tabTo(true)});bm.addEventListener('click',function(){tabTo('n')});
-var ly=window.scrollY;window.addEventListener('scroll',function(){var y=window.scrollY,d=y-ly;if(Math.abs(d)<6)return;var bot=y+innerHeight>=document.documentElement.scrollHeight-8;if(d>0&&y>150&&!bot)tb.classList.add('tbh');else tb.classList.remove('tbh');ly=y},{passive:true});
+var ly=window.scrollY;window.addEventListener('scroll',function(){var y=window.scrollY,h=tb.classList.contains('tbh'),bot=y+innerHeight>=document.documentElement.scrollHeight-8;if(h){if(y>ly)ly=y;else if(ly-y>22||bot){tb.classList.remove('tbh');ly=y}}else{if(y<ly)ly=y;else if(y-ly>32&&y>150&&!bot){tb.classList.add('tbh');ly=y}}},{passive:true});
 var _u=upd;upd=function(){tb.classList.remove('tbh');ly=window.scrollY;return _u.apply(this,arguments)};
+/* finger-direction control for the bars (works even when the phone sends few scroll events) */
+(function(){var ty=0,acc=0;function set(h){var was=tb.classList.contains('tbh');if(was===h)return;tb.classList.toggle('tbh',h);ly=window.scrollY;try{window.dispatchEvent(new CustomEvent('navbars',{detail:h}))}catch(x){}}
+document.addEventListener('touchstart',function(e){if(e.touches.length===1){ty=e.touches[0].clientY;acc=0}},{passive:true});
+document.addEventListener('touchmove',function(e){if(e.touches.length!==1)return;var c=e.touches[0].clientY,d=c-ty;ty=c;if((d>0)!==(acc>0))acc=0;acc+=d;
+ if(acc>26)set(false);else if(acc<-40&&window.scrollY>150&&window.scrollY+innerHeight<document.documentElement.scrollHeight-8)set(true)},{passive:true})})();
 document.addEventListener('focusin',function(e){if(e.target.matches&&e.target.matches('textarea,input'))document.body.classList.add('kb')});
 document.addEventListener('focusout',function(){document.body.classList.remove('kb')});
 window.tabUpd=function(){upd()};upd()})();
@@ -1519,18 +1524,23 @@ window.__tr=false;setTimeout(function(){window.__tr=true},800);
 window.txOn=function(){if(!window.__tr)return;var d=document.documentElement;d.classList.add('tx');clearTimeout(window.__txt);window.__txt=setTimeout(function(){d.classList.remove('tx')},600)};
 var _st=setTh;setTh=function(){window.txOn();return _st.apply(this,arguments)};
 })();
-/* nav pin: always pin the top bar with position:fixed on phones (sticky is unreliable in the iPhone home-screen app) */
-(function(){var n=document.getElementById('nav'),sn=document.createElement('div'),sp=null,fx=false,mq=matchMedia('(max-width:999px)'),t=0;
+/* nav pin: pin the top bar with position:fixed on phones (sticky is unreliable in the iPhone home-screen app); hide it while scrolling down, show it on scroll up */
+(function(){var n=document.getElementById('nav'),sn=document.createElement('div'),sp=null,fx=false,hd=false,ly=0,mq=matchMedia('(max-width:999px)'),t=0,root=document.documentElement;
 sn.id='nsn';sn.style.cssText='height:0;margin:0;padding:0;border:0;pointer-events:none';n.parentNode.insertBefore(sn,n);
-function nh(){if(n.offsetHeight>0)document.documentElement.style.setProperty('--nh',n.offsetHeight+'px')}
-function on(){if(fx)return;sp=document.createElement('div');sp.id='nsp';sp.style.height=n.offsetHeight+'px';n.parentNode.insertBefore(sp,n);n.classList.add('nfx');fx=true;nh()}
-function off(){if(!fx)return;n.classList.remove('nfx');if(sp&&sp.parentNode)sp.parentNode.removeChild(sp);sp=null;fx=false;nh()}
+function nh(){if(hd)root.style.setProperty('--nh','0px');else if(n.offsetHeight>0)root.style.setProperty('--nh',n.offsetHeight+'px')}
+function hide(){if(hd)return;hd=true;n.classList.add('nhd');nh()}
+function show(){if(!hd)return;hd=false;n.classList.remove('nhd');nh()}
+function on(){if(fx)return;sp=document.createElement('div');sp.id='nsp';sp.style.height=n.offsetHeight+'px';n.parentNode.insertBefore(sp,n);n.classList.add('nfx');fx=true;ly=window.pageYOffset;hide()}
+function off(){if(!fx)return;show();n.classList.remove('nfx');if(sp&&sp.parentNode)sp.parentNode.removeChild(sp);sp=null;fx=false;nh()}
 function chk(){t=0;
  if(!mq.matches){off();return}
- if(fx){if(!n.offsetHeight||sn.getBoundingClientRect().top>=0)off();return}
+ if(fx){if(!n.offsetHeight||sn.getBoundingClientRect().top>=0){off();return}
+  var y=window.pageYOffset,mx=root.scrollHeight-window.innerHeight;if(y<0||y>mx)return;
+  if(hd){if(y>ly)ly=y;else if(ly-y>22){show();ly=y}}else{if(y<ly)ly=y;else if(y-ly>32){hide();ly=y}}return}
  if(n.offsetHeight>0&&sn.getBoundingClientRect().top<=-1)on()}
 function q(){if(!t)t=requestAnimationFrame(chk)}
 window.addEventListener('scroll',q,{passive:true});window.addEventListener('resize',q);window.addEventListener('orientationchange',q);setInterval(q,500);
+window.addEventListener('navbars',function(e){if(!fx)return;ly=window.pageYOffset;if(e.detail)hide();else show()});
 })();
 </script>
 <script data-goatcounter="https://slucero77.goatcounter.com/count" data-goatcounter-settings='{"no_onload":true}' async src="//gc.zgo.at/count.js" onload="trk()"></script>
