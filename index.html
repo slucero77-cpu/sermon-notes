@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta name="build" content="1795323964148">
+<meta name="build" content="1795324361302">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -717,7 +717,7 @@ header{background-image:radial-gradient(ellipse 60% 140% at 20% 0%,rgba(255,255,
 @keyframes cpop{0%{transform:scale(.85)}60%{transform:scale(1.1)}100%{transform:scale(1)}}
 
 /* nav pin (phones) */
-@media (max-width:999px){#nav.nfx{position:fixed;left:0;right:0;top:0;padding-top:calc(10px + env(safe-area-inset-top));transition:transform .22s ease}#nav.nfx.nhd{transform:translateY(-105%);box-shadow:none;pointer-events:none}}
+@media (max-width:999px){#nav.nfx{position:fixed;left:0;right:0;top:0;padding-top:calc(10px + env(safe-area-inset-top));transition:transform .25s ease-out}#nav.nfx.nhd{transform:translateY(-105%);box-shadow:none;pointer-events:none}}
 /* press effect on the rest of the buttons */
 nav button,#tabbar button,.tools button,.fs button,button#mnu,button.krb,#hwhome,#hwbtn,button.xpb,#side button,#nHome,#btt{transition:transform .14s cubic-bezier(.3,1.6,.5,1),box-shadow .2s,background-color .2s,color .2s,border-color .2s}
 nav button,#tabbar button,.tools button,.fs button,button#mnu,button.krb,#hwhome,#hwbtn,button.xpb,#side button,#nHome,#btt{--pa:var(--a,#2f4fa0)}
@@ -1528,19 +1528,20 @@ var _st=setTh;setTh=function(){window.txOn();return _st.apply(this,arguments)};
 (function(){var n=document.getElementById('nav'),sn=document.createElement('div'),sp=null,fx=false,hd=false,ly=0,mq=matchMedia('(max-width:999px)'),t=0,root=document.documentElement;
 sn.id='nsn';sn.style.cssText='height:0;margin:0;padding:0;border:0;pointer-events:none';n.parentNode.insertBefore(sn,n);
 function nh(){if(hd)root.style.setProperty('--nh','0px');else if(n.offsetHeight>0)root.style.setProperty('--nh',n.offsetHeight+'px')}
+var tbx=document.getElementById('tabbar');
+function sync(){if(!fx||!tbx)return;if(tbx.classList.contains('tbh'))hide();else show()}
 function hide(){if(hd)return;hd=true;n.classList.add('nhd');nh()}
 function show(){if(!hd)return;hd=false;n.classList.remove('nhd');nh()}
-function on(){if(fx)return;sp=document.createElement('div');sp.id='nsp';sp.style.height=n.offsetHeight+'px';n.parentNode.insertBefore(sp,n);n.classList.add('nfx');fx=true;ly=window.pageYOffset;hide()}
+function on(){if(fx)return;sp=document.createElement('div');sp.id='nsp';sp.style.height=n.offsetHeight+'px';n.parentNode.insertBefore(sp,n);n.classList.add('nfx');fx=true;sync()}
 function off(){if(!fx)return;show();n.classList.remove('nfx');if(sp&&sp.parentNode)sp.parentNode.removeChild(sp);sp=null;fx=false;nh()}
 function chk(){t=0;
  if(!mq.matches){off();return}
  if(fx){if(!n.offsetHeight||sn.getBoundingClientRect().top>=0){off();return}
-  var y=window.pageYOffset,mx=root.scrollHeight-window.innerHeight;if(y<0||y>mx)return;
-  if(hd){if(y>ly)ly=y;else if(ly-y>22){show();ly=y}}else{if(y<ly)ly=y;else if(y-ly>32){hide();ly=y}}return}
+  sync();return}
  if(n.offsetHeight>0&&sn.getBoundingClientRect().top<=-1)on()}
 function q(){if(!t)t=requestAnimationFrame(chk)}
 window.addEventListener('scroll',q,{passive:true});window.addEventListener('resize',q);window.addEventListener('orientationchange',q);setInterval(q,500);
-window.addEventListener('navbars',function(e){if(!fx)return;ly=window.pageYOffset;if(e.detail)hide();else show()});
+if(tbx)new MutationObserver(sync).observe(tbx,{attributes:true,attributeFilter:['class']});
 })();
 </script>
 <script data-goatcounter="https://slucero77.goatcounter.com/count" data-goatcounter-settings='{"no_onload":true}' async src="//gc.zgo.at/count.js" onload="trk()"></script>
