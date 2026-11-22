@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta name="build" content="1795306678194">
+<meta name="build" content="1795313107966">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -713,6 +713,13 @@ header{background-image:radial-gradient(ellipse 60% 140% at 20% 0%,rgba(255,255,
 @keyframes favburst{0%{opacity:0;transform:translate(-50%,-50%) scale(.3)}25%{opacity:1}100%{opacity:0;transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) scale(1.2) rotate(70deg)}}
 .cpd{animation:cpop .45s cubic-bezier(.3,1.7,.5,1)}
 @keyframes cpop{0%{transform:scale(.85)}60%{transform:scale(1.1)}100%{transform:scale(1)}}
+
+/* press effect on the rest of the buttons */
+nav button,#tabbar button,.tools button,.fs button,button#mnu,button.krb,#hwhome,#hwbtn,button.xpb,#side button,#nHome,#btt{transition:transform .14s cubic-bezier(.3,1.6,.5,1),box-shadow .2s,background-color .2s,color .2s,border-color .2s}
+nav button,#tabbar button,.tools button,.fs button,button#mnu,button.krb,#hwhome,#hwbtn,button.xpb,#side button,#nHome,#btt{--pa:var(--a,#2f4fa0)}
+:is(nav button,#tabbar button,.tools button,.fs button,button#mnu,button.krb,#hwhome,#hwbtn,button.xpb,#side button,#nHome,#btt):active{transform:scale(.92)!important;box-shadow:0 0 0 3px color-mix(in srgb,var(--pa) 38%,transparent)}
+:is(nav button,#tabbar button,.tools button,.fs button,button#mnu,button.krb,#hwhome,#hwbtn,button.xpb,#side button,#nHome,#btt).pp{animation:btnpop .42s cubic-bezier(.3,1.6,.5,1)}
+@keyframes btnpop{0%{transform:scale(.9);box-shadow:0 0 0 0 color-mix(in srgb,var(--pa) 45%,transparent)}45%{transform:scale(1.08);box-shadow:0 0 0 7px color-mix(in srgb,var(--pa) 30%,transparent)}100%{transform:scale(1);box-shadow:0 0 0 12px color-mix(in srgb,var(--pa) 0%,transparent)}}
 /* start reading pulse + sliding tab highlight */
 .card.wk .go{animation:gopulse 2.8s ease-out 1.6s 3}
 @keyframes gopulse{0%{box-shadow:0 0 0 0 rgba(255,255,255,.55)}70%,100%{box-shadow:0 0 0 12px rgba(255,255,255,0)}}
@@ -1434,6 +1441,10 @@ document.addEventListener('click',function(e){var c=e.target.closest&&e.target.c
  var rm=false;try{rm=matchMedia('(prefers-reduced-motion: reduce)').matches}catch(x){}if(rm)return;
  e.stopImmediatePropagation();e.preventDefault();c.style.setProperty('--gl',getComputedStyle(c).borderLeftColor);c.classList.add('gl');
  setTimeout(function(){c._go=1;c.classList.remove('gl');c.click();setTimeout(function(){c._go=0},50)},190)},true);
+
+/* press effect on the rest of the buttons */
+document.addEventListener('pointerdown',function(e){var b=e.target.closest&&e.target.closest('nav button,#tabbar button,.tools button,.fs button,button#mnu,button.krb,#hwhome,#hwbtn,button.xpb,#side button,#nHome,#btt');
+ if(!b)return;b.classList.remove('pp');void b.offsetWidth;b.classList.add('pp');setTimeout(function(){b.classList.remove('pp')},460)},true);
 </script>
 <script data-goatcounter="https://slucero77.goatcounter.com/count" data-goatcounter-settings='{"no_onload":true}' async src="//gc.zgo.at/count.js" onload="trk()"></script>
 </body>
