@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta name="build" content="1795302372685">
+<meta name="build" content="1795306678194">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -697,6 +697,48 @@ html[data-th=dark] #mnud .mseg button{border-right-color:#5b82d6}
 html[data-th=dark] #mnud .mseg button[aria-pressed=true]{background:#3a5fb8}
 html[data-th=dark] #mnud .msz input{accent-color:#7ea0e8}
 @media (min-width:1000px){#mnud{display:none!important}}
+/* alive: header drift, card glow, sheet bounce, save burst, copied pop */
+header{background-image:radial-gradient(ellipse 60% 140% at 20% 0%,rgba(255,255,255,.16),rgba(255,255,255,0) 70%)!important;background-repeat:no-repeat!important;background-size:220% 100%!important;background-position:0% 0!important;animation:hdrift 16s ease-in-out infinite alternate}
+@keyframes hdrift{from{background-position:0% 0}to{background-position:100% 0}}
+#home .card:active{transform:translateX(4px) scale(.975);box-shadow:-10px 0 26px -3px var(--gl,transparent)}
+#home .card.gl{animation:cardglow .24s ease-out both!important}
+#home .card.gl:not(.wk):not(.wkq){background:color-mix(in srgb,var(--gl,transparent) 20%,var(--card))}
+@keyframes cardglow{0%{transform:scale(1);box-shadow:0 0 0 0 transparent}55%{transform:translateX(5px) scale(.972);box-shadow:-12px 0 30px -2px var(--gl,transparent)}100%{transform:translateX(3px) scale(.98);box-shadow:-10px 0 26px -2px var(--gl,transparent)}}
+@media (max-width:999px){#sheet.on .pn{animation:shBounce .42s cubic-bezier(.2,.9,.3,1.12)}}
+@keyframes shBounce{from{transform:translateY(100%)}to{transform:none}}
+.favbtn{position:relative;overflow:visible}
+.favbtn.on.bump::before,.favbtn.on.bump::after{content:"\2726";position:absolute;top:50%;left:50%;pointer-events:none;color:#ffd46b;text-shadow:0 0 6px #f2b84b;font-size:13px;line-height:1;animation:favburst .7s ease-out both}
+.favbtn.on.bump::before{--dx:-34px;--dy:-22px}
+.favbtn.on.bump::after{--dx:34px;--dy:-24px;animation-delay:.05s}
+@keyframes favburst{0%{opacity:0;transform:translate(-50%,-50%) scale(.3)}25%{opacity:1}100%{opacity:0;transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) scale(1.2) rotate(70deg)}}
+.cpd{animation:cpop .45s cubic-bezier(.3,1.7,.5,1)}
+@keyframes cpop{0%{transform:scale(.85)}60%{transform:scale(1.1)}100%{transform:scale(1)}}
+/* start reading pulse + sliding tab highlight */
+.card.wk .go{animation:gopulse 2.8s ease-out 1.6s 3}
+@keyframes gopulse{0%{box-shadow:0 0 0 0 rgba(255,255,255,.55)}70%,100%{box-shadow:0 0 0 12px rgba(255,255,255,0)}}
+#tabbar button{position:relative;z-index:1}
+#tabbar.hp button.on2{background:transparent}
+#tbi{position:absolute;left:0;top:0;z-index:0;border-radius:12px;background:var(--a);pointer-events:none;opacity:0;transition:transform .34s cubic-bezier(.3,1.25,.5,1),width .3s ease,opacity .15s}
+#tbi.on{opacity:1}
+/* menu animation */
+button#mnu{transition:transform .16s cubic-bezier(.3,1.6,.5,1),background .2s}
+button#mnu:active{transform:scale(.92)}
+#mnud[style*="flex"]{animation:mnfade .22s ease both}
+#mnud[style*="flex"] .mc{animation:mnup .34s cubic-bezier(.2,.9,.3,1.12) both}
+#mnud[style*="flex"] .mc>*{animation:mnrow .36s ease both}
+#mnud[style*="flex"] .mc>:nth-child(1){animation-delay:.10s}
+#mnud[style*="flex"] .mc>:nth-child(2){animation-delay:.16s}
+#mnud[style*="flex"] .mc>:nth-child(3){animation-delay:.22s}
+#mnud[style*="flex"] .mc>:nth-child(4){animation-delay:.28s}
+#mnud[style*="flex"] .mc>:nth-child(5){animation-delay:.34s}
+#mnud .mseg button,#mnud .mgo,#mnud .mx{transition:background .2s,color .2s,transform .14s}
+#mnud .mseg button:active,#mnud .mgo:active,#mnud .mx:active{transform:scale(.95)}
+#mnud .mgo .tn{transition:transform .2s cubic-bezier(.3,1.6,.5,1)}
+#mnud .mgo:active .tn{transform:scale(1.2) rotate(-8deg)}
+@keyframes mnfade{from{background:rgba(10,18,36,0)}to{background:rgba(10,18,36,.55)}}
+@keyframes mnup{from{transform:translateY(60px) scale(.97);opacity:0}to{transform:none;opacity:1}}
+@keyframes mnrow{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
 /* five small UI additions */
 .kr{margin:18px 0 6px;padding:14px;border:1.5px solid var(--rule);border-radius:14px;background:color-mix(in srgb,var(--a) 6%,var(--card))}
 .kr .krh{font:700 12px/1 -apple-system,system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--mut);margin-bottom:10px}
@@ -999,7 +1041,7 @@ function nxHas(){for(var k in NT)if(NT[k]&&NT[k].n&&NT[k].n.trim())return true;r
 function nxDo(btn,txt,share){var es=LG==='es',old=btn.textContent;
  if(!txt.trim()){btn.textContent=es?'No hay notas todavía':'No notes yet';setTimeout(function(){btn.textContent=old},1800);return}
  if(share&&navigator.share){navigator.share({title:es?'Mis notas del sermón':'My sermon notes',text:txt}).catch(function(){});return}
- copyText(txt,function(ok){btn.textContent=ok?(es?'Copiado ✓':'Copied ✓'):(es?'No se pudo copiar':'Couldn’t copy');setTimeout(function(){btn.textContent=old},1800)})}
+ copyText(txt,function(ok){btn.textContent=ok?(es?'Copiado ✓':'Copied ✓'):(es?'No se pudo copiar':'Couldn’t copy');btn.classList.remove('cpd');void btn.offsetWidth;if(ok)btn.classList.add('cpd');setTimeout(function(){btn.textContent=old;btn.classList.remove('cpd')},1800)})}
 document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('button[data-nx],button[data-nxs],button[data-nxall],button[data-nxalls]');if(!b)return;
  if(b.dataset.nx!==undefined)nxDo(b,nxText(+b.dataset.nx),false);
  else if(b.dataset.nxs!==undefined)nxDo(b,nxText(+b.dataset.nxs),true);
@@ -1007,7 +1049,7 @@ document.addEventListener('click',function(e){var b=e.target.closest&&e.target.c
  else nxDo(b,nxAll(),true)});
 main.addEventListener('click',function(e){var b=e.target.closest('button[data-copy]');if(!b)return;
  var old=b.textContent;
- copyText(qText(+b.dataset.copy),function(ok){b.textContent=ok?'Copied ✓':'Couldn’t copy';setTimeout(function(){b.textContent=old},1800)});
+ copyText(qText(+b.dataset.copy),function(ok){b.textContent=ok?'Copied ✓':'Couldn’t copy';b.classList.remove('cpd');void b.offsetWidth;if(ok)b.classList.add('cpd');setTimeout(function(){b.textContent=old;b.classList.remove('cpd')},1800)});
 });
 main.addEventListener('click',function(e){
  if(e.target.closest('.qgo')){tabTo(true);return}
@@ -1372,6 +1414,26 @@ var _t=tabTo;tabTo=function(){shDone();var r=_t.apply(this,arguments);bt();retur
 document.addEventListener('click',function(e){var k=e.target.closest('button.krb');if(!k)return;e.preventDefault();
  if(k.dataset.kr==='q'){tabTo(true)}else{show(+k.dataset.ki);window.scrollTo(0,0)}},true);
 })();
+
+/* sliding tab highlight */
+(function(){var tb=document.getElementById('tabbar');if(!tb)return;
+var pill=document.createElement('span');pill.id='tbi';pill.setAttribute('aria-hidden','true');tb.insertBefore(pill,tb.firstChild);
+var first=true;
+function mv(){var on=tb.querySelector('button.on2');if(tb.hidden||!on||!on.offsetWidth){pill.classList.remove('on');tb.classList.remove('hp');first=true;return}
+ if(first){pill.style.transition='none'}
+ pill.style.width=on.offsetWidth+'px';pill.style.height=on.offsetHeight+'px';pill.style.top=on.offsetTop+'px';pill.style.transform='translateX('+on.offsetLeft+'px)';
+ pill.classList.add('on');tb.classList.add('hp');
+ if(first){void pill.offsetWidth;pill.style.transition='';first=false}}
+var mo=new MutationObserver(mv);mo.observe(tb,{attributes:true,attributeFilter:['hidden']});[].forEach.call(tb.querySelectorAll('button'),function(b){mo.observe(b,{attributes:true,attributeFilter:['class']})});
+window.addEventListener('resize',function(){first=true;mv()});
+mv()})();
+
+/* card glow color */
+document.addEventListener('pointerdown',function(e){var c=e.target.closest&&e.target.closest('#home .card');if(c)c.style.setProperty('--gl',getComputedStyle(c).borderLeftColor)},true);
+document.addEventListener('click',function(e){var c=e.target.closest&&e.target.closest('#home .card');if(!c||c._go)return;
+ var rm=false;try{rm=matchMedia('(prefers-reduced-motion: reduce)').matches}catch(x){}if(rm)return;
+ e.stopImmediatePropagation();e.preventDefault();c.style.setProperty('--gl',getComputedStyle(c).borderLeftColor);c.classList.add('gl');
+ setTimeout(function(){c._go=1;c.classList.remove('gl');c.click();setTimeout(function(){c._go=0},50)},190)},true);
 </script>
 <script data-goatcounter="https://slucero77.goatcounter.com/count" data-goatcounter-settings='{"no_onload":true}' async src="//gc.zgo.at/count.js" onload="trk()"></script>
 </body>
