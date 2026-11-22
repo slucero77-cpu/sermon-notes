@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta name="build" content="1795314783880">
+<meta name="build" content="1795318532686">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -745,6 +745,24 @@ html[data-hc="1"] body{font-weight:500}
 #rp i{display:block;height:100%;width:100%;background:var(--a,#2f4fa0);transform-origin:0 50%;transform:scaleX(0);transition:transform .12s linear;border-radius:0 4px 4px 0;box-shadow:0 0 8px color-mix(in srgb,var(--a,#2f4fa0) 60%,transparent)}
 @media (min-width:1000px){#rp{left:290px}}
 body.gm #rp{opacity:0}
+
+/* section glow, typing glow, smooth theme switch */
+.jg{animation:jglow 1.6s ease-out}
+.jg>summary{animation:jsum 1.6s ease-out}
+@keyframes jglow{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--a) 0%,transparent)}18%{box-shadow:0 0 0 5px color-mix(in srgb,var(--a) 55%,transparent),0 0 22px color-mix(in srgb,var(--a) 45%,transparent)}100%{box-shadow:0 0 0 0 color-mix(in srgb,var(--a) 0%,transparent)}}
+@keyframes jsum{0%{background:var(--card)}18%{background:color-mix(in srgb,var(--a) 22%,var(--card))}100%{background:var(--card)}}
+textarea.mynotes{transition:border-color .2s,box-shadow .25s}
+textarea.mynotes:focus{outline:none;border-color:var(--a);box-shadow:0 0 0 3px color-mix(in srgb,var(--a) 24%,transparent)}
+textarea.mynotes.ty{box-shadow:0 0 0 5px color-mix(in srgb,var(--a) 34%,transparent),0 0 18px color-mix(in srgb,var(--a) 30%,transparent)}
+.svd{margin-left:auto;align-self:center;font:700 13px -apple-system,system-ui,sans-serif;color:var(--a);opacity:0;transform:translateY(4px);transition:opacity .25s,transform .25s;pointer-events:none;padding:0 6px}
+.svd.on{opacity:1;transform:none}
+@media (prefers-reduced-motion:no-preference){html.tx,html.tx *,html.tx *::before,html.tx *::after{transition:background-color .45s ease,color .45s ease,border-color .45s ease,fill .45s ease,box-shadow .45s ease,opacity .3s ease!important}}
+
+/* banner flip between sermons */
+.sb.fl-r{animation:flr .6s cubic-bezier(.2,.8,.25,1) both;transform-origin:50% 50%}
+.sb.fl-l{animation:fll .6s cubic-bezier(.2,.8,.25,1) both;transform-origin:50% 50%}
+@keyframes flr{0%{transform:perspective(900px) rotateY(-75deg) scale(.94);opacity:0}60%{opacity:1}100%{transform:perspective(900px) rotateY(0) scale(1);opacity:1}}
+@keyframes fll{0%{transform:perspective(900px) rotateY(75deg) scale(.94);opacity:0}60%{opacity:1}100%{transform:perspective(900px) rotateY(0) scale(1);opacity:1}}
 /* menu animation */
 button#mnu{transition:transform .16s cubic-bezier(.3,1.6,.5,1),background .2s}
 button#mnu:active{transform:scale(.92)}
@@ -1021,7 +1039,7 @@ function show(i,openK){
  document.documentElement.style.setProperty('--a',scol(i));
  [].forEach.call(document.querySelectorAll('.sermon'),function(e,k){e.classList.toggle('on',k==i)});
  document.getElementById('nCur').textContent=s.tab;
- try{if(typeof pv==='number'&&pv!==i&&!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)){var ne=document.querySelectorAll('.sermon')[i],fw=FLAT.indexOf(i)>FLAT.indexOf(pv);ne.classList.remove('sl-r','sl-l');void ne.offsetWidth;ne.classList.add(fw?'sl-r':'sl-l');setTimeout(function(){ne.classList.remove('sl-r','sl-l')},400)}}catch(e){}
+ try{if(typeof pv==='number'&&pv!==i&&!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)){var ne=document.querySelectorAll('.sermon')[i],fw=FLAT.indexOf(i)>FLAT.indexOf(pv);ne.classList.remove('sl-r','sl-l');void ne.offsetWidth;ne.classList.add(fw?'sl-r':'sl-l');setTimeout(function(){ne.classList.remove('sl-r','sl-l')},400);var fb=ne.querySelector('.sb');if(fb){fb.classList.remove('fl-r','fl-l');void fb.offsetWidth;fb.classList.add(fw?'fl-r':'fl-l');setTimeout(function(){fb.classList.remove('fl-r','fl-l')},640)}}}catch(e){}
  applyView();
  if(openK!=null&&typeof openK==='string'&&openK.indexOf('dq')===0){if(!gm)setGm(true)}else if(openK!=null&&gm)setGm(false);
  if(openK!=null){var el=document.getElementById(typeof openK==='string'?openK:'d'+i+'_'+openK);if(el){el.open=true;setTimeout(function(){el.scrollIntoView({block:'start'});window.scrollBy(0,-60)},30)}}
@@ -1211,6 +1229,7 @@ function navH(){var v=parseInt(getComputedStyle(document.documentElement).getPro
 function jumpTo(t){var el=typeof t==='number'?document.getElementById('d'+view+'_'+t):document.getElementById(t);if(!el)return;
  if(gm)setGm(false);
  window.JMP=true;clearTimeout(window.JMPt);
+ try{el.classList.remove('jg');void el.offsetWidth;el.classList.add('jg');setTimeout(function(){el.classList.remove('jg')},1700)}catch(x){}
  if(el.tagName==='DETAILS'&&!el.open){el.dataset.ao='1';try{window.csOn(el)}catch(x){}el.open=true}
  var go=function(){var y=el.getBoundingClientRect().top+window.scrollY-navH()-8;window.scrollTo({top:Math.max(0,y),behavior:'auto'})};
  go();setTimeout(go,80);setTimeout(go,300);
@@ -1401,7 +1420,7 @@ function mq(){try{return matchMedia('(prefers-color-scheme: dark)').matches}catc
 function saved(){try{return localStorage.getItem('th')}catch(e){return null}}
 function rd(k,def){try{return localStorage.getItem(k)||def}catch(e){return def}}
 function seg2(items,sel,k){return '<div class="mseg" role="group">'+items.map(function(x){return '<button type="button" data-rd="'+k+':'+x[0]+'" aria-pressed="'+(x[0]===sel)+'">'+x[1]+'</button>'}).join('')+'</div>'}
-function setRd(k,v){var d=document.documentElement;try{localStorage.setItem(k,v)}catch(e){}
+function setRd(k,v){var d=document.documentElement;if(window.txOn)window.txOn();try{localStorage.setItem(k,v)}catch(e){}
  if(k==='rf'){if(v==='sans')d.setAttribute('data-rf','sans');else d.removeAttribute('data-rf')}
  if(k==='rl'){if(v==='roomy')d.setAttribute('data-rl','roomy');else d.removeAttribute('data-rl')}
  if(k==='hc'){if(v==='1')d.setAttribute('data-hc','1');else d.removeAttribute('data-hc')}}
@@ -1484,6 +1503,18 @@ function rq(){if(!tk){tk=true;requestAnimationFrame(up)}}
 window.addEventListener('scroll',rq,{passive:true});window.addEventListener('resize',rq);
 ['show','goHome','tabTo'].forEach(function(n){try{var o=window[n]||eval(n);if(typeof o==='function'){var w=function(){var x=o.apply(this,arguments);setTimeout(rq,60);return x};eval(n+'=w')}}catch(e){}});
 rq()})();
+
+/* typing glow + saved tick, smooth theme switch */
+(function(){var es=LG==='es',tt={};
+document.addEventListener('input',function(e){var t=e.target;if(!t.matches||!t.matches('textarea.mynotes'))return;
+ t.classList.add('ty');clearTimeout(t._ty);t._ty=setTimeout(function(){t.classList.remove('ty')},450);
+ var row=t.parentNode&&t.parentNode.querySelector('.nxrow');if(!row)return;var sv=row.querySelector('.svd');
+ if(!sv){sv=document.createElement('span');sv.className='svd';sv.setAttribute('aria-live','polite');row.appendChild(sv)}
+ clearTimeout(t._sv);t._sv=setTimeout(function(){sv.textContent=es?'Guardado ✓':'Saved ✓';sv.classList.add('on');clearTimeout(sv._h);sv._h=setTimeout(function(){sv.classList.remove('on')},1600)},650)},true);
+window.__tr=false;setTimeout(function(){window.__tr=true},800);
+window.txOn=function(){if(!window.__tr)return;var d=document.documentElement;d.classList.add('tx');clearTimeout(window.__txt);window.__txt=setTimeout(function(){d.classList.remove('tx')},600)};
+var _st=setTh;setTh=function(){window.txOn();return _st.apply(this,arguments)};
+})();
 </script>
 <script data-goatcounter="https://slucero77.goatcounter.com/count" data-goatcounter-settings='{"no_onload":true}' async src="//gc.zgo.at/count.js" onload="trk()"></script>
 </body>
