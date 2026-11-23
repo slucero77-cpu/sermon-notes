@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta name="build" content="1795385861579">
+<meta name="build" content="1795400995588">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -681,7 +681,7 @@ html[data-th=dark] #sheet .lk a.blb{filter:none;color:#9db8f0;border-color:#9db8
 a.vq{cursor:pointer}
 /* phone menu */
 button#mnu{display:none;width:auto!important;padding:0 14px;gap:8px;font-weight:700}
-@media (max-width:999px){.fs #th,.fs #fm,.fs #fp,.fs #lgb{display:none!important}button#mnu{display:inline-flex}}
+.fs #th,.fs #fm,.fs #fp,.fs #lgb{display:none!important}button#mnu{display:inline-flex}
 #mnul2,#mnud .md{display:none}
 #mnud{display:none;position:fixed;inset:0;z-index:210;background:rgba(10,18,36,.55);align-items:flex-end;justify-content:center;padding:12px}
 #mnud .mc{background:var(--card);color:var(--ink);border:1px solid var(--rule);border-radius:16px;width:100%;max-width:560px;max-height:86vh;overflow:auto;box-shadow:0 18px 50px rgba(0,0,0,.35);font-family:-apple-system,system-ui,sans-serif;padding-bottom:8px}
@@ -703,7 +703,7 @@ html[data-th=dark] #mnud .mseg{border-color:#5b82d6}
 html[data-th=dark] #mnud .mseg button{border-right-color:#5b82d6}
 html[data-th=dark] #mnud .mseg button[aria-pressed=true]{background:#3a5fb8}
 html[data-th=dark] #mnud .msz input{accent-color:#7ea0e8}
-@media (min-width:1000px){button#mnu{display:inline-flex}#mnul,#mnud .mr.ph{display:none}#mnul2,#mnud .md{display:inline}#mnud .mp{display:none}#mnud{align-items:center}#mnud .mc{max-width:400px}#mnud .mr.lastd{border-bottom:0}}
+@media (min-width:1000px){#mnud{align-items:center}#mnud .mc{max-width:440px}}
 /* alive: header drift, card glow, sheet bounce, save burst, copied pop */
 header{background-image:radial-gradient(ellipse 60% 140% at 20% 0%,rgba(255,255,255,.16),rgba(255,255,255,0) 70%)!important;background-repeat:no-repeat!important;background-size:220% 100%!important;background-position:0% 0!important;animation:hdrift 16s ease-in-out infinite alternate}
 @keyframes hdrift{from{background-position:0% 0}to{background-position:100% 0}}
@@ -1002,8 +1002,8 @@ function howToEs(){return '<details class="how"><summary>Cómo usar esta página
  +'<li><b>Notas:</b> cada sección del esquema se abre sola mientras bajas. Toca un versículo para abrir una tarjeta con enlaces para leerlo en la LBLA o estudiarlo en Blue Letter Bible, o toca <b>Ver esta parte</b> para ir a ese momento del video.</li>'
  +'<li><b>Preguntas:</b> toca un versículo en una pregunta (como Ver: Habacuc 2:15) para abrir la misma tarjeta.</li>'
  +'<li><b>En una computadora:</b> los sermones están agrupados por serie a la izquierda; toca un grupo para abrirlo o cerrarlo. Debajo del sermón que lees hay una lista numerada de sus secciones para ir directo a una. En una pantalla ancha, las Preguntas aparecen junto a las Notas, con pestañas de <b>Preguntas de discusión</b> y <b>Mis notas</b>.</li>'
- +'<li><b>Inglés:</b> en el teléfono, toca <b>Menú</b> arriba y elige <b>English</b>; en una computadora, toca <b>EN</b>. Para leer todo en español, elige <b>Español</b> o toca <b>ES</b>.</li>'
- +'<li><b>También:</b> la búsqueda encuentra palabras, versículos y preguntas. Usa <b>← →</b> para cambiar de sermón. En el teléfono, <b>Menú</b> también cambia entre claro y oscuro (o Como el teléfono) y el tamaño del texto; en una computadora usa <b>A− A+</b> y <b>☾</b>. En una computadora, presiona <b>/</b> para buscar, <b>g</b> para Preguntas y <b>n</b> para Notas.</li>'
+ +'<li><b>Inglés:</b> toca <b>Menú</b> arriba y elige <b>English</b>. Para leer todo en español, toca <b>Menú</b> y elige <b>Español</b>.</li>'
+ +'<li><b>También:</b> la búsqueda encuentra palabras, versículos y preguntas. Usa <b>← →</b> para cambiar de sermón. <b>Menú</b> también cambia entre claro y oscuro (o como tu teléfono o computadora), el tamaño del texto, la letra, el espaciado y el contraste. En una computadora, presiona <b>/</b> para buscar, <b>g</b> para Preguntas y <b>n</b> para Notas.</li>'
  +'</ul></div></details>'}
 function howBtn(){return '<button type="button" class="hwhome" id="hwhome"><span class="hwq" aria-hidden="true">?</span>'+(LG==='es'?'Cómo usar esta página':'How to use this')+'</button>'}
 function howTo(){
@@ -1014,8 +1014,8 @@ function howTo(){
  +'<li><b>Notes:</b> each outline section opens as you scroll. Tap a verse to open a card with links to read it in the ESV or study it in Blue Letter Bible, or tap <b>Watch this part</b> to jump to that spot in the video.</li>'
  +'<li><b>Questions:</b> tap a verse in a question (like Look at: Habakkuk 2:15) to open the same verse card.</li>'
  +'<li><b>On a computer:</b> sermons are grouped by series on the left; tap a group to open or close it. Under the sermon you are reading is a numbered list of its sections, so you can jump straight to one. On a wide screen, Questions sit beside the Notes, with tabs for <b>Discussion Questions</b> and <b>My Notes</b>.</li>'
- +'<li><b>Spanish:</b> on a phone, tap <b>Menu</b> at the top and choose <b>Español</b>; on a computer, tap <b>ES</b>. Everything is then in Spanish (verses open in the LBLA). Switch back the same way with <b>English</b> or <b>EN</b>.</li>'
- +'<li><b>Also:</b> Search finds words, verses and questions. Use <b>← →</b> to change sermons. On a phone, <b>Menu</b> also sets light or dark (or Match phone) and the text size; on a computer use <b>A− A+</b> and <b>☾</b>. On a laptop, press <b>/</b> to search, <b>g</b> for Questions and <b>n</b> for Notes.</li>'
+ +'<li><b>Spanish:</b> tap <b>Menu</b> at the top and choose <b>Español</b>. Everything is then in Spanish (verses open in the LBLA). Switch back the same way with <b>English</b>.</li>'
+ +'<li><b>Also:</b> Search finds words, verses and questions. Use <b>← →</b> to change sermons. <b>Menu</b> also sets light or dark (or match your phone or computer) and the text size, font, line spacing and contrast. On a laptop, press <b>/</b> to search, <b>g</b> for Questions and <b>n</b> for Notes.</li>'
  +'</ul></div></details>';
 }
 function notesUpd(){try{var m=(S[S.length-1].metaEn||S[S.length-1].meta).match(/([A-Z][a-z]{2} \d{1,2}, \d{4})/);if(!m)return 'Notes updated weekly.';var d=new Date(m[1]);if(isNaN(d))return 'Notes updated weekly.';d.setDate(d.getDate()+((2-d.getDay()+7)%7||7));var D=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],M=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];return 'Notes updated '+D[d.getDay()]+', '+M[d.getMonth()]+' '+d.getDate()+'.'}catch(e){return 'Notes updated weekly.'}}
@@ -1396,8 +1396,13 @@ var _u=upd;upd=function(){tb.classList.remove('tbh');ly=window.scrollY;return _u
 document.addEventListener('touchstart',function(e){if(e.touches.length===1){ty=e.touches[0].clientY;acc=0}},{passive:true});
 document.addEventListener('touchmove',function(e){if(e.touches.length!==1)return;var c=e.touches[0].clientY,d=c-ty;ty=c;if((d>0)!==(acc>0))acc=0;acc+=d;
  if(acc>26)set(false);else if(acc<-40&&window.scrollY>150&&window.scrollY+innerHeight<document.documentElement.scrollHeight-8)set(true)},{passive:true})})();
-document.addEventListener('focusin',function(e){if(e.target.matches&&e.target.matches('textarea,input'))document.body.classList.add('kb')});
-document.addEventListener('focusout',function(){document.body.classList.remove('kb')});
+/* keyboard class: only while a text box really has focus (a search box left focused after opening a sermon used to hide the bottom bar for good) */
+function isTxt(el){return !!(el&&el.matches&&el.matches('textarea,input:not([type=range]):not([type=checkbox]):not([type=radio]):not([type=button]):not([type=submit])'))}
+function syncKb(){var a=document.activeElement;if(a&&a.id==='q'&&typeof view==='number'){try{a.blur()}catch(x){}}document.body.classList.toggle('kb',isTxt(document.activeElement))}
+document.addEventListener('focusin',function(){syncKb()});
+document.addEventListener('focusout',function(){setTimeout(syncKb,0)});
+setInterval(syncKb,500);
+var _u2=upd;upd=function(){syncKb();return _u2.apply(this,arguments)};
 window.tabUpd=function(){upd()};upd()})();
 
 
@@ -1458,7 +1463,7 @@ function build(){
  var seg=function(items,sel,attr){return '<div class="mseg" role="group">'+items.map(function(x){return '<button type="button" '+attr+'="'+x[0]+'" aria-pressed="'+(x[0]===sel)+'">'+x[1]+'</button>'}).join('')+'</div>'};
  return '<div class="mc"><div class="mh"><b><span class="mp">'+(es?'Menú':'Menu')+'</span><span class="md">'+(es?'Lectura':'Reading')+'</span></b><button type="button" class="mx" aria-label="'+(es?'Cerrar':'Close')+'">×</button></div>'
   +'<div class="mr ph"><div class="ml">'+(es?'Idioma':'Language')+'</div>'+seg([['en','English'],['es','Español']],es?'es':'en','data-lg')+'</div>'
-  +'<div class="mr ph"><div class="ml">'+(es?'Apariencia':'Appearance')+'</div>'+seg([['auto',es?'Como el teléfono':'Match phone'],['light',es?'Claro':'Light'],['dark',es?'Oscuro':'Dark']],mode,'data-th2')+'</div>'
+  +'<div class="mr ph"><div class="ml">'+(es?'Apariencia':'Appearance')+'</div>'+seg([['auto',matchMedia('(min-width:1000px)').matches?(es?'Como el sistema':'Match system'):(es?'Como el teléfono':'Match phone')],['light',es?'Claro':'Light'],['dark',es?'Oscuro':'Dark']],mode,'data-th2')+'</div>'
   +'<div class="mr ph"><div class="ml">'+(es?'Tamaño del texto':'Text size')+'</div><div class="msz"><b style="font-size:14px">A</b><input type="range" min="14" max="24" step="1" value="'+fs+'" aria-label="'+(es?'Tamaño del texto':'Text size')+'"><b style="font-size:22px">A</b></div></div>'
   +'<div class="mr"><div class="ml">'+(es?'Letra':'Font')+'</div>'+seg2([['serif',es?'Con serifa':'Serif'],['sans',es?'Sin serifa':'Sans']],rd('rf','serif'),'rf')+'</div>'
   +'<div class="mr"><div class="ml">'+(es?'Espaciado de líneas':'Line spacing')+'</div>'+seg2([['normal',es?'Normal':'Normal'],['roomy',es?'Amplio':'Roomy']],rd('rl','normal'),'rl')+'</div>'
