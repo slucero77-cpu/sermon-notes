@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta name="build" content="1795400995588">
+<meta name="build" content="1795402785890">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -824,6 +824,17 @@ html[data-th=dark] .grp>summary::after{border-color:color-mix(in srgb,var(--gc) 
 html[data-th=dark] .gct{background:color-mix(in srgb,var(--gc) 28%,transparent);color:color-mix(in srgb,var(--gc) 55%,#fff)}
 /* pin the header on the home page (phones) */
 @media (max-width:999px){body.hmv header{position:sticky;top:0;z-index:60}}
+/* lift the bottom bar and buttons when the Claude app cuts off the bottom of the artifact frame */
+@media (max-width:999px){
+#tabbar{bottom:var(--lift,0px)}
+#btt{bottom:calc(env(safe-area-inset-bottom) + 74px + var(--lift,0px))}
+#swh{bottom:calc(env(safe-area-inset-bottom) + 72px + var(--lift,0px))}
+body.hasTab{padding-bottom:calc(64px + var(--lift,0px))}
+}
+/* cascade: sermon rows drop in one after another when a series is opened */
+@keyframes grpdrop{from{opacity:0;transform:translateY(-12px)}to{opacity:1;transform:none}}
+details.grp.casc>.card{animation:grpdrop .38s cubic-bezier(.2,.7,.2,1) both!important;animation-delay:calc(var(--ci,0)*70ms)!important}
+@media (prefers-reduced-motion:reduce){details.grp.casc>.card{animation:none!important}}
 </style>
 <script id="rdi">try{var _d=document.documentElement,_g=localStorage;if(_g.getItem("rf")==="sans")_d.setAttribute("data-rf","sans");if(_g.getItem("rl")==="roomy")_d.setAttribute("data-rl","roomy");if(_g.getItem("hc")==="1")_d.setAttribute("data-hc","1")}catch(e){}</script>
 </head>
@@ -1235,7 +1246,7 @@ function buildSide(){
 }
 function markSide(){[].forEach.call(side.querySelectorAll('button'),function(b){var on=+b.dataset.i===view;b.classList.toggle('on',on);if(on){var d=b.closest('details');if(d&&!d.open)d.open=true}})}
 buildSide();
-document.addEventListener('toggle',function(e){var d=e.target;if(d&&d.tagName==='DETAILS'&&d.dataset&&d.dataset.g&&(d.classList.contains('grp')||d.classList.contains('sg'))){gSave(d.dataset.g,d.open);[].forEach.call(document.querySelectorAll('details[data-g]'),function(o){if(o!==d&&o.dataset.g===d.dataset.g&&o.open!==d.open)o.open=d.open})}},true);
+document.addEventListener('toggle',function(e){var d=e.target;if(d&&d.open&&d.classList&&d.classList.contains('grp')){var n=0;[].forEach.call(d.children,function(c){if(c.classList.contains('card')){c.style.setProperty('--ci',Math.min(n++,9))}});d.classList.add('casc');clearTimeout(d._ct);d._ct=setTimeout(function(){d.classList.remove('casc')},1100)}if(d&&d.tagName==='DETAILS'&&d.dataset&&d.dataset.g&&(d.classList.contains('grp')||d.classList.contains('sg'))){gSave(d.dataset.g,d.open);[].forEach.call(document.querySelectorAll('details[data-g]'),function(o){if(o!==d&&o.dataset.g===d.dataset.g&&o.open!==d.open)o.open=d.open})}},true);
 function hwOpen(){var m=howTo().match(/<div class="body">([\s\S]*)<\/div><\/details>/);var d=document.getElementById('hwd');if(!d){d=document.createElement('div');d.id='hwd';d.setAttribute('role','dialog');d.setAttribute('aria-modal','true');d.setAttribute('aria-label',LG==='es'?'Cómo usar esta página':'How to use this');document.body.appendChild(d);d.addEventListener('click',function(e){if(e.target===d||e.target.closest('.hwx'))hwClose()})}
  d.innerHTML='<div class="hwc"><button type="button" class="hwx" aria-label="'+(LG==='es'?'Cerrar':'Close')+'">×</button><h2>'+(LG==='es'?'Cómo usar esta página':'How to use this')+'</h2>'+(m?m[1]:'')+'</div>';d.style.display='flex';var x=d.querySelector('.hwx');if(x)x.focus()}
 function hwClose(){var d=document.getElementById('hwd');if(d)d.style.display='none';var b=document.getElementById('hwbtn');if(b)b.focus()}
@@ -1568,6 +1579,35 @@ function chk(){t=0;
 function q(){if(!t)t=requestAnimationFrame(chk)}
 window.addEventListener('scroll',q,{passive:true});window.addEventListener('resize',q);window.addEventListener('orientationchange',q);setInterval(q,500);
 if(tbx)new MutationObserver(sync).observe(tbx,{attributes:true,attributeFilter:['class']});
+})();
+/* frame cut-off: when the page runs inside the Claude app frame and its bottom edge is off screen, lift bottom-pinned items (--lift) */
+(function(){
+if(window.top===window)return;
+var root=document.documentElement,io=0,heur=0,pr=document.createElement('div');
+pr.setAttribute('aria-hidden','true');pr.style.cssText='position:fixed;left:0;bottom:0;width:2px;height:160px;opacity:0;pointer-events:none';document.body.appendChild(pr);
+function apply(){var l=Math.round(Math.max(0,Math.min(120,Math.max(io,heur))));window.__lift={io:io,heur:heur,l:l};root.style.setProperty('--lift',l+'px')}
+function H(){heur=(screen.width<500)?Math.max(0,innerHeight+100-screen.height):0;apply()}
+try{var th=[];for(var i=0;i<=20;i++)th.push(i/20);new IntersectionObserver(function(es){var e=es[es.length-1];io=Math.max(0,Math.round(160-e.intersectionRect.height));apply()},{threshold:th}).observe(pr)}catch(x){}
+window.addEventListener('resize',H);setInterval(H,1000);H();
+})();
+/* smooth open and close for sections and series groups */
+(function(){
+var RM=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)');
+document.addEventListener('click',function(e){
+ if(RM&&RM.matches)return;
+ var t=e.target,s=t.closest&&t.closest('.outline summary,.qa summary,details.grp>summary,#side details.sg>summary');
+ if(!s||!s.parentNode||s.parentNode.tagName!=='DETAILS')return;
+ var inner=t.closest('a,button,input,textarea,select');if(inner&&s.contains(inner))return;
+ var d=s.parentNode;e.preventDefault();if(d._an)return;
+ var cs=getComputedStyle(d),h0=d.offsetHeight,opening=!d.open,h1;
+ if(opening){d.open=true;h1=d.offsetHeight}
+ else{h1=s.offsetHeight+(parseFloat(cs.paddingTop)||0)+(parseFloat(cs.paddingBottom)||0)+(parseFloat(cs.borderTopWidth)||0)+(parseFloat(cs.borderBottomWidth)||0)}
+ if(!d.animate||Math.abs(h1-h0)<4){if(!opening)d.open=false;return}
+ d._an=1;d.style.setProperty('overflow','clip','important');
+ var a=d.animate([{height:h0+'px'},{height:h1+'px'}],{duration:Math.min(380,200+Math.abs(h1-h0)/6),easing:'cubic-bezier(.2,.8,.2,1)',fill:'forwards'});
+ var fin=function(){if(!d._an)return;d._an=0;if(!opening)d.open=false;try{a.cancel()}catch(x){}d.style.removeProperty('overflow')};
+ a.onfinish=fin;a.oncancel=function(){d._an=0;d.style.removeProperty('overflow')}
+},false);
 })();
 </script>
 <script data-goatcounter="https://slucero77.goatcounter.com/count" data-goatcounter-settings='{"no_onload":true}' async src="//gc.zgo.at/count.js" onload="trk()"></script>
