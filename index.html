@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta name="build" content="1795480999672">
+<meta name="build" content="1795481412604">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -1053,7 +1053,7 @@ function lukeNext(){var L=lukeIds(),c=null;try{c=localStorage.getItem('lkid')}ca
 function pHead(p,cls){var tot=0,has=false;GRP.forEach(function(g){if(g.p===p){tot+=g.ids.length;if(gOf(S.length-1)===g||(view>=0&&view<S.length&&gOf(view)===g))has=true}});var sec=cls.indexOf('grp')>=0;return '<details class="'+cls+'" data-g="'+p.replace(/"/g,'&quot;')+'"'+(gOpen({n:p},has)?' open':'')+' style="--gc:#d9707a"><summary'+(sec?' class="sec"':'')+'><span class="gnm">'+p+'</span><span class="gct">'+tot+'</span></summary>'}
 function gOf(k){for(var q=0;q<GRP.length;q++)if(GRP[q].ids.indexOf(S[k].id)>=0)return GRP[q];return null}
 function buildHome(){
- var nw=S.length-1,h='<button class="card wk" data-i="'+nw+'" style="border-left-color:'+scol(nw)+';--hc:'+scol(nw)+'"><em>This week’s sermon'+(isNew(nw)?'<span class="nw">New</span>':'')+'</em><b>'+S[nw].title+'</b><span>'+shortMeta(S[nw])+'</span><u class="pass">'+S[nw].ref+'</u><i class="go">Start reading ›</i></button><button class="card wkq" data-i="'+nw+'" data-q="1" type="button">Open this week’s questions ›</button><p class="hint"><b>'+notesUpd()+'</b> New notes post Tuesday evening, or Wednesday at the latest. Or tap any sermon below.</p>'+wnote()+a2hs()+howBtn()+(nxHas()?'<div class="nxhome"><button type="button" class="xpb" data-nxall="1">'+(LG==='es'?'Copiar todas mis notas':'Copy all my notes')+'</button></div>':'');
+ var nw=S.length-1,h='<button class="card wk" data-i="'+nw+'" style="border-left-color:'+scol(nw)+';--hc:'+scol(nw)+'"><em>This week’s sermon'+(isNew(nw)?'<span class="nw">New</span>':'')+'</em><b>'+S[nw].title+'</b><span>'+shortMeta(S[nw])+'</span><u class="pass">'+S[nw].ref+'</u><i class="go">Start reading ›</i></button><button class="card wkq" data-i="'+nw+'" data-q="1" type="button">Open this week’s questions ›</button><p class="hint"><b>'+notesUpd()+'</b> New notes post Tuesday evening, or Wednesday at the latest. Or tap any sermon below.</p>'+wnote()+a2hs()+howBtn();
  var last=null;try{last=localStorage.getItem('sid')}catch(e){}
  var lr=null;try{lr=JSON.parse(localStorage.getItem('lr')||'null')}catch(e){}
  var li2=(lr&&idxOf(lr.id)>=0)?idxOf(lr.id):(last?idxOf(last):-1);var lrOk=!!(lr&&idxOf(lr.id)===li2);
