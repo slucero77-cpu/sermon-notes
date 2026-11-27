@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta name="build" content="1795571475934">
+<meta name="build" content="1795810972040">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -683,7 +683,7 @@ html[data-th=dark] #sheet .lk a.blb{filter:none;color:#9db8f0;border-color:#9db8
 .vlink a.blb{white-space:nowrap}
 a.vq{cursor:pointer}
 /* phone menu */
-button#mnu{display:none;width:auto!important;padding:0 14px;gap:8px;font-weight:700}
+button#mnu{display:none;width:auto!important;padding:0 14px;gap:8px;font-weight:700}#mnul:empty{display:none}
 .fs #th,.fs #fm,.fs #fp,.fs #lgb{display:none!important}button#mnu{display:inline-flex}
 #mnul2,#mnud .md{display:none}
 #mnud{display:none;position:fixed;inset:0;z-index:210;background:rgba(10,18,36,.55);align-items:flex-end;justify-content:center;padding:12px}
@@ -847,7 +847,7 @@ details.grp.casc>.card{animation:grpdrop .38s cubic-bezier(.2,.7,.2,1) both!impo
 <a class="skip" href="#main" id="skip">Skip to sermon content</a>
 <header>
  <div class="hrow"><div><small>Hope Chapel</small><h1>Sermon Notes</h1></div>
- <div class="fs"><button id="th" aria-label="Dark mode"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button><button id="fm" aria-label="Smaller text">A−</button><button id="fp" aria-label="Larger text">A+</button><button id="lgb" aria-label="Español">ES</button><button id="mnu" type="button" aria-haspopup="dialog" aria-label="Menu"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg><span id="mnul">Menu</span><span id="mnul2">Reading</span></button></div></div>
+ <div class="fs"><button id="th" aria-label="Dark mode"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button><button id="fm" aria-label="Smaller text">A−</button><button id="fp" aria-label="Larger text">A+</button><button id="lgb" aria-label="Español">ES</button><button id="mnu" type="button" aria-haspopup="dialog" aria-label="Menu"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg><span id="mnul"></span><span id="mnul2">Reading</span></button></div></div>
  <div class="search" role="search"><input id="q" type="search" aria-label="Search all sermons" placeholder="Search all sermons…" autocomplete="off" autocapitalize="off"></div>
 </header>
 <aside id="side" aria-label="All sermons"></aside>
@@ -1053,7 +1053,7 @@ function lukeNext(){var L=lukeIds(),c=null;try{c=localStorage.getItem('lkid')}ca
 function pHead(p,cls){var tot=0,has=false;GRP.forEach(function(g){if(g.p===p){tot+=g.ids.length;if(gOf(S.length-1)===g||(view>=0&&view<S.length&&gOf(view)===g))has=true}});var sec=cls.indexOf('grp')>=0;return '<details class="'+cls+'" data-g="'+p.replace(/"/g,'&quot;')+'"'+(gOpen({n:p},has)?' open':'')+' style="--gc:#d9707a"><summary'+(sec?' class="sec"':'')+'><span class="gnm">'+p+'</span><span class="gct">'+tot+'</span></summary>'}
 function gOf(k){for(var q=0;q<GRP.length;q++)if(GRP[q].ids.indexOf(S[k].id)>=0)return GRP[q];return null}
 function buildHome(){
- var nw=S.length-1,h='<button class="card wk" data-i="'+nw+'" style="border-left-color:'+scol(nw)+';--hc:'+scol(nw)+'"><em>This week’s sermon'+(isNew(nw)?'<span class="nw">New</span>':'')+'</em><b>'+S[nw].title+'</b><span>'+shortMeta(S[nw])+'</span><u class="pass">'+S[nw].ref+'</u><i class="go">Start reading ›</i></button><button class="card wkq" data-i="'+nw+'" data-q="1" type="button">Open this week’s questions ›</button><p class="hint"><b>'+notesUpd()+'</b> New notes post Tuesday evening, or Wednesday at the latest. Or tap any sermon below.</p>'+wnote()+a2hs()+howBtn();
+ var nw=S.length-1,h='<button class="card wk" data-i="'+nw+'" style="border-left-color:'+scol(nw)+';--hc:'+scol(nw)+'"><em>This week’s sermon'+(isNew(nw)?'<span class="nw">New</span>':'')+'</em><b>'+S[nw].title+'</b><span>'+shortMeta(S[nw])+'</span><u class="pass">'+S[nw].ref+'</u><i class="go">Start reading ›</i></button><button class="card wkq" data-i="'+nw+'" data-q="1" type="button">Open this week’s questions ›</button><p class="hint"><b>'+notesUpd()+'</b> New notes post Tuesday evening, or Wednesday at the latest. Or tap any sermon below.</p>'+wnote()+a2hs();
  var last=null;try{last=localStorage.getItem('sid')}catch(e){}
  var lr=null;try{lr=JSON.parse(localStorage.getItem('lr')||'null')}catch(e){}
  var li2=(lr&&idxOf(lr.id)>=0)?idxOf(lr.id):(last?idxOf(last):-1);var lrOk=!!(lr&&idxOf(lr.id)===li2);
@@ -1478,7 +1478,7 @@ new MutationObserver(function(ms){ms.forEach(function(m){if(m.type==='characterD
 (function(){
 var btn=document.getElementById('mnu');if(!btn)return;
 var es=LG==='es';
-document.getElementById('mnul').textContent=es?'Menú':'Menu';document.getElementById('mnul2').textContent=es?'Lectura':'Reading';btn.setAttribute('aria-label',es?'Menú':'Menu');
+document.getElementById('mnul2').textContent=es?'Lectura':'Reading';btn.setAttribute('aria-label',es?'Menú':'Menu');
 function mq(){try{return matchMedia('(prefers-color-scheme: dark)').matches}catch(e){return false}}
 function saved(){try{return localStorage.getItem('th')}catch(e){return null}}
 function rd(k,def){try{return localStorage.getItem(k)||def}catch(e){return def}}
