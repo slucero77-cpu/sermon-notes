@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta name="build" content="1795810972040">
+<meta name="build" content="1795812746671">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -1491,13 +1491,14 @@ function build(){
  var cur=document.documentElement.getAttribute('data-th'),sv=saved(),mode=sv?cur:'auto';
  var seg=function(items,sel,attr){return '<div class="mseg" role="group">'+items.map(function(x){return '<button type="button" '+attr+'="'+x[0]+'" aria-pressed="'+(x[0]===sel)+'">'+x[1]+'</button>'}).join('')+'</div>'};
  return '<div class="mc"><div class="mh"><b><span class="mp">'+(es?'Menú':'Menu')+'</span><span class="md">'+(es?'Lectura':'Reading')+'</span></b><button type="button" class="mx" aria-label="'+(es?'Cerrar':'Close')+'">×</button></div>'
+  +'<div class="mr ph"><button type="button" class="mgo" data-go="how"><span class="tn">?</span><span>'+(es?'Cómo usar esta página':'How to use this')+'</span></button></div>'
   +'<div class="mr ph"><div class="ml">'+(es?'Idioma':'Language')+'</div>'+seg([['en','English'],['es','Español']],es?'es':'en','data-lg')+'</div>'
   +'<div class="mr ph"><div class="ml">'+(es?'Apariencia':'Appearance')+'</div>'+seg([['auto',matchMedia('(min-width:1000px)').matches?(es?'Como el sistema':'Match system'):(es?'Como el teléfono':'Match phone')],['light',es?'Claro':'Light'],['dark',es?'Oscuro':'Dark']],mode,'data-th2')+'</div>'
   +'<div class="mr ph"><div class="ml">'+(es?'Tamaño del texto':'Text size')+'</div><div class="msz"><b style="font-size:14px">A</b><input type="range" min="14" max="24" step="1" value="'+fs+'" aria-label="'+(es?'Tamaño del texto':'Text size')+'"><b style="font-size:22px">A</b></div></div>'
   +'<div class="mr"><div class="ml">'+(es?'Letra':'Font')+'</div>'+seg2([['serif',es?'Con serifa':'Serif'],['sans',es?'Sin serifa':'Sans']],rd('rf','serif'),'rf')+'</div>'
   +'<div class="mr"><div class="ml">'+(es?'Espaciado de líneas':'Line spacing')+'</div>'+seg2([['normal',es?'Normal':'Normal'],['roomy',es?'Amplio':'Roomy']],rd('rl','normal'),'rl')+'</div>'
   +'<div class="mr lastd"><div class="ml">'+(es?'Contraste':'Contrast')+'</div>'+seg2([['0',es?'Estándar':'Standard'],['1',es?'Alto':'High']],rd('hc','0'),'hc')+'</div>'
-  +'<div class="mr ph"><button type="button" class="mgo" data-go="how"><span class="tn">?</span><span>'+(es?'Cómo usar esta página':'How to use this')+'</span></button></div></div>'}
+  +'</div>'}
 function open(){var d=document.getElementById('mnud');if(!d){d=document.createElement('div');d.id='mnud';d.setAttribute('role','dialog');d.setAttribute('aria-modal','true');document.body.appendChild(d);
   d.addEventListener('click',function(e){var b=e.target.closest('button');if(e.target===d||(b&&b.classList.contains('mx'))){close();return}if(!b)return;
    if(b.dataset.lg){if(b.dataset.lg!==(es?'es':'en'))document.getElementById('lgb').click();return}
